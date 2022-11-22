@@ -29,10 +29,12 @@ namespace RainBOT.Core.Attributes
     {
         public override async Task<bool> ExecuteChecksAsync(InteractionContext ctx)
         {
-            using (var service = new RbService())
+            using (var data = new Data("data.json"))
             {
+                data.Initialize();
+
                 // Return true if there is an account for the guild; return false if there isn't.
-                return await Task.FromResult(service.Data.GuildAccounts.Exists(x => x.GuildId == ctx.Guild.Id));
+                return await Task.FromResult(data.GuildAccounts.Exists(x => x.GuildId == ctx.Guild.Id));
             }
         }
     }

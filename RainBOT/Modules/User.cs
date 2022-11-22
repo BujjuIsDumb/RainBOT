@@ -35,19 +35,21 @@ namespace RainBOT.Modules
     [SlashCommandGroup("user", "Manage your user account.")]
     public class User : ApplicationCommandModule
     {
-        public RbService Service { private get; set; }
+        public Config Config { private get; set; }
+
+        public Data Data { private get; set; }
 
         [SlashCommand("register", "Create a user account.")]
         [SlashUserBannable]
         public async Task UserRegisterAsync(InteractionContext ctx)
         {
-            if (!Service.Data.UserAccounts.Exists(x => x.UserId == ctx.User.Id))
+            if (!Data.UserAccounts.Exists(x => x.UserId == ctx.User.Id))
             {
-                Service.Data.UserAccounts.Add(new UserAccountData()
+                Data.UserAccounts.Add(new UserAccountData()
                 {
                     UserId = ctx.User.Id
                 });
-                Service.Data.Update();
+                Data.Update();
 
                 await ctx.CreateResponseAsync("✅ Created a user account.", true);
             }
@@ -67,8 +69,8 @@ namespace RainBOT.Modules
                 .WithThumbnail(ctx.User.AvatarUrl)
                 .WithDescription("Manage the settings of your RainBOT user account. Please select a module to configure.")
                 .WithColor(new DiscordColor(3092790))
-                .AddField("Allow Vent Responses", Service.GetUserAccount(ctx).AllowVentResponses ? "Enabled" : "Disabled")
-                .AddField("Bio Style", "#" + Service.GetUserAccount(ctx).BioStyle);
+                .AddField("Allow Vent Responses", Data.UserAccounts.Find(x => x.UserId == ctx.User.Id).AllowVentResponses ? "Enabled" : "Disabled")
+                .AddField("Bio Style", "#" + Data.UserAccounts.Find(x => x.UserId == ctx.User.Id).BioStyle);
 
             var ventingButton = new DiscordButtonComponent(ButtonStyle.Secondary, Core.Utilities.CreateCustomId("ventingButton"), "Venting", false, new DiscordComponentEmoji(DiscordEmoji.FromUnicode("👁‍🗨")));
             var bioButton = new DiscordButtonComponent(ButtonStyle.Secondary, Core.Utilities.CreateCustomId("bioButton"), "Bio", false, new DiscordComponentEmoji(DiscordEmoji.FromUnicode("📜")));
@@ -84,7 +86,7 @@ namespace RainBOT.Modules
                 .WithTitle("Venting Settings")
                 .WithDescription("Configure the venting system.")
                 .WithColor(new DiscordColor(3092790))
-                .AddField("Allow Vent Responses", Service.GetUserAccount(ctx).AllowVentResponses ? "Enabled" : "Disabled");
+                .AddField("Allow Vent Responses", Data.UserAccounts.Find(x => x.UserId == ctx.User.Id).AllowVentResponses ? "Enabled" : "Disabled");
 
             var allowVentResponsesButton = new DiscordButtonComponent(ButtonStyle.Secondary, Core.Utilities.CreateCustomId("allowVentResponsesButton"), "Allow Vent Responses", false, new DiscordComponentEmoji(DiscordEmoji.FromUnicode("💬")));
 
@@ -99,7 +101,7 @@ namespace RainBOT.Modules
                 .WithTitle("Bio Settings")
                 .WithDescription("Configure the bio system.")
                 .WithColor(new DiscordColor(3092790))
-                .AddField("Bio Style", "#" + Service.GetUserAccount(ctx).BioStyle);
+                .AddField("Bio Style", "#" + Data.UserAccounts.Find(x => x.UserId == ctx.User.Id).BioStyle);
 
             var bioStyleButton = new DiscordButtonComponent(ButtonStyle.Secondary, Core.Utilities.CreateCustomId("bioStyleButton"), "Bio Style", false, new DiscordComponentEmoji(DiscordEmoji.FromUnicode("🎨")));
 
@@ -144,8 +146,8 @@ namespace RainBOT.Modules
                             {
                                 if (args.Id == allowVentResponsesSelect.CustomId)
                                 {
-                                    Service.GetUserAccount(ctx).AllowVentResponses = args.Values.First() == "yes";
-                                    Service.Data.Update();
+                                    Data.UserAccounts.Find(x => x.UserId == ctx.User.Id).AllowVentResponses = args.Values.First() == "yes";
+                                    Data.Update();
 
                                     await args.Interaction.CreateResponseAsync(InteractionResponseType.ChannelMessageWithSource, new DiscordInteractionResponseBuilder()
                                         .WithContent("✅ The setting has been set.")
@@ -210,8 +212,8 @@ namespace RainBOT.Modules
                                             {
                                                 if (Regex.IsMatch(args.Values["color"], @"^#(?:[0-9a-fA-F]{3}){1,2}$"))
                                                 {
-                                                    Service.GetUserAccount(ctx).BioStyle = args.Values["color"].ToUpper().Substring(1);
-                                                    Service.Data.Update();
+                                                    Data.UserAccounts.Find(x => x.UserId == ctx.User.Id).BioStyle = args.Values["color"].ToUpper().Substring(1);
+                                                    Data.Update();
 
                                                     await args.Interaction.CreateResponseAsync(InteractionResponseType.ChannelMessageWithSource, new DiscordInteractionResponseBuilder()
                                                         .WithContent("✅ The setting has been set.")
@@ -230,17 +232,17 @@ namespace RainBOT.Modules
                                     {
                                         switch (args.Values.First())
                                         {
-                                            case "none": Service.GetUserAccount(ctx).BioStyle = "2F3136"; break;
-                                            case "red": Service.GetUserAccount(ctx).BioStyle = "E91E63"; break;
-                                            case "orange": Service.GetUserAccount(ctx).BioStyle = "E67E22"; break;
-                                            case "yellow": Service.GetUserAccount(ctx).BioStyle = "F1C40F"; break;
-                                            case "green": Service.GetUserAccount(ctx).BioStyle = "2ECC71"; break;
-                                            case "blue": Service.GetUserAccount(ctx).BioStyle = "3498DB"; break;
-                                            case "purple": Service.GetUserAccount(ctx).BioStyle = "9B59B6"; break;
-                                            case "black": Service.GetUserAccount(ctx).BioStyle = "202225"; break;
-                                            case "white": Service.GetUserAccount(ctx).BioStyle = "FFFFFF"; break;
+                                            case "none": Data.UserAccounts.Find(x => x.UserId == ctx.User.Id).BioStyle = "2F3136"; break;
+                                            case "red": Data.UserAccounts.Find(x => x.UserId == ctx.User.Id).BioStyle = "E91E63"; break;
+                                            case "orange": Data.UserAccounts.Find(x => x.UserId == ctx.User.Id).BioStyle = "E67E22"; break;
+                                            case "yellow": Data.UserAccounts.Find(x => x.UserId == ctx.User.Id).BioStyle = "F1C40F"; break;
+                                            case "green": Data.UserAccounts.Find(x => x.UserId == ctx.User.Id).BioStyle = "2ECC71"; break;
+                                            case "blue": Data.UserAccounts.Find(x => x.UserId == ctx.User.Id).BioStyle = "3498DB"; break;
+                                            case "purple": Data.UserAccounts.Find(x => x.UserId == ctx.User.Id).BioStyle = "9B59B6"; break;
+                                            case "black": Data.UserAccounts.Find(x => x.UserId == ctx.User.Id).BioStyle = "202225"; break;
+                                            case "white": Data.UserAccounts.Find(x => x.UserId == ctx.User.Id).BioStyle = "FFFFFF"; break;
                                         }
-                                        Service.Data.Update();
+                                        Data.Update();
 
                                         await args.Interaction.CreateResponseAsync(InteractionResponseType.ChannelMessageWithSource, new DiscordInteractionResponseBuilder()
                                             .WithContent("✅ The setting has been set.")
@@ -259,9 +261,9 @@ namespace RainBOT.Modules
         {
             var builder = new StringBuilder();
 
-            foreach (var userAccount in Service.Data.UserAccounts.FindAll(x => x.UserId == ctx.User.Id)) builder.AppendLine($"**User Account**\n```json\n{JsonConvert.SerializeObject(userAccount, Formatting.Indented)}```");
-            foreach (var report in Service.Data.Reports.FindAll(x => x.UserId == ctx.User.Id || x.CreatorUserId == ctx.User.Id)) builder.AppendLine($"**Report**\n```json\n{JsonConvert.SerializeObject(report, Formatting.Indented)}```");
-            foreach (var userBan in Service.Data.UserBans.FindAll(x => x.UserId == ctx.User.Id)) builder.AppendLine($"**User Ban**\n```json\n{JsonConvert.SerializeObject(userBan, Formatting.Indented)}```");
+            foreach (var userAccount in Data.UserAccounts.FindAll(x => x.UserId == ctx.User.Id)) builder.AppendLine($"**User Account**\n```json\n{JsonConvert.SerializeObject(userAccount, Formatting.Indented)}```");
+            foreach (var report in Data.Reports.FindAll(x => x.UserId == ctx.User.Id || x.CreatorUserId == ctx.User.Id)) builder.AppendLine($"**Report**\n```json\n{JsonConvert.SerializeObject(report, Formatting.Indented)}```");
+            foreach (var userBan in Data.UserBans.FindAll(x => x.UserId == ctx.User.Id)) builder.AppendLine($"**User Ban**\n```json\n{JsonConvert.SerializeObject(userBan, Formatting.Indented)}```");
             if (builder.Length == 0) builder.Append("There is no data associated with this user.");
 
             await ctx.CreateResponseAsync(new DiscordEmbedBuilder()

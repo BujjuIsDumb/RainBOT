@@ -25,7 +25,7 @@ using RainBOT.Core.Entities.Models;
 
 namespace RainBOT.Core.Entities.Services
 {
-    public class Data
+    public class Data : IDisposable
     {
         [JsonProperty("user_accounts")]
         public List<UserAccountData> UserAccounts = new();
@@ -62,6 +62,15 @@ namespace RainBOT.Core.Entities.Services
         public void Update()
         {
             File.WriteAllText(FileName, JsonConvert.SerializeObject(this, Formatting.Indented));
+        }
+
+        public void Dispose()
+        {
+            UserAccounts.Clear();
+            GuildAccounts.Clear();
+            Reports.Clear();
+            UserBans.Clear();
+            GuildBans.Clear();
         }
     }
 }

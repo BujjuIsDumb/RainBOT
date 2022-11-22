@@ -30,7 +30,9 @@ namespace RainBOT.Modules
     [SlashCommandGroup("identities", "2SLGBTQIA+ identities/labels.")]
     public class Identities : ApplicationCommandModule
     {
-        public RbService Service { private get; set; }
+        public Config Config { private get; set; }
+
+        public Data Data { private get; set; }
 
         [SlashCommand("define", "Define a 2SLGBTQIA+ identity.")]
         public async Task IdentitiesDefineAsync(InteractionContext ctx,

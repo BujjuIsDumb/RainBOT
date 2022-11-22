@@ -32,7 +32,9 @@ namespace RainBOT.Modules
 {
     public class Verification : ApplicationCommandModule
     {
-        public RbService Service { private get; set; }
+        public Config Config { private get; set; }
+
+        public Data Data { private get; set; }
 
         [SlashCommand("verify", "Request verification for the member role.")]
         [GuildOnly]
@@ -47,7 +49,7 @@ namespace RainBOT.Modules
                 .WithCustomId(Core.Utilities.CreateCustomId("verificationFormModal"));
 
             // Add text input component for every question.
-            foreach (var formQuestion in Service.GetGuildAccount(ctx).VerificationFormQuestions)
+            foreach (var formQuestion in Data.GuildAccounts.Find(x => x.GuildId == ctx.Guild.Id).VerificationFormQuestions)
             {
                 if (!string.IsNullOrEmpty(formQuestion.Value))
                 {
@@ -64,7 +66,7 @@ namespace RainBOT.Modules
             {
                 if (args.Interaction.Data.CustomId == verificationFormModal.CustomId)
                 {
-                    int reports = Service.Data.Reports.FindAll(x => x.UserId == ctx.User.Id).Count;
+                    int reports = Data.Reports.FindAll(x => x.UserId == ctx.User.Id).Count;
                     var embed = new DiscordEmbedBuilder()
                         .WithAuthor(name: ctx.User.Username, iconUrl: ctx.User.AvatarUrl)
                         .WithTitle("📨 A new verification request has arrived!")
@@ -77,7 +79,7 @@ namespace RainBOT.Modules
                     {
                         if (!string.IsNullOrEmpty(formQuestion.Value) && formQuestion.Key != "notes")
                         {
-                            embed.AddField(Service.GetGuildAccount(ctx).VerificationFormQuestions[formQuestion.Key], formQuestion.Value);
+                            embed.AddField(Data.GuildAccounts.Find(x => x.GuildId == ctx.Guild.Id).VerificationFormQuestions[formQuestion.Key], formQuestion.Value);
                         }
                     }
 
@@ -95,7 +97,7 @@ namespace RainBOT.Modules
                         .AddComponents(acceptButton, denyButton));
 
                     // Create vetting thread.
-                    DiscordThreadChannel thread = Service.GetGuildAccount(ctx).CreateVettingThread ? await (await args.Interaction.GetOriginalResponseAsync()).CreateThreadAsync($"{ctx.User.Username} Vetting", AutoArchiveDuration.Day) : null;
+                    DiscordThreadChannel thread = Data.GuildAccounts.Find(x => x.GuildId == ctx.Guild.Id).CreateVettingThread ? await (await args.Interaction.GetOriginalResponseAsync()).CreateThreadAsync($"{ctx.User.Username} Vetting", AutoArchiveDuration.Day) : null;
 
                     var originalInteraction = args.Interaction;
 
@@ -135,7 +137,7 @@ namespace RainBOT.Modules
                                             return;
                                         }
 
-                                        if (Service.GetGuildAccount(ctx).DeleteVerificationRequests)
+                                        if (Data.GuildAccounts.Find(x => x.GuildId == ctx.Guild.Id).DeleteVerificationRequests)
                                         {
                                             await originalInteraction.DeleteOriginalResponseAsync();
                                             if (thread is not null) await thread.DeleteAsync();
@@ -212,7 +214,7 @@ namespace RainBOT.Modules
                                             return;
                                         }
 
-                                        if (Service.GetGuildAccount(ctx).DeleteVerificationRequests)
+                                        if (Data.GuildAccounts.Find(x => x.GuildId == ctx.Guild.Id).DeleteVerificationRequests)
                                         {
                                             await originalInteraction.DeleteOriginalResponseAsync();
                                             if (thread is not null) await thread.DeleteAsync();

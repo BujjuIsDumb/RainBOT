@@ -28,7 +28,9 @@ namespace RainBOT.Modules
 {
     public class Hotlines : ApplicationCommandModule
     {
-        public RbService Service { private get; set; }
+        public Config Config { private get; set; }
+
+        public Data Data { private get; set; }
 
         [SlashCommand("hotlines", "Get a list of hotlines.")]
         public async Task HotlinesAsync(InteractionContext ctx)

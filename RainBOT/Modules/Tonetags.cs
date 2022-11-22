@@ -33,7 +33,9 @@ namespace RainBOT.Modules
     [SlashCommandGroup("tonetags", "Tonetags convey tone to people who struggle to identify on their own.")]
     public class Tonetags : ApplicationCommandModule
     {
-        public RbService Service { private get; set; }
+        public Config Config { private get; set; }
+
+        public Data Data { private get; set; }
 
         [SlashCommand("info", "Learn more about tonetags.")]
         public async Task TonetagsInfoAsync(InteractionContext ctx)

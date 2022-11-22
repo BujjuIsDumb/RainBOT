@@ -58,20 +58,24 @@ namespace RainBOT.Core
                 }
                 else if (attribute is SlashUserBannableAttribute slashUserBannableAttribute)
                 {
-                    using (var service = new RbService())
+                    using (var data = new Data("data.json"))
                     {
+                        data.Initialize();
+
                         await args.Context.CreateResponseAsync(new DiscordInteractionResponseBuilder()
-                            .WithContent($"⚠️ You are banned from RainBOT for \"{service.Data.UserBans.Find(x => x.UserId == args.Context.User.Id).Reason}\".")
+                            .WithContent($"⚠️ You are banned from RainBOT for \"{data.UserBans.Find(x => x.UserId == args.Context.User.Id).Reason}\".")
                             .AddComponents(new DiscordLinkButtonComponent("https://forms.gle/mBBhmmT9qC57xjkG7", "Appeal"))
                             .AsEphemeral());
                     }
                 }
                 else if (attribute is SlashGuildBannableAttribute slashGuildBannableAttribute)
                 {
-                    using (var service = new RbService())
+                    using (var data = new Data("data.json"))
                     {
+                        data.Initialize();
+
                         await args.Context.CreateResponseAsync(new DiscordInteractionResponseBuilder()
-                            .WithContent($"⚠️ This server is banned from RainBOT for \"{service.Data.GuildBans.Find(x => x.GuildId == args.Context.Guild.Id).Reason}\".")
+                            .WithContent($"⚠️ This server is banned from RainBOT for \"{data.GuildBans.Find(x => x.GuildId == args.Context.Guild.Id).Reason}\".")
                             .AddComponents(new DiscordLinkButtonComponent("https://forms.gle/mBBhmmT9qC57xjkG7", "Appeal"))
                             .AsEphemeral());
                     }

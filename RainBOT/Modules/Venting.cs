@@ -33,7 +33,9 @@ namespace RainBOT.Modules
 {
     public class Venting : ApplicationCommandModule
     {
-        public RbService Service { private get; set; }
+        public Config Config { private get; set; }
+
+        public Data Data { private get; set; }
 
         [SlashCommand("vent", "Create a vent.")]
         [GuildOnly]
@@ -47,7 +49,7 @@ namespace RainBOT.Modules
         {
             var responseCache = new List<CachedVentResponse>();
 
-            if (anonymous && !Service.GetGuildAccount(ctx).AnonymousVenting)
+            if (anonymous && !Data.GuildAccounts.Find(x => x.GuildId == ctx.Guild.Id).AnonymousVenting)
             {
                 await ctx.CreateResponseAsync("⚠️ You are not allowed to make anonymous vents in this server.", true);
                 return;
@@ -89,7 +91,7 @@ namespace RainBOT.Modules
                     {
                         if (args.Id == respondButton.CustomId)
                         {
-                            if (Service.GetUserAccount(ctx).AllowVentResponses)
+                            if (Data.UserAccounts.Find(x => x.UserId == ctx.User.Id).AllowVentResponses)
                             {
                                 // Build modal.
                                 var respondModal = new DiscordInteractionResponseBuilder()
@@ -143,7 +145,7 @@ namespace RainBOT.Modules
                         {
                             var moderator = args.User as DiscordMember;
 
-                            if (Service.GetGuildAccount(ctx).VentModerators.Contains(moderator.Id) || moderator.Permissions.HasPermission(Permissions.Administrator) || moderator.IsOwner)
+                            if (Data.GuildAccounts.Find(x => x.GuildId == ctx.Guild.Id).VentModerators.Contains(moderator.Id) || moderator.Permissions.HasPermission(Permissions.Administrator) || moderator.IsOwner)
                             {
                                 var embed = new DiscordEmbedBuilder()
                                     .WithTitle($"Vent from {ctx.User.Username}")

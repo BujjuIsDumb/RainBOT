@@ -32,14 +32,16 @@ namespace RainBOT.Modules
     [SlashCommandGroup("report", "Report a user to warn the moderators when they join a server.")]
     public class Report : ApplicationCommandModule
     {
-        public RbService Service { private get; set; }
+        public Config Config { private get; set; }
+
+        public Data Data { private get; set; }
 
         [SlashCommand("create", "Create a report.")]
         [SlashRequireUserAccount]
         public async Task ReportCreateAsync(InteractionContext ctx,
             [Option("user", "The user to report.")] DiscordUser user)
         {
-            if (Service.Data.Reports.Exists(x => x.UserId == user.Id && x.CreatorUserId == ctx.User.Id))
+            if (Data.Reports.Exists(x => x.UserId == user.Id && x.CreatorUserId == ctx.User.Id))
             {
                 await ctx.CreateResponseAsync($"⚠️ You've already reported **{user.Username}**.", true);
                 return;
@@ -59,14 +61,14 @@ namespace RainBOT.Modules
             {
                 if (args.Interaction.Data.CustomId == reportModal.CustomId)
                 {
-                    Service.Data.Reports.Add(new ReportData()
+                    Data.Reports.Add(new ReportData()
                     {
                         UserId = user.Id,
                         CreatorUserId = ctx.User.Id,
                         Subject = args.Values["subject"],
                         Body = args.Values["body"]
                     });
-                    Service.Data.Update();
+                    Data.Update();
 
                     await args.Interaction.CreateResponseAsync(InteractionResponseType.ChannelMessageWithSource, new DiscordInteractionResponseBuilder()
                         .WithContent($"✅ Created a report for **{user.Username}**.")
@@ -80,12 +82,12 @@ namespace RainBOT.Modules
         public async Task ReportRevokeAsync(InteractionContext ctx,
             [Option("user", "The user to remove the report from.")] DiscordUser user)
         {
-            var report = Service.Data.Reports.Find(x => x.UserId == user.Id && x.CreatorUserId == ctx.User.Id);
+            var report = Data.Reports.Find(x => x.UserId == user.Id && x.CreatorUserId == ctx.User.Id);
 
             if (report is not null)
             {
-                Service.Data.Reports.Remove(report);
-                Service.Data.Update();
+                Data.Reports.Remove(report);
+                Data.Update();
 
                 await ctx.CreateResponseAsync($"✅ Removed your report for **{user.Username}**.", true);
             }
@@ -99,7 +101,7 @@ namespace RainBOT.Modules
         public async Task ReportListAsync(InteractionContext ctx,
             [Option("user", "The user to view the reports of.")] DiscordUser user)
         {
-            if (Service.Data.Reports.FindAll(x => x.UserId == user.Id).Count <= 0)
+            if (Data.Reports.FindAll(x => x.UserId == user.Id).Count <= 0)
             {
                 await ctx.CreateResponseAsync($"⚠️ **{user.Username}** has no reports.", true);
                 return;
@@ -107,7 +109,7 @@ namespace RainBOT.Modules
 
             // Create select menu options for each report.
             var reportSelectOptions = new List<DiscordSelectComponentOption>();
-            foreach (ReportData report in Service.Data.Reports.FindAll(x => x.UserId == user.Id))
+            foreach (ReportData report in Data.Reports.FindAll(x => x.UserId == user.Id))
             {
                 DiscordUser creator = await ctx.Client.GetUserAsync(report.CreatorUserId);
                 reportSelectOptions.Add(new DiscordSelectComponentOption(report.Subject, creator.Id.ToString(), $"Created by {creator.Username}"));
@@ -125,7 +127,7 @@ namespace RainBOT.Modules
             {
                 if (args.Id == reportSelect.CustomId)
                 {
-                    var report = Service.Data.Reports.Find(x => x.UserId == user.Id && x.CreatorUserId == ulong.Parse(args.Values.First())) ?? new ReportData();
+                    var report = Data.Reports.Find(x => x.UserId == user.Id && x.CreatorUserId == ulong.Parse(args.Values.First())) ?? new ReportData();
 
                     var embed = new DiscordEmbedBuilder()
                         .WithAuthor(name: (await ctx.Client.GetUserAsync(report.CreatorUserId)).Username, iconUrl: (await ctx.Client.GetUserAsync(report.CreatorUserId)).AvatarUrl)
@@ -143,7 +145,7 @@ namespace RainBOT.Modules
         [ContextMenu(ApplicationCommandType.UserContextMenu, "View Reports")]
         public async Task ViewReportsAsync(ContextMenuContext ctx)
         {
-            if (Service.Data.Reports.FindAll(x => x.UserId == ctx.TargetUser.Id).Count <= 0)
+            if (Data.Reports.FindAll(x => x.UserId == ctx.TargetUser.Id).Count <= 0)
             {
                 await ctx.CreateResponseAsync($"⚠️ **{ctx.TargetUser.Username}** has no reports.", true);
                 return;
@@ -151,7 +153,7 @@ namespace RainBOT.Modules
 
             // Create select menu options for each report.
             var reportSelectOptions = new List<DiscordSelectComponentOption>();
-            foreach (ReportData report in Service.Data.Reports.FindAll(x => x.UserId == ctx.TargetUser.Id))
+            foreach (ReportData report in Data.Reports.FindAll(x => x.UserId == ctx.TargetUser.Id))
             {
                 DiscordUser creator = await ctx.Client.GetUserAsync(report.CreatorUserId);
                 reportSelectOptions.Add(new DiscordSelectComponentOption(report.Subject, creator.Id.ToString(), $"Created by {creator.Username}"));
@@ -169,7 +171,7 @@ namespace RainBOT.Modules
             {
                 if (args.Id == reportSelect.CustomId)
                 {
-                    var report = Service.Data.Reports.Find(x => x.UserId == ctx.TargetUser.Id && x.CreatorUserId == ulong.Parse(args.Values.First())) ?? new ReportData();
+                    var report = Data.Reports.Find(x => x.UserId == ctx.TargetUser.Id && x.CreatorUserId == ulong.Parse(args.Values.First())) ?? new ReportData();
 
                     var embed = new DiscordEmbedBuilder()
                         .WithAuthor(name: (await ctx.Client.GetUserAsync(report.CreatorUserId)).Username, iconUrl: (await ctx.Client.GetUserAsync(report.CreatorUserId)).AvatarUrl)

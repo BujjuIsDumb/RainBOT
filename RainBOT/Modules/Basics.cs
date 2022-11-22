@@ -30,7 +30,9 @@ namespace RainBOT.Modules
 {
     public class Basics : ApplicationCommandModule
     {
-        public RbService Service { private get; set; }
+        public Config Config { private get; set; }
+
+        public Data Data { private get; set; }
 
         [SlashCommand("help", "Get help with something.")]
         public async Task HelpAsync(InteractionContext ctx,
@@ -160,7 +162,7 @@ namespace RainBOT.Modules
         {
             await ctx.CreateResponseAsync(new DiscordInteractionResponseBuilder()
                 .WithContent("Click the button to view my source code.")
-                .AddComponents(new DiscordLinkButtonComponent(Service.Config.SourceUrl, "Source"))
+                .AddComponents(new DiscordLinkButtonComponent(Config.SourceUrl, "Source"))
                 .AsEphemeral());
         }
 
@@ -169,7 +171,7 @@ namespace RainBOT.Modules
         {
             await ctx.CreateResponseAsync(new DiscordInteractionResponseBuilder()
                 .WithContent("Click the button to join the support server.")
-                .AddComponents(new DiscordLinkButtonComponent(Service.Config.SupportUrl, "Server"))
+                .AddComponents(new DiscordLinkButtonComponent(Config.SupportUrl, "Server"))
                 .AsEphemeral());
         }
 
@@ -178,7 +180,7 @@ namespace RainBOT.Modules
         {
             await ctx.CreateResponseAsync(new DiscordInteractionResponseBuilder()
                 .WithContent("Click the button to invite me to your server.")
-                .AddComponents(new DiscordLinkButtonComponent(Service.Config.InviteUrl, "Invite"))
+                .AddComponents(new DiscordLinkButtonComponent(Config.InviteUrl, "Invite"))
                 .AsEphemeral());
         }
     }

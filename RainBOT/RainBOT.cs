@@ -34,12 +34,14 @@ namespace RainBOT
     {
         private async Task InitializeAsync()
         {
-            using (var service = new RbService())
+            using (var config = new Config("config.json"))
             {
+                config.Initialize();
+
                 // Setup client.
                 var discord = new DiscordShardedClient(new DiscordConfiguration()
                 {
-                    Token = service.Config.Token,
+                    Token = config.Token,
                     TokenType = TokenType.Bot
                 });
                 discord.MessageCreated += Events.MessageCreated;
@@ -48,20 +50,21 @@ namespace RainBOT
                 var slash = await discord.UseSlashCommandsAsync(new SlashCommandsConfiguration()
                 {
                     Services = new ServiceCollection()
-                        .AddTransient<RbService>()
+                        .AddTransient<Config>()
+                        .AddTransient<Data>()
                         .BuildServiceProvider()
                 });
                 
                 // Register commands.
                 foreach (var extension in slash.Values)
                 {
-                    extension.RegisterCommands(Assembly.GetExecutingAssembly(), service.Config.GuildId);
+                    extension.RegisterCommands(Assembly.GetExecutingAssembly(), config.GuildId);
                     extension.SlashCommandErrored += Events.SlashCommandErrored;
                 }
 
                 // Start bot.
                 await discord.StartAsync();
-                discord.Ready += async (sender, args) => await discord.UpdateStatusAsync(new DiscordActivity(service.Config.Status, service.Config.StatusType));
+                discord.Ready += async (sender, args) => await discord.UpdateStatusAsync(new DiscordActivity(config.Status, config.StatusType));
                 await Task.Delay(-1);
             }
         }

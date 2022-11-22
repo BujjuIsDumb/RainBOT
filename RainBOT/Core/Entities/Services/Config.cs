@@ -25,7 +25,7 @@ using Newtonsoft.Json;
 
 namespace RainBOT.Core.Entities.Services
 {
-    public class Config
+    public class Config : IDisposable
     {
         [JsonProperty("token")]
         public string Token { get; private set; }
@@ -65,6 +65,17 @@ namespace RainBOT.Core.Entities.Services
             GuildId = loaded.GuildId;
             Status = loaded.Status;
             StatusType = loaded.StatusType;
+        }
+
+        public void Dispose()
+        {
+            Token = null;
+            SourceUrl = null;
+            SupportUrl = null;
+            InviteUrl = null;
+            GuildId = null;
+            Status = null;
+            StatusType = default;
         }
     }
 }
