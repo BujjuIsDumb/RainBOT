@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.4.33110.190
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RainBOT", "RainBOT\RainBOT.csproj", "{7293554C-235C-4C5C-A9C5-0F1E4FE2889D}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{7293554C-235C-4C5C-A9C5-0F1E4FE2889D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7293554C-235C-4C5C-A9C5-0F1E4FE2889D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7293554C-235C-4C5C-A9C5-0F1E4FE2889D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7293554C-235C-4C5C-A9C5-0F1E4FE2889D}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {2680F8F6-194C-45FF-8942-5CDBAD5C07FB}
+	EndGlobalSection
+EndGlobal
