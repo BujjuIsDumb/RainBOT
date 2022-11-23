@@ -50,8 +50,8 @@ namespace RainBOT
                 var slash = await discord.UseSlashCommandsAsync(new SlashCommandsConfiguration()
                 {
                     Services = new ServiceCollection()
-                        .AddTransient<Config>()
-                        .AddTransient<Data>()
+                        .AddTransient(x => new Config("config.json"))
+                        .AddTransient(x => new Data("data.json"))
                         .BuildServiceProvider()
                 });
                 
