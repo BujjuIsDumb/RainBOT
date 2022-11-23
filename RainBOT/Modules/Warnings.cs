@@ -56,7 +56,8 @@ namespace RainBOT.Modules
             {
                 UserId = user.Id,
                 CreatorUserId = ctx.User.Id,
-                Description = warning
+                Description = warning,
+                CreationTimestamp = DateTime.UtcNow
             });
 
             Data.GuildAccounts.Find(x => x.GuildId == ctx.Guild.Id).Warnings = warnings.ToArray();
@@ -123,6 +124,7 @@ namespace RainBOT.Modules
                         .WithAuthor(name: (await ctx.Client.GetUserAsync(warn.CreatorUserId)).Username, iconUrl: (await ctx.Client.GetUserAsync(warn.CreatorUserId)).AvatarUrl)
                         .WithTitle("Warning")
                         .WithDescription(warn.Description)
+                        .WithTimestamp(warn.CreationTimestamp)
                         .WithColor(new DiscordColor(3092790));
 
                     await args.Interaction.CreateResponseAsync(InteractionResponseType.ChannelMessageWithSource, new DiscordInteractionResponseBuilder()
@@ -173,6 +175,7 @@ namespace RainBOT.Modules
                         .WithAuthor(name: (await ctx.Client.GetUserAsync(warn.CreatorUserId)).Username, iconUrl: (await ctx.Client.GetUserAsync(warn.CreatorUserId)).AvatarUrl)
                         .WithTitle("Warning")
                         .WithDescription(warn.Description)
+                        .WithTimestamp(warn.CreationTimestamp)
                         .WithColor(new DiscordColor(3092790));
 
                     await args.Interaction.CreateResponseAsync(InteractionResponseType.ChannelMessageWithSource, new DiscordInteractionResponseBuilder()

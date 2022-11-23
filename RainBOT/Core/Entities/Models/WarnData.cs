@@ -34,5 +34,8 @@ namespace RainBOT.Core.Entities.Models
 
         [JsonProperty("description")]
         public string Description { get; set; }
+
+        [JsonProperty("creation_timestamp")]
+        public DateTimeOffset CreationTimestamp { get; set; } = DateTimeOffset.UnixEpoch;
     }
 }
