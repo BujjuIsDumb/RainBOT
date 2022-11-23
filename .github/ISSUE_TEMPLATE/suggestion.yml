@@ -1,1 +1,25 @@
-
+name: "Suggestion"
+description: "Something should be added"
+assignees: "BujjuIsDumb"
+labels:
+- "Suggestion"
+- "Unimportant"
+body:
+- type: markdown
+  attributes:
+    value: "### Suggest a feature"
+- type: markdown
+  attributes:
+    value: "If you have a feature that you would like to see added to RainBOT, you can suggest it here. If the feature seems like a good fit for RainBOT, it may be added."
+- type: textarea
+  attributes:
+    label: "Describe the feature"
+    description: "Give a summary of the feature."
+  validations:
+    required: true
+- type: textarea
+  attributes:
+    label: "Why this should be added"
+    description: "Why should this feature be added?"
+  validations:
+    required: true
