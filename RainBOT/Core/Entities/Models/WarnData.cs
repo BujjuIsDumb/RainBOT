@@ -20,31 +20,19 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-using DSharpPlus.Entities;
 using Newtonsoft.Json;
 
 namespace RainBOT.Core.Entities.Models
 {
-    public class GuildAccountData
+    public class WarnData
     {
-        [JsonProperty("guild_id")]
-        public ulong GuildId { get; set; } = 0;
+        [JsonProperty("user_id")]
+        public ulong UserId { get; set; }
 
-        [JsonProperty("vent_moderators")]
-        public ulong[] VentModerators { get; set; } = new ulong[0];
+        [JsonProperty("creator_user_id")]
+        public ulong CreatorUserId { get; set; }
 
-        [JsonProperty("anonymous_venting")]
-        public bool AnonymousVenting { get; set; } = true;
-
-        [JsonProperty("delete_verification_requests")]
-        public bool DeleteVerificationRequests { get; set; } = false;
-
-        [JsonProperty("create_vetting_thread")]
-        public bool CreateVettingThread { get; set; } = true;
-
-        [JsonProperty("verification_form_questions")]
-        public Dictionary<string, string> VerificationFormQuestions { get; set; } = new();
-
-        public WarnData[] Warnings { get; set; } = new WarnData[0];
+        [JsonProperty("description")]
+        public string Description { get; set; }
     }
 }
