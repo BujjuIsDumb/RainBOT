@@ -134,7 +134,7 @@ namespace RainBOT.Modules
                         .WithAuthor(name: (await ctx.Client.GetUserAsync(report.CreatorUserId)).Username, iconUrl: (await ctx.Client.GetUserAsync(report.CreatorUserId)).AvatarUrl)
                         .WithTitle(report.Subject)
                         .WithDescription(report.Body)
-                        .WithTimestamp(DateTimeOffset.UtcNow)
+                        .WithTimestamp(report.CreationTimestamp)
                         .WithColor(new DiscordColor(3092790));
 
                     await args.Interaction.CreateResponseAsync(InteractionResponseType.ChannelMessageWithSource, new DiscordInteractionResponseBuilder()
@@ -179,7 +179,7 @@ namespace RainBOT.Modules
                         .WithAuthor(name: (await ctx.Client.GetUserAsync(report.CreatorUserId)).Username, iconUrl: (await ctx.Client.GetUserAsync(report.CreatorUserId)).AvatarUrl)
                         .WithTitle(report.Subject)
                         .WithDescription(report.Body)
-                        .WithTimestamp(DateTimeOffset.UtcNow)
+                        .WithTimestamp(report.CreationTimestamp)
                         .WithColor(new DiscordColor(3092790));
 
                     await args.Interaction.CreateResponseAsync(InteractionResponseType.ChannelMessageWithSource, new DiscordInteractionResponseBuilder()
