@@ -27,6 +27,7 @@ using DSharpPlus.SlashCommands.Attributes;
 
 namespace RainBOT.Modules
 {
+    [GuildOnly]
     public class Moderation : ApplicationCommandModule
     {
         [SlashCommand("purge", "Delete multiple messages at once.")]
