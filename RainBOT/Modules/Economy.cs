@@ -43,14 +43,14 @@ namespace RainBOT.Modules
             Data.UserAccounts.Find(x => x.UserId == ctx.User.Id).Coins += 100;
             Data.Update();
 
-            await ctx.CreateResponseAsync($"✅ You have worked for the day. You now have ¤{Data.UserAccounts.Find(x => x.UserId == ctx.User.Id).Coins}!", true);
+            await ctx.CreateResponseAsync($"✅ You have worked for the day. You now have 🌈{Data.UserAccounts.Find(x => x.UserId == ctx.User.Id).Coins}!", true);
         }
 
         [SlashCommand("coins", "See how many coins you have.")]
         [SlashRequireUserAccount]
         public async Task EconomyCoinsAsync(InteractionContext ctx)
         {
-            await ctx.CreateResponseAsync($"You have ¤{Data.UserAccounts.Find(x => x.UserId == ctx.User.Id).Coins}", true);
+            await ctx.CreateResponseAsync($"You have 🌈{Data.UserAccounts.Find(x => x.UserId == ctx.User.Id).Coins}", true);
         }
 
         [SlashCommand("leaderboard", "View the leaderboard.")]
@@ -75,7 +75,7 @@ namespace RainBOT.Modules
                     case 2: placeString = "🥉 "; break;
                 }
 
-                embed.AddField(placeString + (await ctx.Client.GetUserAsync(account.UserId)).Username, "¤" + account.Coins);
+                embed.AddField(placeString + (await ctx.Client.GetUserAsync(account.UserId)).Username, "🌈" + account.Coins);
             }
 
             await ctx.CreateResponseAsync(embed, true);
