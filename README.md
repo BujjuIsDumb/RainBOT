@@ -5,6 +5,6 @@
 <p align = "center">RainBOT is a Discord bot designed to help start, manage, and moderate 2SLGBTQIA+ safespace servers.</p>
 <p align = "center">
    <a href="https://github.com/BujjuIsDumb/RainBOT/issues"><img src="https://img.shields.io/github/issues/BujjuIsDumb/RainBOT"></a>
-   <a href="https://github.com/BujjuIsDumb/RainBOT/commits/main"><img src="https://img.shields.io/github/last-commit/BujjuIsDumb/RainBOT?color=%23fc8803"></a>
-   <a href="https://github.com/BujjuIsDumb/RainBOT/blob/main/LICENSE"><img src="https://img.shields.io/github/license/BujjuIsDumb/RainBOT"></a>
+   <a href="https://github.com/BujjuIsDumb/RainBOT/commits/master"><img src="https://img.shields.io/github/last-commit/BujjuIsDumb/RainBOT?color=%23fc8803"></a>
+   <a href="https://github.com/BujjuIsDumb/RainBOT/blob/master/LICENSE"><img src="https://img.shields.io/github/license/BujjuIsDumb/RainBOT"></a>
 </p>
