@@ -29,10 +29,8 @@ namespace RainBOT.Core.Attributes
     {
         public override async Task<bool> ExecuteChecksAsync(InteractionContext ctx)
         {
-            using (var data = new Data("data.json"))
+            using (var data = new Data("data.json").Initialize())
             {
-                data.Initialize();
-
                 // Return true if there is no ban for the user; return false if there is.
                 return await Task.FromResult(data.UserAccounts.Exists(x => x.UserId == ctx.User.Id));
             }

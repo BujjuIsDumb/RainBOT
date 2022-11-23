@@ -20,20 +20,19 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-using DSharpPlus.SlashCommands;
-using RainBOT.Core.Entities.Services;
+using Newtonsoft.Json;
 
-namespace RainBOT.Core.Attributes
+namespace RainBOT.Core.Entities.Models
 {
-    public class SlashGuildBannableAttribute : SlashCheckBaseAttribute
+    public class WarnData
     {
-        public override async Task<bool> ExecuteChecksAsync(InteractionContext ctx)
-        {
-            using (var data = new Data("data.json").Initialize())
-            {
-                // Return true if there is no ban for the guild; return false if there is.
-                return await Task.FromResult(!data.GuildBans.Exists(x => x.GuildId == ctx.Guild.Id));
-            }
-        }
+        [JsonProperty("user_id")]
+        public ulong UserId { get; set; }
+
+        [JsonProperty("creator_user_id")]
+        public ulong CreatorUserId { get; set; }
+
+        [JsonProperty("description")]
+        public string Description { get; set; }
     }
 }

@@ -47,7 +47,7 @@ namespace RainBOT.Core.Entities.Services
         [JsonIgnore]
         public string FileName { get; set; }
 
-        public void Initialize()
+        public Data Initialize()
         {
             // Load the database.
             var loaded = JsonConvert.DeserializeObject<Data>(File.ReadAllText(FileName));
@@ -57,6 +57,8 @@ namespace RainBOT.Core.Entities.Services
             Reports = loaded.Reports;
             UserBans = loaded.UserBans;
             GuildBans = loaded.GuildBans;
+
+            return this;
         }
 
         public void Update()

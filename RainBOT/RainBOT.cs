@@ -34,10 +34,8 @@ namespace RainBOT
     {
         private async Task InitializeAsync()
         {
-            using (var config = new Config("config.json"))
+            using (var config = new Config("config.json").Initialize())
             {
-                config.Initialize();
-
                 // Setup client.
                 var discord = new DiscordShardedClient(new DiscordConfiguration()
                 {
@@ -50,8 +48,8 @@ namespace RainBOT
                 var slash = await discord.UseSlashCommandsAsync(new SlashCommandsConfiguration()
                 {
                     Services = new ServiceCollection()
-                        .AddTransient<Config>()
-                        .AddTransient<Data>()
+                        .AddTransient(x => new Config("config.json").Initialize())
+                        .AddTransient(x => new Data("data.json").Initialize())
                         .BuildServiceProvider()
                 });
                 
