@@ -53,7 +53,7 @@ namespace RainBOT.Core.Entities.Services
         [JsonIgnore]
         public string FileName { get; set; }
 
-        public void Initialize()
+        public Config Initialize()
         {
             // Load the config.
             var loaded = JsonConvert.DeserializeObject<Config>(File.ReadAllText(FileName));
@@ -65,6 +65,8 @@ namespace RainBOT.Core.Entities.Services
             GuildId = loaded.GuildId;
             Status = loaded.Status;
             StatusType = loaded.StatusType;
+
+            return this;
         }
 
         public void Dispose()
