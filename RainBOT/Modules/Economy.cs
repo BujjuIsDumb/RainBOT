@@ -64,12 +64,16 @@ namespace RainBOT.Modules
 
             foreach (var account in leaderboard)
             {
-                int place = leaderboard.ToList().IndexOf(account) ;
-                string placeString = (place + 1).ToString() + ". ";
+                // Set place number.
+                string placeString = (leaderboard.ToList().IndexOf(account) + 1).ToString() + ". ";
 
-                if (place == 0) placeString = "🥇 ";
-                if (place == 1) placeString = "🥈 ";
-                if (place == 2) placeString = "🥉 ";
+                // Set place number to medals for first three users on leaderboard.
+                switch (leaderboard.ToList().IndexOf(account))
+                {
+                    case 0: placeString = "🥇 "; break;
+                    case 1: placeString = "🥈 "; break;
+                    case 2: placeString = "🥉 "; break;
+                }
 
                 embed.AddField(placeString + (await ctx.Client.GetUserAsync(account.UserId)).Username, "¤" + account.Coins);
             }
