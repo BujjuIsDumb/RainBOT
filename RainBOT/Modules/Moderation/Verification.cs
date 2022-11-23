@@ -28,7 +28,7 @@ using DSharpPlus.SlashCommands.Attributes;
 using RainBOT.Core.Attributes;
 using RainBOT.Core.Entities.Services;
 
-namespace RainBOT.Modules
+namespace RainBOT.Modules.Moderation
 {
     public class Verification : ApplicationCommandModule
     {

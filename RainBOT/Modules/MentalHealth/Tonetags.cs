@@ -28,7 +28,7 @@ using RainBOT.Core;
 using RainBOT.Core.AutocompleteProviders;
 using RainBOT.Core.Entities.Services;
 
-namespace RainBOT.Modules
+namespace RainBOT.Modules.MentalHealth
 {
     [SlashCommandGroup("tonetags", "Tonetags convey tone to people who struggle to identify on their own.")]
     public class Tonetags : ApplicationCommandModule

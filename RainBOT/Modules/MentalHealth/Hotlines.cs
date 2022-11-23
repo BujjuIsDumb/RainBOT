@@ -24,7 +24,7 @@ using DSharpPlus.Entities;
 using DSharpPlus.SlashCommands;
 using RainBOT.Core.Entities.Services;
 
-namespace RainBOT.Modules
+namespace RainBOT.Modules.MentalHealth
 {
     public class Hotlines : ApplicationCommandModule
     {

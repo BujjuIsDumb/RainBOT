@@ -29,7 +29,7 @@ using RainBOT.Core.Attributes;
 using RainBOT.Core.Entities.Models;
 using RainBOT.Core.Entities.Services;
 
-namespace RainBOT.Modules
+namespace RainBOT.Modules.Bot
 {
     [SlashCommandGroup("server", "Manage your server account.", false)]
     [SlashCommandPermissions(Permissions.ManageGuild)]

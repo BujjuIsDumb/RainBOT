@@ -26,7 +26,7 @@ using DSharpPlus.SlashCommands;
 using RainBOT.Core;
 using RainBOT.Core.Entities.Services;
 
-namespace RainBOT.Modules
+namespace RainBOT.Modules.MentalHealth
 {
     [SlashCommandGroup("cw", "Content warnings are warnings that messages contain potentially triggering content.")]
     public class ContentWarnings : ApplicationCommandModule
