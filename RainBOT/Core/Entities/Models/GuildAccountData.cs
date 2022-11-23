@@ -45,6 +45,7 @@ namespace RainBOT.Core.Entities.Models
         [JsonProperty("verification_form_questions")]
         public Dictionary<string, string> VerificationFormQuestions { get; set; } = new();
 
+        [JsonProperty("warnings")]
         public WarnData[] Warnings { get; set; } = new WarnData[0];
     }
 }
