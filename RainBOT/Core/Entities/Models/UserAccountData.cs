@@ -37,8 +37,5 @@ namespace RainBOT.Core.Entities.Models
 
         [JsonProperty("allow_vent_responses")]
         public bool AllowVentResponses { get; set; } = true;
-
-        [JsonProperty("coins")]
-        public int Coins { get; set; } = 0;
     }
 }
