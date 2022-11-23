@@ -3,7 +3,6 @@ description: "Something should be added"
 assignees: "BujjuIsDumb"
 labels:
 - "Suggestion"
-- "Unimportant"
 body:
 - type: markdown
   attributes:
