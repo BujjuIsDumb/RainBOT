@@ -133,6 +133,7 @@ namespace RainBOT.Modules
         }
 
         [ContextMenu(ApplicationCommandType.UserContextMenu, "View Warnings")]
+        [SlashRequireGuildAccount]
         public async Task ViewWarningsAsync(ContextMenuContext ctx)
         {
             if (Data.GuildAccounts.Find(x => x.GuildId == ctx.Guild.Id).Warnings.ToList().FindAll(x => x.UserId == ctx.TargetUser.Id).Count <= 0)
