@@ -30,7 +30,7 @@ using RainBOT.Core.Attributes;
 using RainBOT.Core.Entities.Models;
 using RainBOT.Core.Entities.Services;
 
-namespace RainBOT.Modules.Bot
+namespace RainBOT.Modules
 {
     [SlashCommandGroup("user", "Manage your user account.")]
     public class User : ApplicationCommandModule

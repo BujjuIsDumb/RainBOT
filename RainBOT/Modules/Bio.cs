@@ -28,7 +28,7 @@ using RainBOT.Core.AutocompleteProviders;
 using RainBOT.Core.Entities.Models;
 using RainBOT.Core.Entities.Services;
 
-namespace RainBOT.Modules.Lgbt
+namespace RainBOT.Modules
 {
     [SlashCommandGroup("bio", "Create a bio with information about yourself.")]
     public class Bio : ApplicationCommandModule

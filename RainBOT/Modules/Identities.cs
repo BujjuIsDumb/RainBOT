@@ -25,7 +25,7 @@ using RainBOT.Core;
 using RainBOT.Core.AutocompleteProviders;
 using RainBOT.Core.Entities.Services;
 
-namespace RainBOT.Modules.Lgbt
+namespace RainBOT.Modules
 {
     [SlashCommandGroup("identities", "2SLGBTQIA+ identities/labels.")]
     public class Identities : ApplicationCommandModule

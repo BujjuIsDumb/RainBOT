@@ -26,7 +26,7 @@ using DSharpPlus.Entities;
 using DSharpPlus.SlashCommands;
 using RainBOT.Core.Entities.Services;
 
-namespace RainBOT.Modules.Bot
+namespace RainBOT.Modules
 {
     public class Basics : ApplicationCommandModule
     {

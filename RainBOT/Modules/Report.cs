@@ -27,7 +27,7 @@ using RainBOT.Core.Attributes;
 using RainBOT.Core.Entities.Models;
 using RainBOT.Core.Entities.Services;
 
-namespace RainBOT.Modules.Moderation
+namespace RainBOT.Modules
 {
     [SlashCommandGroup("report", "Report a user to warn the moderators when they join a server.")]
     public class Report : ApplicationCommandModule

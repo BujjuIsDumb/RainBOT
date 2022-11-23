@@ -17,8 +17,4 @@
     <PackageReference Include="DSharpPlus.SlashCommands" Version="4.3.0-nightly-01188" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Modules\Fun\" />
-  </ItemGroup>
-
 </Project>

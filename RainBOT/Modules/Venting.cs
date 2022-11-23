@@ -29,7 +29,7 @@ using RainBOT.Core.Attributes;
 using RainBOT.Core.Entities;
 using RainBOT.Core.Entities.Services;
 
-namespace RainBOT.Modules.MentalHealth
+namespace RainBOT.Modules
 {
     public class Venting : ApplicationCommandModule
     {
