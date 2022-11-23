@@ -1,5 +1,5 @@
 name: "Bug"
-description: "Something isn't working as intended"
+description: "Report a bug or typo "
 assignees: "BujjuIsDumb"
 labels: "Bug"
 body:
@@ -19,7 +19,7 @@ body:
   attributes:
     label: "Steps to reproduce"
     description: "Give instructions on how to recreate the bug."
-    placeholder: |
+    value: |
       1.
       2.
       3.
