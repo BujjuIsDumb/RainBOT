@@ -42,7 +42,6 @@ namespace RainBOT.Modules
         [SlashCommand("create", "Create a warning.")]
         public async Task WarnCreateAsync(InteractionContext ctx,
             [Option("user", "The user to warn.")] DiscordUser user,
-            [MaximumLength(30)]
             [Option("warning", "What did the user do?")] string warning)
         {
             if (Data.GuildAccounts.Find(x => x.GuildId == ctx.Guild.Id).Warnings.ToList().Exists(x => x.UserId == user.Id && x.CreatorUserId == ctx.User.Id))
@@ -103,7 +102,7 @@ namespace RainBOT.Modules
             foreach (WarnData warn in Data.GuildAccounts.Find(x => x.GuildId == ctx.Guild.Id).Warnings)
             {
                 DiscordUser creator = await ctx.Client.GetUserAsync(warn.CreatorUserId);
-                warnSelectOptions.Add(new DiscordSelectComponentOption(warn.Description, creator.Id.ToString(), $"Created by {creator.Username}"));
+                warnSelectOptions.Add(new DiscordSelectComponentOption($"Warning from {creator.Username}", creator.Id.ToString()));
             }
 
             var warnSelect = new DiscordSelectComponent(Core.Utilities.CreateCustomId("warnSelect"), "Select a warning", warnSelectOptions);
@@ -154,7 +153,7 @@ namespace RainBOT.Modules
             foreach (WarnData warn in Data.GuildAccounts.Find(x => x.GuildId == ctx.Guild.Id).Warnings)
             {
                 DiscordUser creator = await ctx.Client.GetUserAsync(warn.CreatorUserId);
-                warnSelectOptions.Add(new DiscordSelectComponentOption(warn.Description, creator.Id.ToString(), $"Created by {creator.Username}"));
+                warnSelectOptions.Add(new DiscordSelectComponentOption($"Warning from {creator.Username}", creator.Id.ToString()));
             }
 
             var warnSelect = new DiscordSelectComponent(Core.Utilities.CreateCustomId("warnSelect"), "Select a warning", warnSelectOptions);
