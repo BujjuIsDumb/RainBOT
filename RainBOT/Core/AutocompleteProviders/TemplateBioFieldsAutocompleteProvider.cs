@@ -33,7 +33,7 @@ namespace RainBOT.Core.AutocompleteProviders
             {
                 new DiscordAutoCompleteChoice("Pronouns", "Pronouns"),
                 new DiscordAutoCompleteChoice("Honorific(s)", "Honorific(s)"),
-                new DiscordAutoCompleteChoice("Preferred Gendered Terms", "Perferred Gendered Terms"),
+                new DiscordAutoCompleteChoice("Preferred Gendered Terms", "Preferred Gendered Terms"),
                 new DiscordAutoCompleteChoice("Gender Identity", "Gender Identity"),
                 new DiscordAutoCompleteChoice("Sexuality/Romanticism", "Sexuality/Romanticism")
             };

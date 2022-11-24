@@ -252,7 +252,7 @@ namespace RainBOT.Modules
 
                             var createVettingThreadSelect = new DiscordSelectComponent(Core.Utilities.CreateCustomId("createVettingThreadSelect"), "Select an option", new List<DiscordSelectComponentOption>()
                             {
-                                new DiscordSelectComponentOption("Yes", "yes", "Create vetting threads for verification reqeuests.", false, new DiscordComponentEmoji(DiscordEmoji.FromUnicode("✅"))),
+                                new DiscordSelectComponentOption("Yes", "yes", "Create vetting threads for verification requests.", false, new DiscordComponentEmoji(DiscordEmoji.FromUnicode("✅"))),
                                 new DiscordSelectComponentOption("No", "no", "Do not create vetting threads for verification requests.", false, new DiscordComponentEmoji(DiscordEmoji.FromUnicode("🚫")))
                             });
 

@@ -50,7 +50,7 @@ namespace RainBOT.Core
                 }
                 else if (attribute is SlashRequireUserAccountAttribute)
                 {
-                    await args.Context.CreateResponseAsync($"⚠️ You need a user account to use this commnad. Create one with {Utilities.GetCommandMention(args.Context.Client, "user register")}.", true);
+                    await args.Context.CreateResponseAsync($"⚠️ You need a user account to use this command. Create one with {Utilities.GetCommandMention(args.Context.Client, "user register")}.", true);
                 }
                 else if (attribute is SlashRequireGuildAccountAttribute)
                 {

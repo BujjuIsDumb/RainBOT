@@ -62,7 +62,7 @@ namespace RainBOT.Core
         {
             // Create a custom ID.
             // Uses snowflakes to differentiate between uses.
-            // Uses component name to differentiate between differnet components created at the same time.
+            // Uses component name to differentiate between different components created at the same time.
             return $"{componentName}-{DateTimeOffset.Now.ToUnixTimeSeconds()}";
         }
     }

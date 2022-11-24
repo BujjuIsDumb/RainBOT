@@ -125,7 +125,7 @@ namespace RainBOT.Modules
             {
                 var embed = new DiscordEmbedBuilder()
                     .WithTitle("Bugs, typos, and suggestions")
-                    .WithDescription("Bug reports, typo reports, and featuer suggestions should " +
+                    .WithDescription("Bug reports, typo reports, and feature suggestions should " +
                     "all be made [here](https://github.com/BujjuIsDumb/RainBOT/issues).\n\nWe " +
                     "try to get bugs fixed as soon as possible, but typos and suggested " +
                     "features may take a bit longer. Please give as much detail as possible.")

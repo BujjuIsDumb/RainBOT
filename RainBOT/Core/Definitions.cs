@@ -115,13 +115,13 @@ namespace RainBOT.Core
             ["2 spirit"] = "An indigenous third gender.",
             ["two-spirit"] = "An indigenous third gender.",
             ["2-spirit"] = "An indigenous third gender.",
-            ["lesbian"] = "A feminine-alligned person sexually and/or romantically attracted to feminine-alligned people.",
-            ["gay"] = "A masculine-alligned person sexually and/or romantically attracted to masculine-alligned people. Also used as an umbrella term for queer people.",
+            ["lesbian"] = "A feminine-aligned person sexually and/or romantically attracted to feminine-aligned people.",
+            ["gay"] = "A masculine-aligned person sexually and/or romantically attracted to masculine-aligned people. Also used as an umbrella term for queer people.",
             ["bisexual"] = "Someone sexually attracted to people of the same gender AND other genders.",
             ["bi"] = "Someone attracted to people of the same gender and other genders.",
             ["biromantic"] = "Someone romantically attracted to people of the same gender AND other genders.",
-            ["transgender"] = "An umbrella term for someone whose gender and assigned sex at birth do not allign.",
-            ["trans"] = "An umbrella term for someone whose gender and assigned sex at birth do not allign.",
+            ["transgender"] = "An umbrella term for someone whose gender and assigned sex at birth do not align.",
+            ["trans"] = "An umbrella term for someone whose gender and assigned sex at birth do not align.",
             ["transsexual"] = "A transgender person who has changed their sex. (Different from transgender!)",
             ["queer"] = "An umbrella term for someone who isn't straight.",
             ["intersex"] = "A person with both male and female primary sex characteristics.",
@@ -135,8 +135,8 @@ namespace RainBOT.Core
             ["straight"] = "A heterosexual and heteroromantic person.",
             ["monosexual"] = "An umbrella term for someone sexually attracted to only one gender. For example, an exclusively homosexual and homoromantic woman.",
             ["monoromantic"] = "An umbrella term for someone romantically attracted to only one gender. For example, an exclusively homosexual and homoromantic woman.",
-            ["cisgender"] = "Someone whose gender identity and sex assigned at birth do not allign.",
-            ["cis"] = "Someone whose gender identity and sex assigned at birth do not allign.",
+            ["cisgender"] = "Someone whose gender identity and sex assigned at birth do not align.",
+            ["cis"] = "Someone whose gender identity and sex assigned at birth do not align.",
             ["cishet"] = "Someone who is not part of the LGBTQIA+ community.",
             ["cishetallo"] = "Someone who is not part of the LGBTQIA+ community.",
             ["cishetalloendo"] = "Someone who is not part of the LGBTQIA+ community.",
@@ -165,8 +165,8 @@ namespace RainBOT.Core
             ["enbian"] = "Relating to nblnb attraction or relationships.",
             ["toric"] = "Relating to nblm attraction or relationships.",
             ["trixic"] = "Relating to nblw attraction or relationships.",
-            ["neptunic"] = "Like sapphic but including feminine-alligned non-binary people.",
-            ["vincian"] = "Like achillean but including masculine-alligned non-binary people.",
+            ["neptunic"] = "Like sapphic but including feminine-aligned non-binary people.",
+            ["vincian"] = "Like achillean but including masculine-aligned non-binary people.",
             ["wlw"] = "Women loving women",
             ["mlm"] = "Men loving men",
             ["nblw"] = "Non-binary people loving women",
@@ -195,7 +195,7 @@ namespace RainBOT.Core
             ["demi non-binary"] = "Someone who only partially identifies as a non-binary.",
             ["demi-non-binary"] = "Someone who only partially identifies as a non-binary.",
             ["xenogender"] = "A gender for someone who feels like their gender is represented by something typically not associated with gender.",
-            ["neopronouns"] = "Pronouns used to replace the pronouns of a langauge when none of those pronouns apply to someone."
+            ["neopronouns"] = "Pronouns used to replace the pronouns of a language when none of those pronouns apply to someone."
         };
     }
 }

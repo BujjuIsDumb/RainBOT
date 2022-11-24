@@ -201,7 +201,7 @@ namespace RainBOT.Modules
                                         var colorModal = new DiscordInteractionResponseBuilder()
                                             .WithTitle("Choose a color")
                                             .WithCustomId(Core.Utilities.CreateCustomId("colorModal"))
-                                            .AddComponents(new TextInputComponent(label: "Color (Hexidecimal)", customId: "color", placeholder: "#2F3136", style: TextInputStyle.Short, min_length: 7, max_length: 7));
+                                            .AddComponents(new TextInputComponent(label: "Color (Hexadecimal)", customId: "color", placeholder: "#2F3136", style: TextInputStyle.Short, min_length: 7, max_length: 7));
 
                                         await args.Interaction.CreateResponseAsync(InteractionResponseType.Modal, colorModal);
 
