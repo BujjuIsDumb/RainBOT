@@ -20,7 +20,6 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-using DSharpPlus.Entities;
 using Newtonsoft.Json;
 
 namespace RainBOT.Core.Entities.Models
