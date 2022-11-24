@@ -23,6 +23,10 @@
 using System.Reflection;
 using DSharpPlus;
 using DSharpPlus.Entities;
+using DSharpPlus.Interactivity;
+using DSharpPlus.Interactivity.Enums;
+using DSharpPlus.Interactivity.EventHandling;
+using DSharpPlus.Interactivity.Extensions;
 using DSharpPlus.SlashCommands;
 using Microsoft.Extensions.DependencyInjection;
 using RainBOT.Core;
@@ -51,6 +55,21 @@ namespace RainBOT
                         .AddTransient(x => new Config("config.json").Initialize())
                         .AddTransient(x => new Data("data.json").Initialize())
                         .BuildServiceProvider()
+                });
+
+                // Use interactivity for pagination.
+                await discord.UseInteractivityAsync(new InteractivityConfiguration()
+                {
+                    AckPaginationButtons = true,
+                    ButtonBehavior = ButtonPaginationBehavior.Disable,
+                    PaginationButtons = new PaginationButtons()
+                    {
+                        SkipLeft = new DiscordButtonComponent(ButtonStyle.Primary, Core.Utilities.CreateCustomId("first"), "First"),
+                        Left = new DiscordButtonComponent(ButtonStyle.Secondary, Core.Utilities.CreateCustomId("back"), "Back"),
+                        Stop = new DiscordButtonComponent(ButtonStyle.Danger, Core.Utilities.CreateCustomId("stop"), "Stop"),
+                        Right = new DiscordButtonComponent(ButtonStyle.Secondary, Core.Utilities.CreateCustomId("next"), "Next"),
+                        SkipRight = new DiscordButtonComponent(ButtonStyle.Primary, Core.Utilities.CreateCustomId("last"), "Last")
+                    }
                 });
                 
                 // Register commands.

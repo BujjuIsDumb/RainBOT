@@ -22,6 +22,9 @@
 
 using DSharpPlus;
 using DSharpPlus.Entities;
+using DSharpPlus.Interactivity;
+using DSharpPlus.Interactivity.EventHandling;
+using DSharpPlus.Interactivity.Extensions;
 using DSharpPlus.SlashCommands;
 using RainBOT.Core.Attributes;
 using RainBOT.Core.Entities.Models;
@@ -108,40 +111,19 @@ namespace RainBOT.Modules
                 return;
             }
 
-            // Create select menu options for each report.
-            var reportSelectOptions = new List<DiscordSelectComponentOption>();
-            foreach (ReportData report in Data.Reports.FindAll(x => x.UserId == user.Id))
+            // Generate pages.
+            var pages = new List<Page>();
+            foreach (var report in Data.Reports.FindAll(x => x.UserId == user.Id))
             {
-                DiscordUser creator = await ctx.Client.GetUserAsync(report.CreatorUserId);
-                reportSelectOptions.Add(new DiscordSelectComponentOption(report.Subject, creator.Id.ToString(), $"Created by {creator.Username}"));
+                pages.Add(new Page(embed: new DiscordEmbedBuilder()
+                    .WithAuthor(name: (await ctx.Client.GetUserAsync(report.CreatorUserId)).Username, iconUrl: (await ctx.Client.GetUserAsync(report.CreatorUserId)).AvatarUrl)
+                    .WithTitle(report.Subject)
+                    .WithDescription(report.Body)
+                    .WithTimestamp(report.CreationTimestamp)
+                    .WithColor(new DiscordColor(3092790))));
             }
 
-            var reportSelect = new DiscordSelectComponent(Core.Utilities.CreateCustomId("reportSelect"), "Select a report", reportSelectOptions);
-
-            await ctx.CreateResponseAsync(new DiscordInteractionResponseBuilder()
-                .WithContent("Please select a report to view.")
-                .AddComponents(reportSelect)
-                .AsEphemeral());
-
-            // Respond to select menu input.
-            ctx.Client.ComponentInteractionCreated += async (sender, args) =>
-            {
-                if (args.Id == reportSelect.CustomId)
-                {
-                    var report = Data.Reports.Find(x => x.UserId == user.Id && x.CreatorUserId == ulong.Parse(args.Values.First())) ?? new ReportData();
-
-                    var embed = new DiscordEmbedBuilder()
-                        .WithAuthor(name: (await ctx.Client.GetUserAsync(report.CreatorUserId)).Username, iconUrl: (await ctx.Client.GetUserAsync(report.CreatorUserId)).AvatarUrl)
-                        .WithTitle(report.Subject)
-                        .WithDescription(report.Body)
-                        .WithTimestamp(report.CreationTimestamp)
-                        .WithColor(new DiscordColor(3092790));
-
-                    await args.Interaction.CreateResponseAsync(InteractionResponseType.ChannelMessageWithSource, new DiscordInteractionResponseBuilder()
-                        .AddEmbed(embed)
-                        .AsEphemeral());
-                }
-            };
+            await ctx.Client.GetInteractivity().SendPaginatedResponseAsync(ctx.Interaction, true, ctx.User, pages);
         }
 
         [ContextMenu(ApplicationCommandType.UserContextMenu, "View Reports")]
@@ -153,40 +135,19 @@ namespace RainBOT.Modules
                 return;
             }
 
-            // Create select menu options for each report.
-            var reportSelectOptions = new List<DiscordSelectComponentOption>();
-            foreach (ReportData report in Data.Reports.FindAll(x => x.UserId == ctx.TargetUser.Id))
+            // Generate pages.
+            var pages = new List<Page>();
+            foreach (var report in Data.Reports.FindAll(x => x.UserId == ctx.TargetUser.Id))
             {
-                DiscordUser creator = await ctx.Client.GetUserAsync(report.CreatorUserId);
-                reportSelectOptions.Add(new DiscordSelectComponentOption(report.Subject, creator.Id.ToString(), $"Created by {creator.Username}"));
+                pages.Add(new Page(embed: new DiscordEmbedBuilder()
+                    .WithAuthor(name: (await ctx.Client.GetUserAsync(report.CreatorUserId)).Username, iconUrl: (await ctx.Client.GetUserAsync(report.CreatorUserId)).AvatarUrl)
+                    .WithTitle(report.Subject)
+                    .WithDescription(report.Body)
+                    .WithTimestamp(report.CreationTimestamp)
+                    .WithColor(new DiscordColor(3092790))));
             }
 
-            var reportSelect = new DiscordSelectComponent(Core.Utilities.CreateCustomId("reportSelect"), "Select a report", reportSelectOptions);
-
-            await ctx.CreateResponseAsync(new DiscordInteractionResponseBuilder()
-                .WithContent("Please select a report to view.")
-                .AddComponents(reportSelect)
-                .AsEphemeral());
-
-            // Respond to select menu input.
-            ctx.Client.ComponentInteractionCreated += async (sender, args) =>
-            {
-                if (args.Id == reportSelect.CustomId)
-                {
-                    var report = Data.Reports.Find(x => x.UserId == ctx.TargetUser.Id && x.CreatorUserId == ulong.Parse(args.Values.First())) ?? new ReportData();
-
-                    var embed = new DiscordEmbedBuilder()
-                        .WithAuthor(name: (await ctx.Client.GetUserAsync(report.CreatorUserId)).Username, iconUrl: (await ctx.Client.GetUserAsync(report.CreatorUserId)).AvatarUrl)
-                        .WithTitle(report.Subject)
-                        .WithDescription(report.Body)
-                        .WithTimestamp(report.CreationTimestamp)
-                        .WithColor(new DiscordColor(3092790));
-
-                    await args.Interaction.CreateResponseAsync(InteractionResponseType.ChannelMessageWithSource, new DiscordInteractionResponseBuilder()
-                        .AddEmbed(embed)
-                        .AsEphemeral());
-                }
-            };
+            await ctx.Client.GetInteractivity().SendPaginatedResponseAsync(ctx.Interaction, true, ctx.User, pages);
         }
     }
 }
