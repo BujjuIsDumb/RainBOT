@@ -58,7 +58,7 @@ namespace RainBOT.Core
                 }
                 else if (attribute is SlashUserBannableAttribute slashUserBannableAttribute)
                 {
-                    using (var data = new Data("data.json"))
+                    using (var data = new Data("data.json").Initialize())
                     {
                         await args.Context.CreateResponseAsync(new DiscordInteractionResponseBuilder()
                             .WithContent($"⚠️ You are banned from RainBOT for \"{data.UserBans.Find(x => x.UserId == args.Context.User.Id).Reason}\".")
