@@ -70,7 +70,7 @@ namespace RainBOT
                 {
                     SkipLeft = new DiscordButtonComponent(ButtonStyle.Primary, Core.Utilities.CreateCustomId("first"), "First"),
                     Left = new DiscordButtonComponent(ButtonStyle.Secondary, Core.Utilities.CreateCustomId("back"), "Back"),
-                    Stop = new DiscordButtonComponent(ButtonStyle.Danger, Core.Utilities.CreateCustomId("stop"), "Stop"),
+                    Stop = new DiscordButtonComponent(ButtonStyle.Danger, Core.Utilities.CreateCustomId("lock"), string.Empty, false, new DiscordComponentEmoji(DiscordEmoji.FromUnicode("🔒"))),
                     Right = new DiscordButtonComponent(ButtonStyle.Secondary, Core.Utilities.CreateCustomId("next"), "Next"),
                     SkipRight = new DiscordButtonComponent(ButtonStyle.Primary, Core.Utilities.CreateCustomId("last"), "Last")
                 }
