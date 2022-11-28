@@ -34,7 +34,7 @@ using RainBOT.Core.Entities.Services;
 
 namespace RainBOT
 {
-    public class RainBOT
+    public class RbClient
     {
         private Config _config;
 
