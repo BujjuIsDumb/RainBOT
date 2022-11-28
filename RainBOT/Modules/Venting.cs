@@ -26,7 +26,6 @@ using DSharpPlus.Exceptions;
 using DSharpPlus.SlashCommands;
 using DSharpPlus.SlashCommands.Attributes;
 using RainBOT.Core.Attributes;
-using RainBOT.Core.Entities;
 using RainBOT.Core.Entities.Services;
 
 namespace RainBOT.Modules
