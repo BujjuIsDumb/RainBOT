@@ -146,7 +146,6 @@ namespace RainBOT.Modules
                                     .WithTitle($"Vent from {ctx.User.Username}")
                                     .WithThumbnail(ctx.User.AvatarUrl)
                                     .WithDescription($"**Anonymous:** {(anonymous ? "Enabled" : "Disabled")}\n**Trigger Warning:** {(tw ? "Enabled" : "Disabled")}\n**Responses:** {responseCache.Count}")
-                                    .WithTimestamp(ctx.Interaction.CreationTimestamp)
                                     .WithColor(new DiscordColor(3092790));
 
                                 responseCache.ForEach(x => embed.AddField("Response from " + x.creator.Username, "> " + x.response));
