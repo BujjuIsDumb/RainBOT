@@ -134,14 +134,9 @@ namespace RainBOT.Modules
         }
 
         [ContextMenu(ApplicationCommandType.UserContextMenu, "View Warnings")]
+        [ContextMenuRequireGuildAccount]
         public async Task ViewWarningsAsync(ContextMenuContext ctx)
         {
-            if (!Data.GuildAccounts.Exists(x => x.GuildId == ctx.Guild.Id))
-            {
-                await ctx.CreateResponseAsync($"⚠️ The server needs an account to use this context menu. Create one with {Core.Utilities.GetCommandMention(ctx.Client, "server register")}.", true);
-                return;
-            }
-
             if (Data.GuildAccounts.Find(x => x.GuildId == ctx.Guild.Id).Warnings.ToList().FindAll(x => x.UserId == ctx.TargetUser.Id).Count <= 0)
             {
                 await ctx.CreateResponseAsync($"⚠️ **{ctx.TargetUser.Username}** has no warnings.", true);
