@@ -106,7 +106,6 @@ namespace RainBOT.Modules
                                 {
                                     if (args.Interaction.Data.CustomId == respondModal.CustomId)
                                     {
-
                                         try
                                         {
                                             var embed = new DiscordEmbedBuilder()
