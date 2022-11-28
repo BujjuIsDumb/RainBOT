@@ -29,11 +29,10 @@ namespace RainBOT.Core.Attributes
     {
         public override async Task<bool> ExecuteChecksAsync(ContextMenuContext ctx)
         {
-            using (var data = new Data("data.json").Initialize())
-            {
-                // Return true if there is no ban for the guild; return false if there is.
-                return await Task.FromResult(!data.GuildBans.Exists(x => x.GuildId == ctx.Guild.Id));
-            }
+            using var data = new Data("data.json").Initialize();
+
+            // Return true if there is no ban for the guild; return false if there is.
+            return await Task.FromResult(!data.GuildBans.Exists(x => x.GuildId == ctx.Guild.Id));
         }
     }
 }

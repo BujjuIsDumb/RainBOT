@@ -59,9 +59,7 @@ namespace RainBOT.Modules
             [Autocomplete(typeof(TonetagsDefineAutocompleteProvider))]
             [Option("tonetag", "The tonetag to define.", true)] string tonetag)
         {
-            string definition;
-
-            if (Definitions.Tonetags.TryGetValue($"{(tonetag.StartsWith("/") ? "" : "/")}{tonetag.ToLower()}", out definition)) await ctx.CreateResponseAsync($"`{tonetag}` {definition}", true);
+            if (Definitions.Tonetags.TryGetValue($"{(tonetag.StartsWith("/") ? "" : "/")}{tonetag.ToLower()}", out string definition)) await ctx.CreateResponseAsync($"`{tonetag}` {definition}", true);
             else await ctx.CreateResponseAsync("⚠️ That tonetag isn't defined.", true);
         }
 
@@ -74,10 +72,9 @@ namespace RainBOT.Modules
             {
                 if (section.Contains('/'))
                 {
-                    string tonetag = section.Substring(section.IndexOf('/')).ToLower();
-                    string definition;
+                    string tonetag = section[section.IndexOf('/')..].ToLower();
 
-                    if (Definitions.Tonetags.TryGetValue($"{(tonetag.StartsWith("/") ? "" : "/")}{tonetag.ToLower()}", out definition))
+                    if (Definitions.Tonetags.TryGetValue($"{(tonetag.StartsWith("/") ? "" : "/")}{tonetag.ToLower()}", out string definition))
                         builder.AppendLine($"`{tonetag}` {definition}");
                 }
             }

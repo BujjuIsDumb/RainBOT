@@ -47,7 +47,7 @@ namespace RainBOT.Modules
             [Option("anonymous", "Whether or not the vent will show you name to non-moderators.")] bool anonymous,
             [Option("tw", "Whether or not the vent contains potentially triggering content.")] bool tw)
         {
-            var responseCache = new List<CachedVentResponse>();
+            var responseCache = new List<(DiscordUser creator, string response)>();
 
             if (anonymous && !Data.GuildAccounts.Find(x => x.GuildId == ctx.Guild.Id).AnonymousVenting)
             {
@@ -118,11 +118,7 @@ namespace RainBOT.Modules
                                                 .WithContent("✅ Your response has been sent.")
                                                 .AsEphemeral());
 
-                                            responseCache.Add(new CachedVentResponse()
-                                            {
-                                                Creator = args.Interaction.User,
-                                                Response = args.Values["response"]
-                                            });
+                                            responseCache.Add(new(args.Interaction.User, args.Values["response"]));
                                         }
                                         catch (UnauthorizedException)
                                         {
@@ -153,7 +149,7 @@ namespace RainBOT.Modules
                                     .WithTimestamp(ctx.Interaction.CreationTimestamp)
                                     .WithColor(new DiscordColor(3092790));
 
-                                responseCache.ForEach(x => embed.AddField("Response from " + x.Creator.Username, "> " + x.Response));
+                                responseCache.ForEach(x => embed.AddField("Response from " + x.creator.Username, "> " + x.response));
 
                                 await args.Interaction.CreateResponseAsync(InteractionResponseType.ChannelMessageWithSource, new DiscordInteractionResponseBuilder()
                                     .AddEmbed(embed)

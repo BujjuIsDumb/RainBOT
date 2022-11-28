@@ -30,20 +30,19 @@ namespace RainBOT.Core.AutocompleteProviders
     {
         public Task<IEnumerable<DiscordAutoCompleteChoice>> Provider(AutocompleteContext ctx)
         {
-            using (var data = new Data("data.json").Initialize())
+            using var data = new Data("data.json").Initialize();
+
+            var account = data.UserAccounts.Find(x => x.UserId == ctx.User.Id);
+            var list = new List<DiscordAutoCompleteChoice>();
+
+            if (account is not null)
             {
-                var account = data.UserAccounts.Find(x => x.UserId == ctx.User.Id);
-                var list = new List<DiscordAutoCompleteChoice>();
-
-                if (account is not null)
-                {
-                    // Add an autocomplete suggestion for every field.
-                    foreach (var field in account.BioFields)
-                        list.Add(new DiscordAutoCompleteChoice(field.Name, field.Name));
-                }
-
-                return Task.FromResult(list.OrderBy(x => Utilities.CompareStrings((string)ctx.OptionValue, x.Name)) as IEnumerable<DiscordAutoCompleteChoice>);
+                // Add an autocomplete suggestion for every field.
+                foreach (var field in account.BioFields)
+                    list.Add(new DiscordAutoCompleteChoice(field.Name, field.Name));
             }
+
+            return Task.FromResult(list.OrderBy(x => Utilities.CompareStrings((string)ctx.OptionValue, x.Name)) as IEnumerable<DiscordAutoCompleteChoice>);
         }
     }
 }

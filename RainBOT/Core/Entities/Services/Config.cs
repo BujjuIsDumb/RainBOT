@@ -69,8 +69,9 @@ namespace RainBOT.Core.Entities.Services
             return this;
         }
 
-        public void Dispose()
+        void IDisposable.Dispose()
         {
+            GC.SuppressFinalize(this);
             Token = null;
             SourceUrl = null;
             SupportUrl = null;

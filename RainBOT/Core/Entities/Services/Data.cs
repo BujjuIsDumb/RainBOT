@@ -66,8 +66,9 @@ namespace RainBOT.Core.Entities.Services
             File.WriteAllText(FileName, JsonConvert.SerializeObject(this, Formatting.Indented));
         }
 
-        public void Dispose()
+        void IDisposable.Dispose()
         {
+            GC.SuppressFinalize(this);
             UserAccounts.Clear();
             GuildAccounts.Clear();
             Reports.Clear();

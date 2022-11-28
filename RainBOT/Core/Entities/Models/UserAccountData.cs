@@ -30,7 +30,7 @@ namespace RainBOT.Core.Entities.Models
         public ulong UserId { get; set; } = 0;
 
         [JsonProperty("bio_fields")]
-        public BioFieldData[] BioFields { get; set; } = new BioFieldData[0];
+        public BioFieldData[] BioFields { get; set; } = Array.Empty<BioFieldData>();
 
         [JsonProperty("bio_style")]
         public string BioStyle { get; set; } = "2F3136";

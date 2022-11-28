@@ -36,54 +36,57 @@ namespace RainBOT
 {
     public class RainBOT
     {
+        private Config _config;
+
+        private DiscordShardedClient _client;
+        
         private async Task InitializeAsync()
         {
-            using (var config = new Config("config.json").Initialize())
+            _config = new Config("config.json").Initialize();
+
+            // Setup client.
+            _client = new DiscordShardedClient(new DiscordConfiguration()
             {
-                // Setup client.
-                var discord = new DiscordShardedClient(new DiscordConfiguration()
-                {
-                    Token = config.Token,
-                    TokenType = TokenType.Bot
-                });
-                discord.MessageCreated += Events.MessageCreated;
+                Token = _config.Token,
+                TokenType = TokenType.Bot
+            });
+            _client.MessageCreated += Events.MessageCreated;
 
-                // Setup slash commands.
-                var slash = await discord.UseSlashCommandsAsync(new SlashCommandsConfiguration()
-                {
-                    Services = new ServiceCollection()
-                        .AddTransient(x => new Config("config.json").Initialize())
-                        .AddTransient(x => new Data("data.json").Initialize())
-                        .BuildServiceProvider()
-                });
+            // Setup slash commands.
+            var slash = await _client.UseSlashCommandsAsync(new SlashCommandsConfiguration()
+            {
+                Services = new ServiceCollection()
+                    .AddTransient(x => new Config("config.json").Initialize())
+                    .AddTransient(x => new Data("data.json").Initialize())
+                    .BuildServiceProvider()
+            });
 
-                // Use interactivity for pagination.
-                await discord.UseInteractivityAsync(new InteractivityConfiguration()
+            // Use interactivity for pagination.
+            await _client.UseInteractivityAsync(new InteractivityConfiguration()
+            {
+                AckPaginationButtons = true,
+                ButtonBehavior = ButtonPaginationBehavior.Disable,
+                PaginationButtons = new PaginationButtons()
                 {
-                    AckPaginationButtons = true,
-                    ButtonBehavior = ButtonPaginationBehavior.Disable,
-                    PaginationButtons = new PaginationButtons()
-                    {
-                        SkipLeft = new DiscordButtonComponent(ButtonStyle.Primary, Core.Utilities.CreateCustomId("first"), "First"),
-                        Left = new DiscordButtonComponent(ButtonStyle.Secondary, Core.Utilities.CreateCustomId("back"), "Back"),
-                        Stop = new DiscordButtonComponent(ButtonStyle.Danger, Core.Utilities.CreateCustomId("stop"), "Stop"),
-                        Right = new DiscordButtonComponent(ButtonStyle.Secondary, Core.Utilities.CreateCustomId("next"), "Next"),
-                        SkipRight = new DiscordButtonComponent(ButtonStyle.Primary, Core.Utilities.CreateCustomId("last"), "Last")
-                    }
-                });
-                
-                // Register commands.
-                foreach (var extension in slash.Values)
-                {
-                    extension.RegisterCommands(Assembly.GetExecutingAssembly(), config.GuildId);
-                    extension.SlashCommandErrored += Events.SlashCommandErrored;
+                    SkipLeft = new DiscordButtonComponent(ButtonStyle.Primary, Core.Utilities.CreateCustomId("first"), "First"),
+                    Left = new DiscordButtonComponent(ButtonStyle.Secondary, Core.Utilities.CreateCustomId("back"), "Back"),
+                    Stop = new DiscordButtonComponent(ButtonStyle.Danger, Core.Utilities.CreateCustomId("stop"), "Stop"),
+                    Right = new DiscordButtonComponent(ButtonStyle.Secondary, Core.Utilities.CreateCustomId("next"), "Next"),
+                    SkipRight = new DiscordButtonComponent(ButtonStyle.Primary, Core.Utilities.CreateCustomId("last"), "Last")
                 }
+            });
 
-                // Start bot.
-                await discord.StartAsync();
-                discord.Ready += async (sender, args) => await discord.UpdateStatusAsync(new DiscordActivity(config.Status, config.StatusType));
-                await Task.Delay(-1);
+            // Register commands.
+            foreach (var extension in slash.Values)
+            {
+                extension.RegisterCommands(Assembly.GetExecutingAssembly(), _config.GuildId);
+                extension.SlashCommandErrored += Events.SlashCommandErrored;
             }
+
+            // Start bot.
+            await _client.StartAsync();
+            _client.Ready += async (sender, args) => await _client.UpdateStatusAsync(new DiscordActivity(_config.Status, _config.StatusType));
+            await Task.Delay(-1);
         }
 
         public void Initialize() => InitializeAsync().GetAwaiter().GetResult();

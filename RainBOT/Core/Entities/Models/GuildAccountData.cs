@@ -30,7 +30,7 @@ namespace RainBOT.Core.Entities.Models
         public ulong GuildId { get; set; } = 0;
 
         [JsonProperty("vent_moderators")]
-        public ulong[] VentModerators { get; set; } = new ulong[0];
+        public ulong[] VentModerators { get; set; } = Array.Empty<ulong>();
 
         [JsonProperty("anonymous_venting")]
         public bool AnonymousVenting { get; set; } = true;
@@ -45,6 +45,6 @@ namespace RainBOT.Core.Entities.Models
         public Dictionary<string, string> VerificationFormQuestions { get; set; } = new();
 
         [JsonProperty("warnings")]
-        public WarnData[] Warnings { get; set; } = new WarnData[0];
+        public WarnData[] Warnings { get; set; } = Array.Empty<WarnData>();
     }
 }

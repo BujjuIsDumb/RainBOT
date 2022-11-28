@@ -212,7 +212,7 @@ namespace RainBOT.Modules
                                             {
                                                 if (Regex.IsMatch(args.Values["color"], @"^#(?:[0-9a-fA-F]{3}){1,2}$"))
                                                 {
-                                                    Data.UserAccounts.Find(x => x.UserId == ctx.User.Id).BioStyle = args.Values["color"].ToUpper().Substring(1);
+                                                    Data.UserAccounts.Find(x => x.UserId == ctx.User.Id).BioStyle = args.Values["color"].ToUpper()[1..];
                                                     Data.Update();
 
                                                     await args.Interaction.CreateResponseAsync(InteractionResponseType.ChannelMessageWithSource, new DiscordInteractionResponseBuilder()
