@@ -28,19 +28,19 @@ namespace RainBOT.Core.Entities.Services
     public class Data : IDisposable
     {
         [JsonProperty("user_accounts")]
-        public List<UserAccountData> UserAccounts = new();
+        public List<UserAccountData> UserAccounts { get; set; } = new();
 
         [JsonProperty("guild_accounts")]
-        public List<GuildAccountData> GuildAccounts = new();
+        public List<GuildAccountData> GuildAccounts { get; set; } = new();
 
         [JsonProperty("reports")]
-        public List<ReportData> Reports = new();
+        public List<ReportData> Reports { get; set; } = new();
 
         [JsonProperty("user_bans")]
-        public List<UserBanData> UserBans = new();
+        public List<UserBanData> UserBans { get; set; } = new();
 
         [JsonProperty("guild_bans")]
-        public List<GuildBanData> GuildBans = new();
+        public List<GuildBanData> GuildBans { get; set; } = new();
 
         public Data(string fileName) => FileName = fileName;
 
