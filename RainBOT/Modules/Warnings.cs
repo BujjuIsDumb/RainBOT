@@ -62,10 +62,10 @@ namespace RainBOT.Modules
             Data.GuildAccounts.Find(x => x.GuildId == ctx.Guild.Id).Warnings = warnings.ToArray();
             Data.Update();
 
-            await ctx.CreateResponseAsync($"✅ Created a warning for **{user.Username}**.", true);
+            await ctx.CreateResponseAsync($"✅ Warned **{user.Username}**.", true);
         }
 
-        [SlashCommand("revoke", "Remove a warn.")]
+        [SlashCommand("revoke", "Remove a warning.")]
         public async Task WarnRevokeAsync(InteractionContext ctx,
             [Option("user", "The user to remove the warning from.")] DiscordUser user)
         {
@@ -93,7 +93,7 @@ namespace RainBOT.Modules
         {
             if (Data.GuildAccounts.Find(x => x.GuildId == ctx.Guild.Id).Warnings.ToList().FindAll(x => x.UserId == user.Id).Count <= 0)
             {
-                await ctx.CreateResponseAsync($"⚠️ **{user.Username}** has no warnings.", true);
+                await ctx.CreateResponseAsync($"⚠️ **{user.Username}** has not been warned.", true);
                 return;
             }
 
@@ -108,7 +108,7 @@ namespace RainBOT.Modules
             var warnSelect = new DiscordSelectComponent(Core.Utilities.CreateCustomId("warnSelect"), "Select a warning", warnSelectOptions);
 
             await ctx.CreateResponseAsync(new DiscordInteractionResponseBuilder()
-                .WithContent("Please select a warn to view.")
+                .WithContent("Please select a warning to view.")
                 .AddComponents(warnSelect)
                 .AsEphemeral());
 
@@ -121,7 +121,6 @@ namespace RainBOT.Modules
 
                     var embed = new DiscordEmbedBuilder()
                         .WithAuthor(name: (await ctx.Client.GetUserAsync(warn.CreatorUserId)).Username, iconUrl: (await ctx.Client.GetUserAsync(warn.CreatorUserId)).AvatarUrl)
-                        .WithTitle("Warning")
                         .WithDescription(warn.Description)
                         .WithTimestamp(warn.CreationTimestamp)
                         .WithColor(new DiscordColor(3092790));
@@ -167,7 +166,6 @@ namespace RainBOT.Modules
 
                     var embed = new DiscordEmbedBuilder()
                         .WithAuthor(name: (await ctx.Client.GetUserAsync(warn.CreatorUserId)).Username, iconUrl: (await ctx.Client.GetUserAsync(warn.CreatorUserId)).AvatarUrl)
-                        .WithTitle("Warning")
                         .WithDescription(warn.Description)
                         .WithTimestamp(warn.CreationTimestamp)
                         .WithColor(new DiscordColor(3092790));
