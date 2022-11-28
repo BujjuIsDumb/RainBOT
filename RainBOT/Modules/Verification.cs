@@ -97,7 +97,7 @@ namespace RainBOT.Modules
                         .AddComponents(acceptButton, denyButton));
 
                     // Create vetting thread.
-                    DiscordThreadChannel thread = Data.GuildAccounts.Find(x => x.GuildId == ctx.Guild.Id).CreateVettingThread ? await (await args.Interaction.GetOriginalResponseAsync()).CreateThreadAsync($"{ctx.User.Username} Vetting", AutoArchiveDuration.Day) : null;
+                    DiscordThreadChannel thread = Data.GuildAccounts.Find(x => x.GuildId == ctx.Guild.Id).CreateVettingThread ? await (await args.Interaction.GetOriginalResponseAsync()).CreateThreadAsync($"{ctx.User.Username} Vetting", AutoArchiveDuration.Day, $"Created vetting thread (/verify executed by {ctx.User.Username})") : null;
 
                     var originalInteraction = args.Interaction;
 
@@ -126,7 +126,7 @@ namespace RainBOT.Modules
                                     {
                                         try
                                         {
-                                            await ctx.Member.GrantRoleAsync(ctx.Guild.GetRole(ulong.Parse(args.Values.First())));
+                                            await ctx.Member.GrantRoleAsync(ctx.Guild.GetRole(ulong.Parse(args.Values.First())), $"Accepted verification request (/verify executed by {ctx.User.Username})");
                                         }
                                         catch (UnauthorizedException)
                                         {
@@ -148,7 +148,7 @@ namespace RainBOT.Modules
                                         if (Data.GuildAccounts.Find(x => x.GuildId == ctx.Guild.Id).DeleteVerificationRequests)
                                         {
                                             await originalInteraction.DeleteOriginalResponseAsync();
-                                            if (thread is not null) await thread.DeleteAsync();
+                                            if (thread is not null) await thread.DeleteAsync($"Delete vetting thread (/verify executed by {ctx.User.Username})");
                                         }
                                         else
                                         {
@@ -166,6 +166,7 @@ namespace RainBOT.Modules
                                                 {
                                                     x.IsArchived = true;
                                                     x.Locked = true;
+                                                    x.AuditLogReason = $"Closed vetting thread (/verify executed by {ctx.User.Username})";
                                                 });
                                             }
                                         }
@@ -210,8 +211,8 @@ namespace RainBOT.Modules
                                     {
                                         try
                                         {
-                                            if (args.Values.First() == "kick") await ctx.Member.RemoveAsync();
-                                            else await ctx.Member.BanAsync();
+                                            if (args.Values.First() == "kick") await ctx.Member.RemoveAsync($"Denied verification request (/verify executed by {ctx.User.Username})");
+                                            else await ctx.Member.BanAsync(reason: $"Denied verification request (/verify executed by {ctx.User.Username})");
                                         }
                                         catch (UnauthorizedException)
                                         {
@@ -233,7 +234,7 @@ namespace RainBOT.Modules
                                         if (Data.GuildAccounts.Find(x => x.GuildId == ctx.Guild.Id).DeleteVerificationRequests)
                                         {
                                             await originalInteraction.DeleteOriginalResponseAsync();
-                                            if (thread is not null) await thread.DeleteAsync();
+                                            if (thread is not null) await thread.DeleteAsync($"Delete vetting thread (/verify executed by {ctx.User.Username})");
                                         }
                                         else
                                         {
@@ -251,6 +252,7 @@ namespace RainBOT.Modules
                                                 {
                                                     x.IsArchived = true;
                                                     x.Locked = true;
+                                                    x.AuditLogReason = $"Closed vetting thread (/verify executed by {ctx.User.Username})";
                                                 });
                                             }
                                         }

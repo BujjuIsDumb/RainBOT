@@ -54,7 +54,7 @@ namespace RainBOT.Modules
 
                     try
                     {
-                        await ctx.Channel.DeleteMessagesAsync(await ctx.Channel.GetMessagesAsync((int)amount));
+                        await ctx.Channel.DeleteMessagesAsync(await ctx.Channel.GetMessagesAsync((int)amount), $"Purged messages (/purge executed by {ctx.User.Username})");
                     }
                     catch (ArgumentException)
                     {
