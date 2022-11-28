@@ -136,6 +136,14 @@ namespace RainBOT.Modules
 
                                             return;
                                         }
+                                        catch (NotFoundException)
+                                        {
+                                            await args.Interaction.CreateResponseAsync(InteractionResponseType.ChannelMessageWithSource, new DiscordInteractionResponseBuilder()
+                                                .WithContent("⚠ The user couldn't be found. They may have left the server.")
+                                                .AsEphemeral());
+
+                                            return;
+                                        }
 
                                         if (Data.GuildAccounts.Find(x => x.GuildId == ctx.Guild.Id).DeleteVerificationRequests)
                                         {
@@ -209,6 +217,14 @@ namespace RainBOT.Modules
                                         {
                                             await args.Interaction.CreateResponseAsync(InteractionResponseType.ChannelMessageWithSource, new DiscordInteractionResponseBuilder()
                                                 .WithContent("⚠️ Insufficient permissions!")
+                                                .AsEphemeral());
+
+                                            return;
+                                        }
+                                        catch (NotFoundException)
+                                        {
+                                            await args.Interaction.CreateResponseAsync(InteractionResponseType.ChannelMessageWithSource, new DiscordInteractionResponseBuilder()
+                                                .WithContent("⚠ The user couldn't be found. They may have left the server.")
                                                 .AsEphemeral());
 
                                             return;
