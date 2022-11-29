@@ -25,6 +25,7 @@ using DSharpPlus;
 using DSharpPlus.Entities;
 using DSharpPlus.SlashCommands;
 using Newtonsoft.Json;
+using RainBOT.Core;
 using RainBOT.Core.Attributes;
 using RainBOT.Core.Entities.Models;
 using RainBOT.Core.Entities.Services;
@@ -66,11 +67,11 @@ namespace RainBOT.Modules
         {
             // Format list settings.
             var ventModerators = new StringBuilder();
-            Data.GuildAccounts.Find(x => x.GuildId == ctx.Guild.Id).VentModerators.ToList().ForEach(async x => ventModerators.AppendLine((await ctx.Client.GetUserAsync(x)).Mention));
+            ctx.Guild.GetGuildAccount(Data).VentModerators.ToList().ForEach(async x => ventModerators.AppendLine((await ctx.Client.GetUserAsync(x)).Mention));
             if (string.IsNullOrEmpty(ventModerators.ToString())) ventModerators.Append("None");
 
             var verificationForm = new StringBuilder();
-            Data.GuildAccounts.Find(x => x.GuildId == ctx.Guild.Id).VerificationFormQuestions.ToList().ForEach(x => verificationForm.AppendLine(x.Value));
+            ctx.Guild.GetGuildAccount(Data).VerificationFormQuestions.ToList().ForEach(x => verificationForm.AppendLine(x.Value));
             if (string.IsNullOrEmpty(verificationForm.ToString())) verificationForm.Append("None");
 
             // Build main menu components.
@@ -80,9 +81,9 @@ namespace RainBOT.Modules
                 .WithDescription("Manage the settings of your RainBOT server account. Please select a module to configure.")
                 .WithColor(new DiscordColor(3092790))
                 .AddField("Vent Moderators", ventModerators.ToString())
-                .AddField("Anonymous Venting", Data.GuildAccounts.Find(x => x.GuildId == ctx.Guild.Id).AnonymousVenting ? "Enabled" : "Disabled")
-                .AddField("Delete Verification Requests", Data.GuildAccounts.Find(x => x.GuildId == ctx.Guild.Id).DeleteVerificationRequests ? "Enabled" : "Disabled")
-                .AddField("Create Vetting Thread", Data.GuildAccounts.Find(x => x.GuildId == ctx.Guild.Id).CreateVettingThread ? "Enabled" : "Disabled")
+                .AddField("Anonymous Venting", ctx.Guild.GetGuildAccount(Data).AnonymousVenting ? "Enabled" : "Disabled")
+                .AddField("Delete Verification Requests", ctx.Guild.GetGuildAccount(Data).DeleteVerificationRequests ? "Enabled" : "Disabled")
+                .AddField("Create Vetting Thread", ctx.Guild.GetGuildAccount(Data).CreateVettingThread ? "Enabled" : "Disabled")
                 .AddField("Verification Form", verificationForm.ToString());
 
             var ventingButton = new DiscordButtonComponent(ButtonStyle.Secondary, Core.Utilities.CreateCustomId("ventingButton"), "Venting", false, new DiscordComponentEmoji(DiscordEmoji.FromUnicode("👁‍🗨")));
@@ -100,7 +101,7 @@ namespace RainBOT.Modules
                 .WithDescription("Configure the venting system.")
                 .WithColor(new DiscordColor(3092790))
                 .AddField("Vent Moderators", ventModerators.ToString())
-                .AddField("Anonymous Venting", Data.GuildAccounts.Find(x => x.GuildId == ctx.Guild.Id).AnonymousVenting ? "Enabled" : "Disabled");
+                .AddField("Anonymous Venting", ctx.Guild.GetGuildAccount(Data).AnonymousVenting ? "Enabled" : "Disabled");
 
             var ventModeratorsButton = new DiscordButtonComponent(ButtonStyle.Secondary, Core.Utilities.CreateCustomId("ventModeratorsButton"), "Vent Moderators", false, new DiscordComponentEmoji(DiscordEmoji.FromUnicode("🛡")));
             var anonymousVentingButton = new DiscordButtonComponent(ButtonStyle.Secondary, Core.Utilities.CreateCustomId("anonymousVentingButton"), "Allow Anonymous Vents", false, new DiscordComponentEmoji(DiscordEmoji.FromUnicode("😷")));
@@ -116,8 +117,8 @@ namespace RainBOT.Modules
                 .WithTitle("Verification Settings")
                 .WithDescription("Configure the verification system.")
                 .WithColor(new DiscordColor(3092790))
-                .AddField("Delete Verification Requests", Data.GuildAccounts.Find(x => x.GuildId == ctx.Guild.Id).DeleteVerificationRequests ? "Enabled" : "Disabled")
-                .AddField("Create Vetting Thread", Data.GuildAccounts.Find(x => x.GuildId == ctx.Guild.Id).CreateVettingThread ? "Enabled" : "Disabled")
+                .AddField("Delete Verification Requests", ctx.Guild.GetGuildAccount(Data).DeleteVerificationRequests ? "Enabled" : "Disabled")
+                .AddField("Create Vetting Thread", ctx.Guild.GetGuildAccount(Data).CreateVettingThread ? "Enabled" : "Disabled")
                 .AddField("Verification Form", verificationForm.ToString());
 
             var deleteVerificationRequestsButton = new DiscordButtonComponent(ButtonStyle.Secondary, Core.Utilities.CreateCustomId("deleteVerificationRequestsButton"), "Delete Verification Requests", false, new DiscordComponentEmoji(DiscordEmoji.FromUnicode("🗑")));
@@ -167,7 +168,7 @@ namespace RainBOT.Modules
                                         selectedUsers.Add(Convert.ToUInt64(userId));
                                     }
 
-                                    Data.GuildAccounts.Find(x => x.GuildId == ctx.Guild.Id).VentModerators = selectedUsers.ToArray();
+                                    ctx.Guild.GetGuildAccount(Data).VentModerators = selectedUsers.ToArray();
                                     Data.Update();
 
                                     await args.Interaction.CreateResponseAsync(InteractionResponseType.ChannelMessageWithSource, new DiscordInteractionResponseBuilder()
@@ -196,7 +197,7 @@ namespace RainBOT.Modules
                             {
                                 if (args.Id == anonymousVentingSelect.CustomId)
                                 {
-                                    Data.GuildAccounts.Find(x => x.GuildId == ctx.Guild.Id).AnonymousVenting = args.Values.First() == "yes";
+                                    ctx.Guild.GetGuildAccount(Data).AnonymousVenting = args.Values.First() == "yes";
                                     Data.Update();
 
                                     await args.Interaction.CreateResponseAsync(InteractionResponseType.ChannelMessageWithSource, new DiscordInteractionResponseBuilder()
@@ -237,7 +238,7 @@ namespace RainBOT.Modules
                             {
                                 if (args.Id == deleteVerificationRequestsSelect.CustomId)
                                 {
-                                    Data.GuildAccounts.Find(x => x.GuildId == ctx.Guild.Id).DeleteVerificationRequests = args.Values.First() == "yes";
+                                    ctx.Guild.GetGuildAccount(Data).DeleteVerificationRequests = args.Values.First() == "yes";
                                     Data.Update();
 
                                     await args.Interaction.CreateResponseAsync(InteractionResponseType.ChannelMessageWithSource, new DiscordInteractionResponseBuilder()
@@ -266,7 +267,7 @@ namespace RainBOT.Modules
                             {
                                 if (args.Id == createVettingThreadSelect.CustomId)
                                 {
-                                    Data.GuildAccounts.Find(x => x.GuildId == ctx.Guild.Id).CreateVettingThread = args.Values.First() == "yes";
+                                    ctx.Guild.GetGuildAccount(Data).CreateVettingThread = args.Values.First() == "yes";
                                     Data.Update();
 
                                     await args.Interaction.CreateResponseAsync(InteractionResponseType.ChannelMessageWithSource, new DiscordInteractionResponseBuilder()
@@ -293,7 +294,7 @@ namespace RainBOT.Modules
                             {
                                 if (args.Interaction.Data.CustomId == verificationFormModal.CustomId)
                                 {
-                                    foreach (var formQuestion in args.Values) Data.GuildAccounts.Find(x => x.GuildId == ctx.Guild.Id).VerificationFormQuestions[formQuestion.Key] = formQuestion.Value ?? null;
+                                    foreach (var formQuestion in args.Values) ctx.Guild.GetGuildAccount(Data).VerificationFormQuestions[formQuestion.Key] = formQuestion.Value ?? null;
                                     Data.Update();
 
                                     await args.Interaction.CreateResponseAsync(InteractionResponseType.ChannelMessageWithSource, new DiscordInteractionResponseBuilder()

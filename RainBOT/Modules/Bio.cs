@@ -23,6 +23,7 @@
 using DSharpPlus;
 using DSharpPlus.Entities;
 using DSharpPlus.SlashCommands;
+using RainBOT.Core;
 using RainBOT.Core.Attributes;
 using RainBOT.Core.AutocompleteProviders;
 using RainBOT.Core.Entities.Models;
@@ -44,25 +45,25 @@ namespace RainBOT.Modules
             [Option("field", "What to name the field.", true)] string field,
             [Option("value", "What to set the field to.")] string value)
         {
-            if (Data.UserAccounts.Find(x => x.UserId == ctx.User.Id).BioFields.ToList().Exists(x => x.Name == field))
+            if (ctx.User.GetUserAccount(Data).BioFields.ToList().Exists(x => x.Name == field))
             {
                 await ctx.CreateResponseAsync($"⚠️ You already have a field with that name. Use {Core.Utilities.GetCommandMention(ctx.Client, "bio edit")}.", true);
                 return;
             }
-            if (Data.UserAccounts.Find(x => x.UserId == ctx.User.Id).BioFields.Length >= 10)
+            if (ctx.User.GetUserAccount(Data).BioFields.Length >= 10)
             {
                 await ctx.CreateResponseAsync("⚠️ You can only have up to 10 bio fields.", true);
                 return;
             }
 
-            var bioFields = Data.UserAccounts.Find(x => x.UserId == ctx.User.Id).BioFields.ToList();
+            var bioFields = ctx.User.GetUserAccount(Data).BioFields.ToList();
             bioFields.Add(new BioFieldData()
             {
                 Name = field,
                 Value = value
             });
 
-            Data.UserAccounts.Find(x => x.UserId == ctx.User.Id).BioFields = bioFields.ToArray();
+            ctx.User.GetUserAccount(Data).BioFields = bioFields.ToArray();
             Data.Update();
 
             await ctx.CreateResponseAsync("✅ Created the field.", true);
@@ -75,16 +76,16 @@ namespace RainBOT.Modules
             [Option("field", "The name of the field to edit.", true)] string field,
             [Option("value", "What to set the field to.")] string value)
         {
-            if (!Data.UserAccounts.Find(x => x.UserId == ctx.User.Id).BioFields.ToList().Exists(x => x.Name == field))
+            if (!ctx.User.GetUserAccount(Data).BioFields.ToList().Exists(x => x.Name == field))
             {
                 await ctx.CreateResponseAsync($"⚠️ You don't have a field with that name. Use {Core.Utilities.GetCommandMention(ctx.Client, "bio create")}.", true);
                 return;
             }
 
-            var bioFields = Data.UserAccounts.Find(x => x.UserId == ctx.User.Id).BioFields.ToList();
+            var bioFields = ctx.User.GetUserAccount(Data).BioFields.ToList();
             bioFields.Find(x => x.Name == field).Value = value;
 
-            Data.UserAccounts.Find(x => x.UserId == ctx.User.Id).BioFields = bioFields.ToArray();
+            ctx.User.GetUserAccount(Data).BioFields = bioFields.ToArray();
             Data.Update();
 
             await ctx.CreateResponseAsync("✅ Edited the field.", true);
@@ -96,16 +97,16 @@ namespace RainBOT.Modules
             [Autocomplete(typeof(ExistingBioFieldsAutocompleteProvider))]
             [Option("field", "The name of the field to delete.", true)] string field)
         {
-            if (!Data.UserAccounts.Find(x => x.UserId == ctx.User.Id).BioFields.ToList().Exists(x => x.Name == field))
+            if (!ctx.User.GetUserAccount(Data).BioFields.ToList().Exists(x => x.Name == field))
             {
                 await ctx.CreateResponseAsync($"⚠️ You don't have a field with that name.", true);
                 return;
             }
 
-            var bioFields = Data.UserAccounts.Find(x => x.UserId == ctx.User.Id).BioFields.ToList();
+            var bioFields = ctx.User.GetUserAccount(Data).BioFields.ToList();
             bioFields.Remove(bioFields.Find(x => x.Name == field));
 
-            Data.UserAccounts.Find(x => x.UserId == ctx.User.Id).BioFields = bioFields.ToArray();
+            ctx.User.GetUserAccount(Data).BioFields = bioFields.ToArray();
             Data.Update();
 
             await ctx.CreateResponseAsync("✅ Deleted the field.", true);

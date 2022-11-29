@@ -26,6 +26,7 @@ using DSharpPlus;
 using DSharpPlus.Entities;
 using DSharpPlus.SlashCommands;
 using Newtonsoft.Json;
+using RainBOT.Core;
 using RainBOT.Core.Attributes;
 using RainBOT.Core.Entities.Models;
 using RainBOT.Core.Entities.Services;
@@ -69,8 +70,8 @@ namespace RainBOT.Modules
                 .WithThumbnail(ctx.User.AvatarUrl)
                 .WithDescription("Manage the settings of your RainBOT user account. Please select a module to configure.")
                 .WithColor(new DiscordColor(3092790))
-                .AddField("Allow Vent Responses", Data.UserAccounts.Find(x => x.UserId == ctx.User.Id).AllowVentResponses ? "Enabled" : "Disabled")
-                .AddField("Bio Style", "#" + Data.UserAccounts.Find(x => x.UserId == ctx.User.Id).BioStyle);
+                .AddField("Allow Vent Responses", ctx.User.GetUserAccount(Data).AllowVentResponses ? "Enabled" : "Disabled")
+                .AddField("Bio Style", "#" + ctx.User.GetUserAccount(Data).BioStyle);
 
             var ventingButton = new DiscordButtonComponent(ButtonStyle.Secondary, Core.Utilities.CreateCustomId("ventingButton"), "Venting", false, new DiscordComponentEmoji(DiscordEmoji.FromUnicode("👁‍🗨")));
             var bioButton = new DiscordButtonComponent(ButtonStyle.Secondary, Core.Utilities.CreateCustomId("bioButton"), "Bio", false, new DiscordComponentEmoji(DiscordEmoji.FromUnicode("📜")));
@@ -86,7 +87,7 @@ namespace RainBOT.Modules
                 .WithTitle("Venting Settings")
                 .WithDescription("Configure the venting system.")
                 .WithColor(new DiscordColor(3092790))
-                .AddField("Allow Vent Responses", Data.UserAccounts.Find(x => x.UserId == ctx.User.Id).AllowVentResponses ? "Enabled" : "Disabled");
+                .AddField("Allow Vent Responses", ctx.User.GetUserAccount(Data).AllowVentResponses ? "Enabled" : "Disabled");
 
             var allowVentResponsesButton = new DiscordButtonComponent(ButtonStyle.Secondary, Core.Utilities.CreateCustomId("allowVentResponsesButton"), "Allow Vent Responses", false, new DiscordComponentEmoji(DiscordEmoji.FromUnicode("💬")));
 
@@ -101,7 +102,7 @@ namespace RainBOT.Modules
                 .WithTitle("Bio Settings")
                 .WithDescription("Configure the bio system.")
                 .WithColor(new DiscordColor(3092790))
-                .AddField("Bio Style", "#" + Data.UserAccounts.Find(x => x.UserId == ctx.User.Id).BioStyle);
+                .AddField("Bio Style", "#" + ctx.User.GetUserAccount(Data).BioStyle);
 
             var bioStyleButton = new DiscordButtonComponent(ButtonStyle.Secondary, Core.Utilities.CreateCustomId("bioStyleButton"), "Bio Style", false, new DiscordComponentEmoji(DiscordEmoji.FromUnicode("🎨")));
 
@@ -146,7 +147,7 @@ namespace RainBOT.Modules
                             {
                                 if (args.Id == allowVentResponsesSelect.CustomId)
                                 {
-                                    Data.UserAccounts.Find(x => x.UserId == ctx.User.Id).AllowVentResponses = args.Values.First() == "yes";
+                                    ctx.User.GetUserAccount(Data).AllowVentResponses = args.Values.First() == "yes";
                                     Data.Update();
 
                                     await args.Interaction.CreateResponseAsync(InteractionResponseType.ChannelMessageWithSource, new DiscordInteractionResponseBuilder()
@@ -212,7 +213,7 @@ namespace RainBOT.Modules
                                             {
                                                 if (Regex.IsMatch(args.Values["color"], @"^#(?:[0-9a-fA-F]{3}){1,2}$"))
                                                 {
-                                                    Data.UserAccounts.Find(x => x.UserId == ctx.User.Id).BioStyle = args.Values["color"].ToUpper()[1..];
+                                                    ctx.User.GetUserAccount(Data).BioStyle = args.Values["color"].ToUpper()[1..];
                                                     Data.Update();
 
                                                     await args.Interaction.CreateResponseAsync(InteractionResponseType.ChannelMessageWithSource, new DiscordInteractionResponseBuilder()
@@ -232,15 +233,15 @@ namespace RainBOT.Modules
                                     {
                                         switch (args.Values.First())
                                         {
-                                            case "none": Data.UserAccounts.Find(x => x.UserId == ctx.User.Id).BioStyle = "2F3136"; break;
-                                            case "red": Data.UserAccounts.Find(x => x.UserId == ctx.User.Id).BioStyle = "E91E63"; break;
-                                            case "orange": Data.UserAccounts.Find(x => x.UserId == ctx.User.Id).BioStyle = "E67E22"; break;
-                                            case "yellow": Data.UserAccounts.Find(x => x.UserId == ctx.User.Id).BioStyle = "F1C40F"; break;
-                                            case "green": Data.UserAccounts.Find(x => x.UserId == ctx.User.Id).BioStyle = "2ECC71"; break;
-                                            case "blue": Data.UserAccounts.Find(x => x.UserId == ctx.User.Id).BioStyle = "3498DB"; break;
-                                            case "purple": Data.UserAccounts.Find(x => x.UserId == ctx.User.Id).BioStyle = "9B59B6"; break;
-                                            case "black": Data.UserAccounts.Find(x => x.UserId == ctx.User.Id).BioStyle = "202225"; break;
-                                            case "white": Data.UserAccounts.Find(x => x.UserId == ctx.User.Id).BioStyle = "FFFFFF"; break;
+                                            case "none": ctx.User.GetUserAccount(Data).BioStyle = "2F3136"; break;
+                                            case "red": ctx.User.GetUserAccount(Data).BioStyle = "E91E63"; break;
+                                            case "orange": ctx.User.GetUserAccount(Data).BioStyle = "E67E22"; break;
+                                            case "yellow": ctx.User.GetUserAccount(Data).BioStyle = "F1C40F"; break;
+                                            case "green": ctx.User.GetUserAccount(Data).BioStyle = "2ECC71"; break;
+                                            case "blue": ctx.User.GetUserAccount(Data).BioStyle = "3498DB"; break;
+                                            case "purple": ctx.User.GetUserAccount(Data).BioStyle = "9B59B6"; break;
+                                            case "black": ctx.User.GetUserAccount(Data).BioStyle = "202225"; break;
+                                            case "white": ctx.User.GetUserAccount(Data).BioStyle = "FFFFFF"; break;
                                         }
                                         Data.Update();
 

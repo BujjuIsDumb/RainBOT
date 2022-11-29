@@ -25,6 +25,7 @@ using DSharpPlus.Entities;
 using DSharpPlus.Exceptions;
 using DSharpPlus.SlashCommands;
 using DSharpPlus.SlashCommands.Attributes;
+using RainBOT.Core;
 using RainBOT.Core.Attributes;
 using RainBOT.Core.Entities.Services;
 
@@ -49,7 +50,7 @@ namespace RainBOT.Modules
                 .WithCustomId(Core.Utilities.CreateCustomId("verificationFormModal"));
 
             // Add text input component for every question.
-            foreach (var formQuestion in Data.GuildAccounts.Find(x => x.GuildId == ctx.Guild.Id).VerificationFormQuestions)
+            foreach (var formQuestion in ctx.Guild.GetGuildAccount(Data).VerificationFormQuestions)
             {
                 if (!string.IsNullOrEmpty(formQuestion.Value))
                 {
@@ -79,7 +80,7 @@ namespace RainBOT.Modules
                     {
                         if (!string.IsNullOrEmpty(formQuestion.Value) && formQuestion.Key != "notes")
                         {
-                            embed.AddField(Data.GuildAccounts.Find(x => x.GuildId == ctx.Guild.Id).VerificationFormQuestions[formQuestion.Key], formQuestion.Value);
+                            embed.AddField(ctx.Guild.GetGuildAccount(Data).VerificationFormQuestions[formQuestion.Key], formQuestion.Value);
                         }
                     }
 
@@ -97,7 +98,7 @@ namespace RainBOT.Modules
                         .AddComponents(acceptButton, denyButton));
 
                     // Create vetting thread.
-                    DiscordThreadChannel thread = Data.GuildAccounts.Find(x => x.GuildId == ctx.Guild.Id).CreateVettingThread ? await (await args.Interaction.GetOriginalResponseAsync()).CreateThreadAsync($"{ctx.User.Username} Vetting", AutoArchiveDuration.Day, $"Created vetting thread (/verify executed by {ctx.User.Username})") : null;
+                    DiscordThreadChannel thread = ctx.Guild.GetGuildAccount(Data).CreateVettingThread ? await (await args.Interaction.GetOriginalResponseAsync()).CreateThreadAsync($"{ctx.User.Username} Vetting", AutoArchiveDuration.Day, $"Created vetting thread (/verify executed by {ctx.User.Username})") : null;
 
                     var originalInteraction = args.Interaction;
 
@@ -145,7 +146,7 @@ namespace RainBOT.Modules
                                             return;
                                         }
 
-                                        if (Data.GuildAccounts.Find(x => x.GuildId == ctx.Guild.Id).DeleteVerificationRequests)
+                                        if (ctx.Guild.GetGuildAccount(Data).DeleteVerificationRequests)
                                         {
                                             await originalInteraction.DeleteOriginalResponseAsync();
                                             if (thread is not null) await thread.DeleteAsync($"Delete vetting thread (/verify executed by {ctx.User.Username})");
@@ -231,7 +232,7 @@ namespace RainBOT.Modules
                                             return;
                                         }
 
-                                        if (Data.GuildAccounts.Find(x => x.GuildId == ctx.Guild.Id).DeleteVerificationRequests)
+                                        if (ctx.Guild.GetGuildAccount(Data).DeleteVerificationRequests)
                                         {
                                             await originalInteraction.DeleteOriginalResponseAsync();
                                             if (thread is not null) await thread.DeleteAsync($"Delete vetting thread (/verify executed by {ctx.User.Username})");

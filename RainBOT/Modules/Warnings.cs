@@ -23,6 +23,7 @@
 using DSharpPlus;
 using DSharpPlus.Entities;
 using DSharpPlus.SlashCommands;
+using RainBOT.Core;
 using RainBOT.Core.Attributes;
 using RainBOT.Core.Entities.Models;
 using RainBOT.Core.Entities.Services;
@@ -44,13 +45,13 @@ namespace RainBOT.Modules
             [Option("user", "The user to warn.")] DiscordUser user,
             [Option("warning", "What did the user do?")] string warning)
         {
-            if (Data.GuildAccounts.Find(x => x.GuildId == ctx.Guild.Id).Warnings.ToList().Exists(x => x.UserId == user.Id && x.CreatorUserId == ctx.User.Id))
+            if (ctx.Guild.GetGuildAccount(Data).Warnings.ToList().Exists(x => x.UserId == user.Id && x.CreatorUserId == ctx.User.Id))
             {
                 await ctx.CreateResponseAsync($"⚠️ You've already warned **{user.Username}**.", true);
                 return;
             }
 
-            var warnings = Data.GuildAccounts.Find(x => x.GuildId == ctx.Guild.Id).Warnings.ToList();
+            var warnings = ctx.Guild.GetGuildAccount(Data).Warnings.ToList();
             warnings.Add(new WarnData()
             {
                 UserId = user.Id,
@@ -59,7 +60,7 @@ namespace RainBOT.Modules
                 CreationTimestamp = DateTime.UtcNow
             });
 
-            Data.GuildAccounts.Find(x => x.GuildId == ctx.Guild.Id).Warnings = warnings.ToArray();
+            ctx.Guild.GetGuildAccount(Data).Warnings = warnings.ToArray();
             Data.Update();
 
             await ctx.CreateResponseAsync($"✅ Warned **{user.Username}**.", true);
@@ -69,14 +70,14 @@ namespace RainBOT.Modules
         public async Task WarnRevokeAsync(InteractionContext ctx,
             [Option("user", "The user to remove the warning from.")] DiscordUser user)
         {
-            var warn = Data.GuildAccounts.Find(x => x.GuildId == ctx.Guild.Id).Warnings.ToList().Find(x => x.UserId == user.Id && x.CreatorUserId == ctx.User.Id);
+            var warn = ctx.Guild.GetGuildAccount(Data).Warnings.ToList().Find(x => x.UserId == user.Id && x.CreatorUserId == ctx.User.Id);
 
             if (warn is not null)
             {
-                var warnings = Data.GuildAccounts.Find(x => x.GuildId == ctx.Guild.Id).Warnings.ToList();
+                var warnings = ctx.Guild.GetGuildAccount(Data).Warnings.ToList();
                 warnings.Remove(warn);
 
-                Data.GuildAccounts.Find(x => x.GuildId == ctx.Guild.Id).Warnings = warnings.ToArray();
+                ctx.Guild.GetGuildAccount(Data).Warnings = warnings.ToArray();
                 Data.Update();
 
                 await ctx.CreateResponseAsync($"✅ Removed your warning for **{user.Username}**.", true);
@@ -91,7 +92,7 @@ namespace RainBOT.Modules
         public async Task WarnListAsync(InteractionContext ctx,
             [Option("user", "The user to view the warnings of.")] DiscordUser user)
         {
-            if (Data.GuildAccounts.Find(x => x.GuildId == ctx.Guild.Id).Warnings.ToList().FindAll(x => x.UserId == user.Id).Count <= 0)
+            if (ctx.Guild.GetGuildAccount(Data).Warnings.ToList().FindAll(x => x.UserId == user.Id).Count <= 0)
             {
                 await ctx.CreateResponseAsync($"⚠️ **{user.Username}** has not been warned.", true);
                 return;
@@ -99,7 +100,7 @@ namespace RainBOT.Modules
 
             // Create select menu options for each warning.
             var warnSelectOptions = new List<DiscordSelectComponentOption>();
-            foreach (WarnData warn in Data.GuildAccounts.Find(x => x.GuildId == ctx.Guild.Id).Warnings)
+            foreach (WarnData warn in ctx.Guild.GetGuildAccount(Data).Warnings)
             {
                 DiscordUser creator = await ctx.Client.GetUserAsync(warn.CreatorUserId);
                 warnSelectOptions.Add(new DiscordSelectComponentOption($"Warning from {creator.Username}", creator.Id.ToString()));
@@ -117,7 +118,7 @@ namespace RainBOT.Modules
             {
                 if (args.Id == warnSelect.CustomId)
                 {
-                    var warn = Data.GuildAccounts.Find(x => x.GuildId == ctx.Guild.Id).Warnings.ToList().Find(x => x.UserId == user.Id && x.CreatorUserId == ulong.Parse(args.Values.First())) ?? new WarnData();
+                    var warn = ctx.Guild.GetGuildAccount(Data).Warnings.ToList().Find(x => x.UserId == user.Id && x.CreatorUserId == ulong.Parse(args.Values.First())) ?? new WarnData();
 
                     var embed = new DiscordEmbedBuilder()
                         .WithAuthor(name: (await ctx.Client.GetUserAsync(warn.CreatorUserId)).Username, iconUrl: (await ctx.Client.GetUserAsync(warn.CreatorUserId)).AvatarUrl)
@@ -136,7 +137,7 @@ namespace RainBOT.Modules
         [ContextMenuRequireGuildAccount]
         public async Task ViewWarningsAsync(ContextMenuContext ctx)
         {
-            if (Data.GuildAccounts.Find(x => x.GuildId == ctx.Guild.Id).Warnings.ToList().FindAll(x => x.UserId == ctx.TargetUser.Id).Count <= 0)
+            if (ctx.Guild.GetGuildAccount(Data).Warnings.ToList().FindAll(x => x.UserId == ctx.TargetUser.Id).Count <= 0)
             {
                 await ctx.CreateResponseAsync($"⚠️ **{ctx.TargetUser.Username}** has no warnings.", true);
                 return;
@@ -144,7 +145,7 @@ namespace RainBOT.Modules
 
             // Create select menu options for each warning.
             var warnSelectOptions = new List<DiscordSelectComponentOption>();
-            foreach (WarnData warn in Data.GuildAccounts.Find(x => x.GuildId == ctx.Guild.Id).Warnings)
+            foreach (WarnData warn in ctx.Guild.GetGuildAccount(Data).Warnings)
             {
                 DiscordUser creator = await ctx.Client.GetUserAsync(warn.CreatorUserId);
                 warnSelectOptions.Add(new DiscordSelectComponentOption($"Warning from {creator.Username}", creator.Id.ToString()));
@@ -162,7 +163,7 @@ namespace RainBOT.Modules
             {
                 if (args.Id == warnSelect.CustomId)
                 {
-                    var warn = Data.GuildAccounts.Find(x => x.GuildId == ctx.Guild.Id).Warnings.ToList().Find(x => x.UserId == ctx.TargetUser.Id && x.CreatorUserId == ulong.Parse(args.Values.First())) ?? new WarnData();
+                    var warn = ctx.Guild.GetGuildAccount(Data).Warnings.ToList().Find(x => x.UserId == ctx.TargetUser.Id && x.CreatorUserId == ulong.Parse(args.Values.First())) ?? new WarnData();
 
                     var embed = new DiscordEmbedBuilder()
                         .WithAuthor(name: (await ctx.Client.GetUserAsync(warn.CreatorUserId)).Username, iconUrl: (await ctx.Client.GetUserAsync(warn.CreatorUserId)).AvatarUrl)
