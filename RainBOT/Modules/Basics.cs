@@ -183,5 +183,14 @@ namespace RainBOT.Modules
                 .AddComponents(new DiscordLinkButtonComponent(Config.InviteUrl, "Invite"))
                 .AsEphemeral());
         }
+
+        [SlashCommand("wiki", "Go to my wiki.")]
+        public async Task WikiAsync(InteractionContext ctx)
+        {
+            await ctx.CreateResponseAsync(new DiscordInteractionResponseBuilder()
+                .WithContent("Click the button to go to my wiki.")
+                .AddComponents(new DiscordLinkButtonComponent(Config.WikiUrl, "Wiki"))
+                .AsEphemeral());
+        }
     }
 }

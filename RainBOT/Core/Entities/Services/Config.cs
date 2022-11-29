@@ -39,6 +39,9 @@ namespace RainBOT.Core.Entities.Services
         [JsonProperty("invite_url")]
         public string InviteUrl { get; private set; }
 
+        [JsonProperty("wiki_url")]
+        public string WikiUrl { get; private set; }
+
         [JsonProperty("guild_id")]
         public ulong? GuildId { get; private set; }
 
@@ -62,6 +65,7 @@ namespace RainBOT.Core.Entities.Services
             SourceUrl = loaded.SourceUrl;
             SupportUrl = loaded.SupportUrl;
             InviteUrl = loaded.InviteUrl;
+            WikiUrl = loaded.WikiUrl;
             GuildId = loaded.GuildId;
             Status = loaded.Status;
             StatusType = loaded.StatusType;
@@ -76,6 +80,7 @@ namespace RainBOT.Core.Entities.Services
             SourceUrl = null;
             SupportUrl = null;
             InviteUrl = null;
+            WikiUrl = null;
             GuildId = null;
             Status = null;
             StatusType = default;
