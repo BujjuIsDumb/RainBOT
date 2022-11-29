@@ -27,13 +27,13 @@ namespace RainBOT.Core.Entities.Models
     public class WarnData
     {
         [JsonProperty("user_id")]
-        public ulong UserId { get; set; }
+        public ulong UserId { get; set; } = 0;
 
         [JsonProperty("creator_user_id")]
-        public ulong CreatorUserId { get; set; }
+        public ulong CreatorUserId { get; set; } = 0;
 
         [JsonProperty("description")]
-        public string Description { get; set; }
+        public string Description { get; set; } = string.Empty;
 
         [JsonProperty("creation_timestamp")]
         public DateTimeOffset CreationTimestamp { get; set; } = DateTimeOffset.UnixEpoch;
