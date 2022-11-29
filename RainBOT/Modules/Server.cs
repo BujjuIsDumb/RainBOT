@@ -278,6 +278,8 @@ namespace RainBOT.Modules
                         }
                         else if (args.Id == verificationFormButton.CustomId)
                         {
+                            await verificationInteraction.DeleteOriginalResponseAsync();
+
                             // Build modal.
                             var verificationFormModal = new DiscordInteractionResponseBuilder()
                                 .WithTitle("Create the verification form")
