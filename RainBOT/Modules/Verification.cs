@@ -98,7 +98,7 @@ namespace RainBOT.Modules
                         .AddComponents(acceptButton, denyButton));
 
                     // Create vetting thread.
-                    DiscordThreadChannel thread = ctx.Guild.GetGuildAccount(Data).CreateVettingThread ? await (await args.Interaction.GetOriginalResponseAsync()).CreateThreadAsync($"{ctx.User.Username} Vetting", AutoArchiveDuration.Day, $"Created vetting thread (/verify executed by {ctx.User.Username})") : null;
+                    var thread = ctx.Guild.GetGuildAccount(Data).CreateVettingThread ? await (await args.Interaction.GetOriginalResponseAsync()).CreateThreadAsync($"{ctx.User.Username} Vetting", AutoArchiveDuration.Day, $"Created vetting thread (/verify executed by {ctx.User.Username})") : null;
 
                     var originalInteraction = args.Interaction;
 

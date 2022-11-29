@@ -39,7 +39,7 @@ namespace RainBOT
         private Config _config;
 
         private DiscordShardedClient _client;
-        
+
         private async Task InitializeAsync()
         {
             _config = new Config("config.json").Initialize();

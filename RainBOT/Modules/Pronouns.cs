@@ -41,7 +41,7 @@ namespace RainBOT.Modules
             [Option("reflexive", "Himself, herself, and themself are reflexive pronouns.")] string reflexive,
             [Option("plural", "Whether or not to use plural grammar rules for the pronouns.")] bool plural)
         {
-            var prompts = new string[]
+            string[] prompts = new string[]
             {
                 $"My friend {ctx.User.Username} and I went to the café the other day. Usually, " +
                 $"I order for {objective}, but {subjective} ordered for {reflexive} today! I am " +
@@ -70,7 +70,7 @@ namespace RainBOT.Modules
         public async Task PronounsRandom(InteractionContext ctx)
         {
             // https://docs.google.com/spreadsheets/d/1_AHHBGKSzEKtKfZ9WqWAmUGuyfaIsrYmeoRkekC6VIA/edit?usp=sharing (Non-themed an non-exclusive only)
-            var prompts = new string[]
+            string[] prompts = new string[]
             {
                 "ae/aeir/aer/aers/aeirself",
                 "ae/aem/aer/aers/aemself",

@@ -100,9 +100,9 @@ namespace RainBOT.Modules
 
             // Create select menu options for each warning.
             var warnSelectOptions = new List<DiscordSelectComponentOption>();
-            foreach (WarnData warn in ctx.Guild.GetGuildAccount(Data).Warnings)
+            foreach (var warn in ctx.Guild.GetGuildAccount(Data).Warnings)
             {
-                DiscordUser creator = await ctx.Client.GetUserAsync(warn.CreatorUserId);
+                var creator = await ctx.Client.GetUserAsync(warn.CreatorUserId);
                 warnSelectOptions.Add(new DiscordSelectComponentOption($"Warning from {creator.Username}", creator.Id.ToString()));
             }
 
@@ -145,9 +145,9 @@ namespace RainBOT.Modules
 
             // Create select menu options for each warning.
             var warnSelectOptions = new List<DiscordSelectComponentOption>();
-            foreach (WarnData warn in ctx.Guild.GetGuildAccount(Data).Warnings)
+            foreach (var warn in ctx.Guild.GetGuildAccount(Data).Warnings)
             {
-                DiscordUser creator = await ctx.Client.GetUserAsync(warn.CreatorUserId);
+                var creator = await ctx.Client.GetUserAsync(warn.CreatorUserId);
                 warnSelectOptions.Add(new DiscordSelectComponentOption($"Warning from {creator.Username}", creator.Id.ToString()));
             }
 
