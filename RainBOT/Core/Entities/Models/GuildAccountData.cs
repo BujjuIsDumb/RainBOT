@@ -42,7 +42,7 @@ namespace RainBOT.Core.Entities.Models
         public bool CreateVettingThread { get; set; } = true;
 
         [JsonProperty("verification_form_questions")]
-        public Dictionary<string, string> VerificationFormQuestions { get; set; } = new();
+        public string[] VerificationFormQuestions { get; set; } = Array.Empty<string>();
 
         [JsonProperty("warnings")]
         public WarnData[] Warnings { get; set; } = Array.Empty<WarnData>();

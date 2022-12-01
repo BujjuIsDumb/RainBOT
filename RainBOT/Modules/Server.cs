@@ -71,7 +71,7 @@ namespace RainBOT.Modules
             if (string.IsNullOrEmpty(ventModerators.ToString())) ventModerators.Append("None");
 
             var verificationForm = new StringBuilder();
-            ctx.Guild.GetGuildAccount(Data).VerificationFormQuestions.ToList().ForEach(x => verificationForm.AppendLine(x.Value));
+            ctx.Guild.GetGuildAccount(Data).VerificationFormQuestions.ToList().ForEach(x => verificationForm.AppendLine(x));
             if (string.IsNullOrEmpty(verificationForm.ToString())) verificationForm.Append("None");
 
             // Build main menu components.
@@ -296,7 +296,11 @@ namespace RainBOT.Modules
                             {
                                 if (args.Interaction.Data.CustomId == verificationFormModal.CustomId)
                                 {
-                                    foreach (var formQuestion in args.Values) ctx.Guild.GetGuildAccount(Data).VerificationFormQuestions[formQuestion.Key] = formQuestion.Value ?? null;
+                                    var formQuestions = new List<string>();
+                                    foreach (string question in args.Values.Values)
+                                        if (!string.IsNullOrEmpty(question)) formQuestions.Add(question);
+
+                                    ctx.Guild.GetGuildAccount(Data).VerificationFormQuestions = formQuestions.ToArray();
                                     Data.Update();
 
                                     await args.Interaction.CreateResponseAsync(InteractionResponseType.ChannelMessageWithSource, new DiscordInteractionResponseBuilder()

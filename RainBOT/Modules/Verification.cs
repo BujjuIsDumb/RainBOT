@@ -50,12 +50,10 @@ namespace RainBOT.Modules
                 .WithCustomId(Core.Utilities.CreateCustomId("verificationFormModal"));
 
             // Add text input component for every question.
-            foreach (var formQuestion in ctx.Guild.GetGuildAccount(Data).VerificationFormQuestions)
+            for (int i = 0; i < ctx.Guild.GetGuildAccount(Data).VerificationFormQuestions.Count(); i++)
             {
-                if (!string.IsNullOrEmpty(formQuestion.Value))
-                {
-                    verificationFormModal.AddComponents(new TextInputComponent(label: formQuestion.Value, customId: formQuestion.Key, style: TextInputStyle.Paragraph, min_length: 5, max_length: 500));
-                }
+                string formQuestion = ctx.Guild.GetGuildAccount(Data).VerificationFormQuestions[i];
+                verificationFormModal.AddComponents(new TextInputComponent(label: formQuestion, customId: $"question{i}", required: true, style: TextInputStyle.Paragraph, min_length: 5, max_length: 500));
             }
 
             verificationFormModal.AddComponents(new TextInputComponent(label: "Notes", customId: "notes", required: false, style: TextInputStyle.Paragraph, min_length: 5, max_length: 500));
@@ -76,12 +74,10 @@ namespace RainBOT.Modules
                         .WithColor(new DiscordColor(3092790));
 
                     // Add field for every question.
-                    foreach (var formQuestion in args.Values)
+                    for (int i = 0; i < ctx.Guild.GetGuildAccount(Data).VerificationFormQuestions.Count(); i++)
                     {
-                        if (!string.IsNullOrEmpty(formQuestion.Value) && formQuestion.Key != "notes")
-                        {
-                            embed.AddField(ctx.Guild.GetGuildAccount(Data).VerificationFormQuestions[formQuestion.Key], formQuestion.Value);
-                        }
+                        string formQuestion = ctx.Guild.GetGuildAccount(Data).VerificationFormQuestions[i];
+                        embed.AddField(formQuestion, args.Values[$"question{i}"]);
                     }
 
                     // Add notes field.
