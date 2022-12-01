@@ -1,4 +1,4 @@
-﻿// This file is from RainBOT (https://github.com/BujjuIsDumb/RainBOT)
+﻿// This file is from RainBOT.
 // 
 // Copyright(c) 2022 Bujju
 // 
