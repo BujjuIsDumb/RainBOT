@@ -66,9 +66,17 @@ namespace RainBOT.Modules
         [SlashRequireGuildAccount]
         public async Task ServerSettingsAsync(InteractionContext ctx)
         {
-            // Format vent moderator mentions.
-            string[] mentions = Array.Empty<string>();
-            ctx.Guild.GetGuildAccount(Data).VentModerators.ToList().ForEach(async x => mentions.Append((await ctx.Client.GetUserAsync(x)).Mention));
+            // Get mention strings.
+            string[] ventModeratorMentions = Array.Empty<string>();
+            ctx.Guild.GetGuildAccount(Data).VentModerators.ToList().ForEach(async x => ventModeratorMentions.Append((await ctx.Client.GetUserAsync(x)).Mention));
+
+            // Create lists.
+            string ventModerators = string.Join("\n", ventModeratorMentions);
+            if (string.IsNullOrEmpty(ventModerators)) ventModerators = "None";
+
+            string verificationForm = string.Join("\n", ctx.Guild.GetGuildAccount(Data).VerificationFormQuestions);
+
+
 
             // Build main menu components.
             var mainEmbed = new DiscordEmbedBuilder()
@@ -76,11 +84,11 @@ namespace RainBOT.Modules
                 .WithThumbnail(ctx.Guild.IconUrl)
                 .WithDescription("Manage the settings of your RainBOT server account. Please select a module to configure.")
                 .WithColor(new DiscordColor(3092790))
-                .AddField("Vent Moderators", string.Join("\n", mentions))
+                .AddField("Vent Moderators", verificationForm)
                 .AddField("Anonymous Venting", ctx.Guild.GetGuildAccount(Data).AnonymousVenting ? "Enabled" : "Disabled")
                 .AddField("Delete Verification Requests", ctx.Guild.GetGuildAccount(Data).DeleteVerificationRequests ? "Enabled" : "Disabled")
                 .AddField("Create Vetting Thread", ctx.Guild.GetGuildAccount(Data).CreateVettingThread ? "Enabled" : "Disabled")
-                .AddField("Verification Form", string.Join("\n", ctx.Guild.GetGuildAccount(Data).VerificationFormQuestions));
+                .AddField("Verification Form", verificationForm);
 
             var ventingButton = new DiscordButtonComponent(ButtonStyle.Secondary, Core.Utilities.CreateCustomId("ventingButton"), "Venting", false, new DiscordComponentEmoji(DiscordEmoji.FromUnicode("👁‍🗨")));
             var verificationButton = new DiscordButtonComponent(ButtonStyle.Secondary, Core.Utilities.CreateCustomId("verificationButton"), "Verification", false, new DiscordComponentEmoji(DiscordEmoji.FromUnicode("✅")));
@@ -96,7 +104,7 @@ namespace RainBOT.Modules
                 .WithTitle("Venting Settings")
                 .WithDescription("Configure the venting system.")
                 .WithColor(new DiscordColor(3092790))
-                .AddField("Vent Moderators", string.Join("\n", mentions))
+                .AddField("Vent Moderators", ventModerators)
                 .AddField("Anonymous Venting", ctx.Guild.GetGuildAccount(Data).AnonymousVenting ? "Enabled" : "Disabled");
 
             var ventModeratorsButton = new DiscordButtonComponent(ButtonStyle.Secondary, Core.Utilities.CreateCustomId("ventModeratorsButton"), "Vent Moderators", false, new DiscordComponentEmoji(DiscordEmoji.FromUnicode("🛡")));
@@ -115,7 +123,7 @@ namespace RainBOT.Modules
                 .WithColor(new DiscordColor(3092790))
                 .AddField("Delete Verification Requests", ctx.Guild.GetGuildAccount(Data).DeleteVerificationRequests ? "Enabled" : "Disabled")
                 .AddField("Create Vetting Thread", ctx.Guild.GetGuildAccount(Data).CreateVettingThread ? "Enabled" : "Disabled")
-                .AddField("Verification Form", string.Join("\n", ctx.Guild.GetGuildAccount(Data).VerificationFormQuestions));
+                .AddField("Verification Form", verificationForm);
 
             var deleteVerificationRequestsButton = new DiscordButtonComponent(ButtonStyle.Secondary, Core.Utilities.CreateCustomId("deleteVerificationRequestsButton"), "Delete Verification Requests", false, new DiscordComponentEmoji(DiscordEmoji.FromUnicode("🗑")));
             var createVettingThreadButton = new DiscordButtonComponent(ButtonStyle.Secondary, Core.Utilities.CreateCustomId("createVettingThreadButton"), "Create Vetting Thread", false, new DiscordComponentEmoji(DiscordEmoji.FromUnicode("⚖️")));
