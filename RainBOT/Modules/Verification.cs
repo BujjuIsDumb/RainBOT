@@ -40,7 +40,7 @@ namespace RainBOT.Modules
         [SlashCommand("verify", "Request verification for the member role.")]
         [GuildOnly]
         [SlashCooldown(5, 300, SlashCooldownBucketType.User)]
-        [SlashRequireBotPermissions(Permissions.CreatePublicThreads | Permissions.ManageRoles | Permissions.KickMembers | Permissions.BanMembers | Permissions.ManageThreads)]
+        [SlashRequireBotPermissions(Permissions.CreatePrivateThreads | Permissions.ManageRoles | Permissions.KickMembers | Permissions.BanMembers | Permissions.ManageThreads)]
         [SlashRequireGuildAccount]
         public async Task VerifyAsync(InteractionContext ctx)
         {
