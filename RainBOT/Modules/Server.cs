@@ -84,7 +84,7 @@ namespace RainBOT.Modules
                 .WithThumbnail(ctx.Guild.IconUrl)
                 .WithDescription("Manage the settings of your RainBOT server account. Please select a module to configure.")
                 .WithColor(new DiscordColor(3092790))
-                .AddField("Vent Moderators", verificationForm)
+                .AddField("Vent Moderators", ventModerators)
                 .AddField("Anonymous Venting", ctx.Guild.GetGuildAccount(Data).AnonymousVenting ? "Enabled" : "Disabled")
                 .AddField("Delete Verification Requests", ctx.Guild.GetGuildAccount(Data).DeleteVerificationRequests ? "Enabled" : "Disabled")
                 .AddField("Create Vetting Thread", ctx.Guild.GetGuildAccount(Data).CreateVettingThread ? "Enabled" : "Disabled")
