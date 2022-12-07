@@ -55,7 +55,6 @@ namespace RainBOT.Modules
                 string formQuestion = ctx.Guild.GetGuildAccount(Data).VerificationFormQuestions[i];
                 verificationFormModal.AddComponents(new TextInputComponent(label: formQuestion, customId: $"question{i}", required: true, style: TextInputStyle.Paragraph, min_length: 5, max_length: 500));
             }
-
             verificationFormModal.AddComponents(new TextInputComponent(label: "Notes", customId: "notes", required: false, style: TextInputStyle.Paragraph, min_length: 5, max_length: 500));
 
             await ctx.CreateResponseAsync(InteractionResponseType.Modal, verificationFormModal);
@@ -82,9 +81,7 @@ namespace RainBOT.Modules
 
                     // Add notes field.
                     if (!string.IsNullOrEmpty(args.Values["notes"]))
-                    {
                         embed.AddField("Notes", args.Values["notes"]);
-                    }
 
                     var acceptButton = new DiscordButtonComponent(ButtonStyle.Success, Core.Utilities.CreateCustomId("acceptButton"), "Accept", false, new DiscordComponentEmoji(DiscordEmoji.FromUnicode("✅")));
                     var denyButton = new DiscordButtonComponent(ButtonStyle.Danger, Core.Utilities.CreateCustomId("denyButton"), "Deny", false, new DiscordComponentEmoji(DiscordEmoji.FromUnicode("⛔")));
