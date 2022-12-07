@@ -67,16 +67,14 @@ namespace RainBOT.Modules
         public async Task ServerSettingsAsync(InteractionContext ctx)
         {
             // Get mention strings.
-            string[] ventModeratorMentions = Array.Empty<string>();
-            ctx.Guild.GetGuildAccount(Data).VentModerators.ToList().ForEach(async x => ventModeratorMentions.Append((await ctx.Client.GetUserAsync(x)).Mention));
+            var ventModeratorMentions = new List<string>();
+            ctx.Guild.GetGuildAccount(Data).VentModerators.ToList().ForEach(async x => ventModeratorMentions.Add((await ctx.Client.GetUserAsync(x)).Mention));
 
             // Create lists.
             string ventModerators = string.Join("\n", ventModeratorMentions);
             if (string.IsNullOrEmpty(ventModerators)) ventModerators = "None";
 
             string verificationForm = string.Join("\n", ctx.Guild.GetGuildAccount(Data).VerificationFormQuestions);
-
-
 
             // Build main menu components.
             var mainEmbed = new DiscordEmbedBuilder()
