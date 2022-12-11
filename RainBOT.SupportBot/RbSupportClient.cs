@@ -30,7 +30,7 @@ using RainBOT.SupportBot.Core.Entities.Services;
 
 namespace RainBOT.SupportBot
 {
-    public class RainBOT.SupportBot
+    public class RbSupportClient
     {
         private async Task InitializeAsync()
         {
