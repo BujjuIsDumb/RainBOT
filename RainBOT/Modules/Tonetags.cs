@@ -63,6 +63,22 @@ namespace RainBOT.Modules
             else await ctx.CreateResponseAsync("⚠️ That tonetag isn't defined.", true);
         }
 
+        [SlashCommand("list", "Get a list of tonetags.")]
+        public async Task TonetagsListAsync(InteractionContext ctx)
+        {
+            // Build list.
+            var builder = new StringBuilder();
+            foreach (string tonetag in Definitions.Tonetags.Keys)
+                builder.AppendLine($"`{tonetag}` {Definitions.Tonetags[tonetag]}");
+
+            var embed = new DiscordEmbedBuilder()
+                .WithTitle("Tonetag List")
+                .WithDescription(builder.ToString())
+                .WithColor(new DiscordColor(3092790));
+
+            await ctx.CreateResponseAsync(embed, true);
+        }
+
         [ContextMenu(ApplicationCommandType.MessageContextMenu, "Find Tonetags")]
         public async Task FindTonetagsAsync(ContextMenuContext ctx)
         {
