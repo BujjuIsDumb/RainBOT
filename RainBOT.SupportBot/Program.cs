@@ -41,7 +41,7 @@ namespace RainBOT.SupportBot
                 File.WriteAllText("data.json", JsonConvert.SerializeObject(new Data(null), Formatting.Indented));
             }
 
-            new RainBOT.SupportBot().Initialize();
+            new RbSupportClient().Initialize();
         }
     }
 }
