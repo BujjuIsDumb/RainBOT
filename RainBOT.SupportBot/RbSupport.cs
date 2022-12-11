@@ -25,12 +25,12 @@ using DSharpPlus;
 using DSharpPlus.Entities;
 using DSharpPlus.SlashCommands;
 using Microsoft.Extensions.DependencyInjection;
-using RbSupport.Core;
-using RbSupport.Core.Entities.Services;
+using RainBOT.SupportBot.Core;
+using RainBOT.SupportBot.Core.Entities.Services;
 
-namespace RbSupport
+namespace RainBOT.SupportBot
 {
-    public class RbSupport
+    public class RainBOT.SupportBot
     {
         private async Task InitializeAsync()
         {

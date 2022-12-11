@@ -26,7 +26,7 @@ using DSharpPlus.EventArgs;
 using DSharpPlus.SlashCommands;
 using DSharpPlus.SlashCommands.EventArgs;
 
-namespace RbSupport.Core
+namespace RainBOT.SupportBot.Core
 {
     public class Events
     {

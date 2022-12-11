@@ -21,9 +21,9 @@
 // SOFTWARE.
 
 using Newtonsoft.Json;
-using RbSupport.Core.Entities.Models;
+using RainBOT.SupportBot.Core.Entities.Models;
 
-namespace RbSupport.Core.Entities.Services
+namespace RainBOT.SupportBot.Core.Entities.Services
 {
     public class Data : IDisposable
     {

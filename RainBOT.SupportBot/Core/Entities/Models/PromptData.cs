@@ -22,7 +22,7 @@
 
 using Newtonsoft.Json;
 
-namespace RbSupport.Core.Entities.Models
+namespace RainBOT.SupportBot.Core.Entities.Models
 {
     public class PromptData
     {

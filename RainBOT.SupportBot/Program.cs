@@ -21,9 +21,9 @@
 // SOFTWARE.
 
 using Newtonsoft.Json;
-using RbSupport.Core.Entities.Services;
+using RainBOT.SupportBot.Core.Entities.Services;
 
-namespace RbSupport
+namespace RainBOT.SupportBot
 {
     public class Program
     {
@@ -41,7 +41,7 @@ namespace RbSupport
                 File.WriteAllText("data.json", JsonConvert.SerializeObject(new Data(null), Formatting.Indented));
             }
 
-            new RbSupport().Initialize();
+            new RainBOT.SupportBot().Initialize();
         }
     }
 }

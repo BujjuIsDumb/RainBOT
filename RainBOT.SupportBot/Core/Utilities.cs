@@ -20,7 +20,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-namespace RbSupport.Core
+namespace RainBOT.SupportBot.Core
 {
     public class Utilities
     {

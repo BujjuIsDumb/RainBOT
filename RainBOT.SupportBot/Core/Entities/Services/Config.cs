@@ -23,7 +23,7 @@
 using DSharpPlus.Entities;
 using Newtonsoft.Json;
 
-namespace RbSupport.Core.Entities.Services
+namespace RainBOT.SupportBot.Core.Entities.Services
 {
     public class Config : IDisposable
     {

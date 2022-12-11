@@ -24,11 +24,11 @@ using System.Text;
 using DSharpPlus;
 using DSharpPlus.Entities;
 using DSharpPlus.SlashCommands;
-using RbSupport.Core.AutocompleteProviders;
-using RbSupport.Core.Entities.Models;
-using RbSupport.Core.Entities.Services;
+using RainBOT.SupportBot.Core.AutocompleteProviders;
+using RainBOT.SupportBot.Core.Entities.Models;
+using RainBOT.SupportBot.Core.Entities.Services;
 
-namespace RbSupport.Modules
+namespace RainBOT.SupportBot.Modules
 {
     [SlashCommandGroup("prompt", "A prompt is a reusable text snippet for common questions.")]
     public class Propmts : ApplicationCommandModule

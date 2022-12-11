@@ -22,9 +22,9 @@
 
 using DSharpPlus.Entities;
 using DSharpPlus.SlashCommands;
-using RbSupport.Core.Entities.Services;
+using RainBOT.SupportBot.Core.Entities.Services;
 
-namespace RbSupport.Core.AutocompleteProviders
+namespace RainBOT.SupportBot.Core.AutocompleteProviders
 {
     public class TagAutocompleteProvider : IAutocompleteProvider
     {
