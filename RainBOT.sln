@@ -3,7 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.4.33110.190
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RainBOT", "RainBOT\RainBOT.csproj", "{7293554C-235C-4C5C-A9C5-0F1E4FE2889D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RainBOT", "RainBOT\RainBOT.csproj", "{7293554C-235C-4C5C-A9C5-0F1E4FE2889D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RainBOT.SupportBot", "RainBOT.SupportBot\RainBOT.SupportBot.csproj", "{A67E36A0-54AB-452E-B42B-7EEDE1D467EA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{7293554C-235C-4C5C-A9C5-0F1E4FE2889D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7293554C-235C-4C5C-A9C5-0F1E4FE2889D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7293554C-235C-4C5C-A9C5-0F1E4FE2889D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A67E36A0-54AB-452E-B42B-7EEDE1D467EA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A67E36A0-54AB-452E-B42B-7EEDE1D467EA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A67E36A0-54AB-452E-B42B-7EEDE1D467EA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A67E36A0-54AB-452E-B42B-7EEDE1D467EA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
