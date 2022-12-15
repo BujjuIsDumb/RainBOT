@@ -24,12 +24,17 @@ using DSharpPlus;
 using DSharpPlus.Entities;
 using DSharpPlus.SlashCommands;
 using DSharpPlus.SlashCommands.Attributes;
+using RainBOT.Core.Entities.Services;
 
 namespace RainBOT.Modules
 {
     [GuildOnly]
     public class Moderation : ApplicationCommandModule
     {
+        public Config Config { private get; set; }
+
+        public Data Data { private get; set; }
+
         [SlashCommand("purge", "Delete multiple messages at once.")]
         [SlashCooldown(1, 30, SlashCooldownBucketType.Guild)]
         [SlashCommandPermissions(Permissions.ManageMessages)]
