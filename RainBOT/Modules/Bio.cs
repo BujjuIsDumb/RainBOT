@@ -52,7 +52,7 @@ namespace RainBOT.Modules
                 await ctx.CreateResponseAsync($"⚠️ You already have a field with that name. Use {Core.Utilities.GetCommandMention(ctx.Client, "bio edit")}.", true);
                 return;
             }
-            if (ctx.User.GetUserAccount(Data).BioFields.Length >= 10)
+            if (ctx.User.GetUserAccount(Data).BioFields.Length >= 25)
             {
                 await ctx.CreateResponseAsync("⚠️ You can only have up to 10 bio fields.", true);
                 return;
