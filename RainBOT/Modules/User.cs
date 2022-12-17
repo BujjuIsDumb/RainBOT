@@ -260,18 +260,16 @@ namespace RainBOT.Modules
         [SlashCommand("data", "Request your user data.")]
         public async Task UserDataAsync(InteractionContext ctx)
         {
-            var builder = new StringBuilder();
-
-            foreach (var userAccount in Data.UserAccounts.FindAll(x => x.UserId == ctx.User.Id)) builder.AppendLine($"**User Account**\n```json\n{JsonConvert.SerializeObject(userAccount, Formatting.Indented)}```");
-            foreach (var report in Data.Reports.FindAll(x => x.UserId == ctx.User.Id || x.CreatorUserId == ctx.User.Id)) builder.AppendLine($"**Report**\n```json\n{JsonConvert.SerializeObject(report, Formatting.Indented)}```");
-            foreach (var userBan in Data.UserBans.FindAll(x => x.UserId == ctx.User.Id)) builder.AppendLine($"**User Ban**\n```json\n{JsonConvert.SerializeObject(userBan, Formatting.Indented)}```");
-            if (builder.Length == 0) builder.Append("There is no data associated with this user.");
-
-            await ctx.CreateResponseAsync(new DiscordEmbedBuilder()
-                .WithAuthor(ctx.User.Username, null, ctx.User.AvatarUrl)
+            var embed = new DiscordEmbedBuilder()
                 .WithTitle("Your data")
-                .WithDescription(builder.ToString())
-                .WithColor(new DiscordColor(3092790)), true);
+                .WithColor(new DiscordColor(3092790));
+
+            foreach (var userAccount in Data.UserAccounts.FindAll(x => x.UserId == ctx.User.Id)) embed.AddField("User Account", $"```json\n{JsonConvert.SerializeObject(userAccount, Formatting.Indented)}```");
+            foreach (var report in Data.Reports.FindAll(x => x.UserId == ctx.User.Id || x.CreatorUserId == ctx.User.Id)) embed.AddField("Report", $"```json\n{JsonConvert.SerializeObject(report, Formatting.Indented)}```");
+            foreach (var userBan in Data.UserBans.FindAll(x => x.UserId == ctx.User.Id)) embed.AddField("User Ban", $"```json\n{JsonConvert.SerializeObject(userBan, Formatting.Indented)}```");
+            if (embed.Fields.Count == 0) embed.WithDescription("There is no data associated with this user.");
+
+            await ctx.CreateResponseAsync(embed, true);
         }
     }
 }

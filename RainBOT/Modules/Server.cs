@@ -319,17 +319,15 @@ namespace RainBOT.Modules
         [SlashCommand("data", "Request your server data.")]
         public async Task ServerDataAsync(InteractionContext ctx)
         {
-            var builder = new StringBuilder();
-
-            foreach (var guildAccount in Data.GuildAccounts.FindAll(x => x.GuildId == ctx.Guild.Id)) builder.AppendLine($"**Server Account**\n```json\n{JsonConvert.SerializeObject(guildAccount, Formatting.Indented)}```");
-            foreach (var guildBan in Data.GuildBans.FindAll(x => x.GuildId == ctx.Guild.Id)) builder.AppendLine($"**Server Ban**\n```json\n{JsonConvert.SerializeObject(guildBan, Formatting.Indented)}```");
-            if (builder.Length == 0) builder.Append("There is no data associated with this server.");
-
-            await ctx.CreateResponseAsync(new DiscordEmbedBuilder()
-                .WithAuthor(ctx.Guild.Name, null, ctx.Guild.IconUrl)
+            var embed = new DiscordEmbedBuilder()
                 .WithTitle("Your data")
-                .WithDescription(builder.ToString())
-                .WithColor(new DiscordColor(3092790)), true);
+                .WithColor(new DiscordColor(3092790));
+
+            foreach (var guildAccount in Data.GuildAccounts.FindAll(x => x.GuildId == ctx.Guild.Id)) embed.AddField("Server Account", $"```json\n{JsonConvert.SerializeObject(guildAccount, Formatting.Indented)}```");
+            foreach (var guildBan in Data.GuildBans.FindAll(x => x.GuildId == ctx.Guild.Id)) embed.AddField("Server Ban", $"```json\n{JsonConvert.SerializeObject(guildBan, Formatting.Indented)}```");
+            if (embed.Fields.Count == 0) embed.WithDescription("There is no data associated with this user.");
+
+            await ctx.CreateResponseAsync(embed, true);
         }
     }
 }
