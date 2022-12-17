@@ -62,199 +62,120 @@ namespace RainBOT.Modules
 
         [SlashCommand("settings", "Manage the settings of your user account.")]
         [SlashRequireUserAccount]
-        public async Task UserSettingsAsync(InteractionContext ctx)
+        public async Task UserSettingsAsync(InteractionContext ctx,
+            [Choice("Allow Vent Responses", 0)]
+            [Choice("Bio Style", 1)]
+            [Option("setting", "The setting to manage.")] long setting)
         {
-            // Build main menu components.
-            var mainEmbed = new DiscordEmbedBuilder()
-                .WithTitle("User Settings")
-                .WithThumbnail(ctx.User.AvatarUrl)
-                .WithDescription("Manage the settings of your RainBOT user account. Please select a module to configure.")
-                .WithColor(new DiscordColor(3092790))
-                .AddField("Allow Vent Responses", ctx.User.GetUserAccount(Data).AllowVentResponses ? "Enabled" : "Disabled")
-                .AddField("Bio Style", "#" + ctx.User.GetUserAccount(Data).BioStyle);
-
-            var ventingButton = new DiscordButtonComponent(ButtonStyle.Secondary, Core.Utilities.CreateCustomId("ventingButton"), "Venting", false, new DiscordComponentEmoji(DiscordEmoji.FromUnicode("👁‍🗨")));
-            var bioButton = new DiscordButtonComponent(ButtonStyle.Secondary, Core.Utilities.CreateCustomId("bioButton"), "Bio", false, new DiscordComponentEmoji(DiscordEmoji.FromUnicode("📜")));
-
-            var mainResponse = new DiscordInteractionResponseBuilder()
-                .AddEmbed(mainEmbed)
-                .AddComponents(ventingButton, bioButton)
-                .AsEphemeral();
-
-            // Build venting menu components.
-            var ventingEmbed = new DiscordEmbedBuilder()
-                .WithAuthor(name: "User Settings", iconUrl: ctx.User.AvatarUrl)
-                .WithTitle("Venting Settings")
-                .WithDescription("Configure the venting system.")
-                .WithColor(new DiscordColor(3092790))
-                .AddField("Allow Vent Responses", ctx.User.GetUserAccount(Data).AllowVentResponses ? "Enabled" : "Disabled");
-
-            var allowVentResponsesButton = new DiscordButtonComponent(ButtonStyle.Secondary, Core.Utilities.CreateCustomId("allowVentResponsesButton"), "Allow Vent Responses", false, new DiscordComponentEmoji(DiscordEmoji.FromUnicode("💬")));
-
-            var ventingResponse = new DiscordInteractionResponseBuilder()
-                .AddEmbed(ventingEmbed)
-                .AddComponents(allowVentResponsesButton)
-                .AsEphemeral();
-
-            // Build bio menu components.
-            var bioEmbed = new DiscordEmbedBuilder()
-                .WithAuthor(name: "User Settings", iconUrl: ctx.User.AvatarUrl)
-                .WithTitle("Bio Settings")
-                .WithDescription("Configure the bio system.")
-                .WithColor(new DiscordColor(3092790))
-                .AddField("Bio Style", "#" + ctx.User.GetUserAccount(Data).BioStyle);
-
-            var bioStyleButton = new DiscordButtonComponent(ButtonStyle.Secondary, Core.Utilities.CreateCustomId("bioStyleButton"), "Bio Style", false, new DiscordComponentEmoji(DiscordEmoji.FromUnicode("🎨")));
-
-            var bioResponse = new DiscordInteractionResponseBuilder()
-                .AddEmbed(bioEmbed)
-                .AddComponents(bioStyleButton)
-                .AsEphemeral();
-
-            // Send main menu message.
-            await ctx.CreateResponseAsync(mainResponse);
-
-            // Respond to button input.
-            ctx.Client.ComponentInteractionCreated += async (sender, args) =>
+            if (setting == 0)
             {
-                if (args.Id == ventingButton.CustomId)
+                var allowVentResponsesSelect = new DiscordSelectComponent(Core.Utilities.CreateCustomId("allowVentResponsesSelect"), "Select an option", new List<DiscordSelectComponentOption>()
                 {
-                    await ctx.DeleteResponseAsync();
-                    await args.Interaction.CreateResponseAsync(InteractionResponseType.ChannelMessageWithSource, ventingResponse);
+                    new DiscordSelectComponentOption("Yes", "yes", "Allow users to respond to your vents.", false, new DiscordComponentEmoji(DiscordEmoji.FromUnicode("✅"))),
+                    new DiscordSelectComponentOption("No", "no", "Do not allow users to respond to your vents.", false, new DiscordComponentEmoji(DiscordEmoji.FromUnicode("🚫")))
+                });
 
-                    var ventingInteraction = args.Interaction;
+                await ctx.CreateResponseAsync(InteractionResponseType.ChannelMessageWithSource, new DiscordInteractionResponseBuilder()
+                    .WithContent("Please select whether or not you want people to respond to your vents.")
+                    .AddComponents(allowVentResponsesSelect)
+                    .AsEphemeral());
 
-                    // Respond to button input.
-                    ctx.Client.ComponentInteractionCreated += async (sender, args) =>
-                    {
-                        if (args.Id == allowVentResponsesButton.CustomId)
-                        {
-                            await ventingInteraction.DeleteOriginalResponseAsync();
-
-                            var allowVentResponsesSelect = new DiscordSelectComponent(Core.Utilities.CreateCustomId("allowVentResponsesSelect"), "Select an option", new List<DiscordSelectComponentOption>()
-                            {
-                                new DiscordSelectComponentOption("Yes", "yes", "Allow users to respond to your vents.", false, new DiscordComponentEmoji(DiscordEmoji.FromUnicode("✅"))),
-                                new DiscordSelectComponentOption("No", "no", "Do not allow users to respond to your vents.", false, new DiscordComponentEmoji(DiscordEmoji.FromUnicode("🚫")))
-                            });
-
-                            await args.Interaction.CreateResponseAsync(InteractionResponseType.ChannelMessageWithSource, new DiscordInteractionResponseBuilder()
-                                .WithContent("Please select whether or not you want people to respond to your vents.")
-                                .AddComponents(allowVentResponsesSelect)
-                                .AsEphemeral());
-
-                            // Respond to select menu input.
-                            ctx.Client.ComponentInteractionCreated += async (sender, args) =>
-                            {
-                                if (args.Id == allowVentResponsesSelect.CustomId)
-                                {
-                                    ctx.User.GetUserAccount(Data).AllowVentResponses = args.Values.First() == "yes";
-                                    Data.Update();
-
-                                    await args.Interaction.CreateResponseAsync(InteractionResponseType.ChannelMessageWithSource, new DiscordInteractionResponseBuilder()
-                                        .WithContent("✅ The setting has been set.")
-                                        .AsEphemeral());
-                                }
-                            };
-                        }
-                    };
-                }
-                else if (args.Id == bioButton.CustomId)
+                // Respond to select menu input.
+                ctx.Client.ComponentInteractionCreated += async (sender, args) =>
                 {
-                    await ctx.DeleteResponseAsync();
-                    await args.Interaction.CreateResponseAsync(InteractionResponseType.ChannelMessageWithSource, bioResponse);
-
-                    var bioInteraction = args.Interaction;
-
-                    // Respond to button input.
-                    ctx.Client.ComponentInteractionCreated += async (sender, args) =>
+                    if (args.Id == allowVentResponsesSelect.CustomId)
                     {
-                        if (args.Id == bioStyleButton.CustomId)
+                        ctx.User.GetUserAccount(Data).AllowVentResponses = args.Values.First() == "yes";
+                        Data.Update();
+
+                        await args.Interaction.CreateResponseAsync(InteractionResponseType.ChannelMessageWithSource, new DiscordInteractionResponseBuilder()
+                            .WithContent("✅ The setting has been set.")
+                            .AsEphemeral());
+                    }
+                };
+            }
+            else if (setting == 1)
+            {
+                var bioStyleSelect = new DiscordSelectComponent(Core.Utilities.CreateCustomId("bioStyleSelect"), "Select an option", new List<DiscordSelectComponentOption>()
+                {
+                    new DiscordSelectComponentOption("None", "none", "Don't use a color for your bio.", false, new DiscordComponentEmoji(DiscordEmoji.FromUnicode("❌"))),
+                    new DiscordSelectComponentOption("Red", "red", "Make your bio color red.", false, new DiscordComponentEmoji(DiscordEmoji.FromUnicode("🔴"))),
+                    new DiscordSelectComponentOption("Orange", "orange", "Make your bio orange.", false, new DiscordComponentEmoji(DiscordEmoji.FromUnicode("🟠"))),
+                    new DiscordSelectComponentOption("Yellow", "yellow", "Make your bio yellow.", false, new DiscordComponentEmoji(DiscordEmoji.FromUnicode("🟡"))),
+                    new DiscordSelectComponentOption("Green", "green", "Make your bio green.", false, new DiscordComponentEmoji(DiscordEmoji.FromUnicode("🟢"))),
+                    new DiscordSelectComponentOption("Blue", "blue", "Make your bio blue.", false, new DiscordComponentEmoji(DiscordEmoji.FromUnicode("🔵"))),
+                    new DiscordSelectComponentOption("Purple", "purple", "Make your bio purple.", false, new DiscordComponentEmoji(DiscordEmoji.FromUnicode("🟣"))),
+                    new DiscordSelectComponentOption("Black", "black", "Make your bio black.", false, new DiscordComponentEmoji(DiscordEmoji.FromUnicode("⚫"))),
+                    new DiscordSelectComponentOption("White", "white", "Make your bio white.", false, new DiscordComponentEmoji(DiscordEmoji.FromUnicode("⚪"))),
+                    new DiscordSelectComponentOption("Custom", "custom", "Choose a custom color", false, new DiscordComponentEmoji(DiscordEmoji.FromUnicode("🔘")))
+                });
+
+                await ctx.CreateResponseAsync(InteractionResponseType.ChannelMessageWithSource, new DiscordInteractionResponseBuilder()
+                    .WithContent("Please select the bio color you want.")
+                    .AddComponents(bioStyleSelect)
+                    .AsEphemeral());
+
+                // Respond to select menu input.
+                ctx.Client.ComponentInteractionCreated += async (sender, args) =>
+                {
+                    if (args.Id == bioStyleSelect.CustomId)
+                    {
+                        if (args.Values.First() == "custom")
                         {
-                            await bioInteraction.DeleteOriginalResponseAsync();
+                            // Build modal.
+                            var colorModal = new DiscordInteractionResponseBuilder()
+                                .WithTitle("Choose a color")
+                                .WithCustomId(Core.Utilities.CreateCustomId("colorModal"))
+                                .AddComponents(new TextInputComponent(label: "Color (Hexadecimal)", customId: "color", placeholder: "#2F3136", style: TextInputStyle.Short, min_length: 7, max_length: 7));
 
-                            var bioStyleSelect = new DiscordSelectComponent(Core.Utilities.CreateCustomId("bioStyleSelect"), "Select an option", new List<DiscordSelectComponentOption>()
+                            await args.Interaction.CreateResponseAsync(InteractionResponseType.Modal, colorModal);
+
+                            // Respond to modal submission.
+                            ctx.Client.ModalSubmitted += async (sender, args) =>
                             {
-                                new DiscordSelectComponentOption("None", "none", "Don't use a color for your bio.", false, new DiscordComponentEmoji(DiscordEmoji.FromUnicode("❌"))),
-                                new DiscordSelectComponentOption("Red", "red", "Make your bio color red.", false, new DiscordComponentEmoji(DiscordEmoji.FromUnicode("🔴"))),
-                                new DiscordSelectComponentOption("Orange", "orange", "Make your bio orange.", false, new DiscordComponentEmoji(DiscordEmoji.FromUnicode("🟠"))),
-                                new DiscordSelectComponentOption("Yellow", "yellow", "Make your bio yellow.", false, new DiscordComponentEmoji(DiscordEmoji.FromUnicode("🟡"))),
-                                new DiscordSelectComponentOption("Green", "green", "Make your bio green.", false, new DiscordComponentEmoji(DiscordEmoji.FromUnicode("🟢"))),
-                                new DiscordSelectComponentOption("Blue", "blue", "Make your bio blue.", false, new DiscordComponentEmoji(DiscordEmoji.FromUnicode("🔵"))),
-                                new DiscordSelectComponentOption("Purple", "purple", "Make your bio purple.", false, new DiscordComponentEmoji(DiscordEmoji.FromUnicode("🟣"))),
-                                new DiscordSelectComponentOption("Black", "black", "Make your bio black.", false, new DiscordComponentEmoji(DiscordEmoji.FromUnicode("⚫"))),
-                                new DiscordSelectComponentOption("White", "white", "Make your bio white.", false, new DiscordComponentEmoji(DiscordEmoji.FromUnicode("⚪"))),
-                                new DiscordSelectComponentOption("Custom", "custom", "Choose a custom color", false, new DiscordComponentEmoji(DiscordEmoji.FromUnicode("🔘")))
-                            });
-
-                            await args.Interaction.CreateResponseAsync(InteractionResponseType.ChannelMessageWithSource, new DiscordInteractionResponseBuilder()
-                                .WithContent("Please select the bio color you want.")
-                                .AddComponents(bioStyleSelect)
-                                .AsEphemeral());
-
-                            // Respond to select menu input.
-                            ctx.Client.ComponentInteractionCreated += async (sender, args) =>
-                            {
-                                if (args.Id == bioStyleSelect.CustomId)
+                                if (args.Interaction.Data.CustomId == colorModal.CustomId)
                                 {
-                                    if (args.Values.First() == "custom")
+                                    if (Regex.IsMatch(args.Values["color"], @"^#(?:[0-9a-fA-F]{3}){1,2}$"))
                                     {
-                                        // Build modal.
-                                        var colorModal = new DiscordInteractionResponseBuilder()
-                                            .WithTitle("Choose a color")
-                                            .WithCustomId(Core.Utilities.CreateCustomId("colorModal"))
-                                            .AddComponents(new TextInputComponent(label: "Color (Hexadecimal)", customId: "color", placeholder: "#2F3136", style: TextInputStyle.Short, min_length: 7, max_length: 7));
-
-                                        await args.Interaction.CreateResponseAsync(InteractionResponseType.Modal, colorModal);
-
-                                        // Respond to modal submission.
-                                        ctx.Client.ModalSubmitted += async (sender, args) =>
-                                        {
-                                            if (args.Interaction.Data.CustomId == colorModal.CustomId)
-                                            {
-                                                if (Regex.IsMatch(args.Values["color"], @"^#(?:[0-9a-fA-F]{3}){1,2}$"))
-                                                {
-                                                    ctx.User.GetUserAccount(Data).BioStyle = args.Values["color"].ToUpper()[1..];
-                                                    Data.Update();
-
-                                                    await args.Interaction.CreateResponseAsync(InteractionResponseType.ChannelMessageWithSource, new DiscordInteractionResponseBuilder()
-                                                        .WithContent("✅ The setting has been set.")
-                                                        .AsEphemeral());
-                                                }
-                                                else
-                                                {
-                                                    await args.Interaction.CreateResponseAsync(InteractionResponseType.ChannelMessageWithSource, new DiscordInteractionResponseBuilder()
-                                                        .WithContent("⚠ That is not a valid hex code. Try the [hex color picker](https://g.co/kgs/eJtdm4).")
-                                                        .AsEphemeral());
-                                                }
-                                            }
-                                        };
-                                    }
-                                    else
-                                    {
-                                        switch (args.Values.First())
-                                        {
-                                            case "none": ctx.User.GetUserAccount(Data).BioStyle = "2F3136"; break;
-                                            case "red": ctx.User.GetUserAccount(Data).BioStyle = "E91E63"; break;
-                                            case "orange": ctx.User.GetUserAccount(Data).BioStyle = "E67E22"; break;
-                                            case "yellow": ctx.User.GetUserAccount(Data).BioStyle = "F1C40F"; break;
-                                            case "green": ctx.User.GetUserAccount(Data).BioStyle = "2ECC71"; break;
-                                            case "blue": ctx.User.GetUserAccount(Data).BioStyle = "3498DB"; break;
-                                            case "purple": ctx.User.GetUserAccount(Data).BioStyle = "9B59B6"; break;
-                                            case "black": ctx.User.GetUserAccount(Data).BioStyle = "202225"; break;
-                                            case "white": ctx.User.GetUserAccount(Data).BioStyle = "FFFFFF"; break;
-                                        }
+                                        ctx.User.GetUserAccount(Data).BioStyle = args.Values["color"].ToUpper()[1..];
                                         Data.Update();
 
                                         await args.Interaction.CreateResponseAsync(InteractionResponseType.ChannelMessageWithSource, new DiscordInteractionResponseBuilder()
                                             .WithContent("✅ The setting has been set.")
                                             .AsEphemeral());
                                     }
+                                    else
+                                    {
+                                        await args.Interaction.CreateResponseAsync(InteractionResponseType.ChannelMessageWithSource, new DiscordInteractionResponseBuilder()
+                                            .WithContent("⚠ That is not a valid hex code. Try the [hex color picker](https://g.co/kgs/eJtdm4).")
+                                            .AsEphemeral());
+                                    }
                                 }
                             };
                         }
-                    };
-                }
-            };
+                        else
+                        {
+                            switch (args.Values.First())
+                            {
+                                case "none": ctx.User.GetUserAccount(Data).BioStyle = "2F3136"; break;
+                                case "red": ctx.User.GetUserAccount(Data).BioStyle = "E91E63"; break;
+                                case "orange": ctx.User.GetUserAccount(Data).BioStyle = "E67E22"; break;
+                                case "yellow": ctx.User.GetUserAccount(Data).BioStyle = "F1C40F"; break;
+                                case "green": ctx.User.GetUserAccount(Data).BioStyle = "2ECC71"; break;
+                                case "blue": ctx.User.GetUserAccount(Data).BioStyle = "3498DB"; break;
+                                case "purple": ctx.User.GetUserAccount(Data).BioStyle = "9B59B6"; break;
+                                case "black": ctx.User.GetUserAccount(Data).BioStyle = "202225"; break;
+                                case "white": ctx.User.GetUserAccount(Data).BioStyle = "FFFFFF"; break;
+                            }
+                            Data.Update();
+
+                            await args.Interaction.CreateResponseAsync(InteractionResponseType.ChannelMessageWithSource, new DiscordInteractionResponseBuilder()
+                                .WithContent("✅ The setting has been set.")
+                                .AsEphemeral());
+                        }
+                    }
+                };
+            }
         }
 
         [SlashCommand("data", "Request your user data.")]
