@@ -43,6 +43,7 @@ namespace RainBOT.Modules
         public async Task BioCreateAsync(InteractionContext ctx,
             [Autocomplete(typeof(TemplateBioFieldsAutocompleteProvider))]
             [Option("field", "What to name the field.", true)] string field,
+            [MaximumLength(1024)]
             [Option("value", "What to set the field to.")] string value)
         {
             if (ctx.User.GetUserAccount(Data).BioFields.ToList().Exists(x => x.Name == field))
@@ -74,6 +75,7 @@ namespace RainBOT.Modules
         public async Task BioEditAsync(InteractionContext ctx,
             [Autocomplete(typeof(ExistingBioFieldsAutocompleteProvider))]
             [Option("field", "The name of the field to edit.", true)] string field,
+            [MaximumLength(1024)]
             [Option("value", "What to set the field to.")] string value)
         {
             if (!ctx.User.GetUserAccount(Data).BioFields.ToList().Exists(x => x.Name == field))
