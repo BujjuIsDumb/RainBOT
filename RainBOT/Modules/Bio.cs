@@ -42,6 +42,7 @@ namespace RainBOT.Modules
         [SlashRequireUserAccount]
         public async Task BioCreateAsync(InteractionContext ctx,
             [Autocomplete(typeof(TemplateBioFieldsAutocompleteProvider))]
+            [MaximumLength(256)]
             [Option("field", "What to name the field.", true)] string field,
             [MaximumLength(1024)]
             [Option("value", "What to set the field to.")] string value)
