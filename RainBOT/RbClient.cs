@@ -29,8 +29,8 @@ using DSharpPlus.SlashCommands.Attributes;
 using DSharpPlus.SlashCommands.EventArgs;
 using Microsoft.Extensions.DependencyInjection;
 using RainBOT.Core;
-using RainBOT.Core.Attributes;
 using RainBOT.Core.Services;
+using RainBOT.Core.Services.Models;
 
 namespace RainBOT
 {
@@ -38,90 +38,30 @@ namespace RainBOT
     {
         private Config _config;
 
-        private DiscordShardedClient _client;
+        private DiscordClient _client;
 
         public async Task InitializeAsync()
         {
             _config = Config.Load("config.json");
 
-            // Setup client.
-            _client = new DiscordShardedClient(new DiscordConfiguration()
+            _client = new DiscordClient(new DiscordConfiguration()
             {
                 Token = _config.Token,
                 TokenType = TokenType.Bot
             });
             _client.MessageCreated += MessageCreated;
 
-            // Setup slash commands.
-            var slash = await _client.UseSlashCommandsAsync(new SlashCommandsConfiguration()
+            var slash = _client.UseSlashCommands(new SlashCommandsConfiguration()
             {
                 Services = new ServiceCollection()
-                    .AddTransient(x => new Data("data.json").Initialize())
+                    .AddTransient(x => new Database("data.json").Initialize())
                     .BuildServiceProvider()
             });
+            slash.RegisterCommands(Assembly.GetExecutingAssembly(), _config.GuildId);
+            slash.SlashCommandErrored += SlashCommandErrored;
 
-            // Register commands.
-            foreach (var extension in slash.Values)
-            {
-                extension.RegisterCommands(Assembly.GetExecutingAssembly(), _config.GuildId);
-                extension.SlashCommandErrored += SlashCommandErrored;
-            }
-
-            // Start bot.
-            await _client.StartAsync();
-            _client.Ready += async (sender, args) => await _client.UpdateStatusAsync(new DiscordActivity("for pings!", ActivityType.Watching));
+            await _client.ConnectAsync(new DiscordActivity("for pings!", ActivityType.Watching));
             await Task.Delay(-1);
-        }
-
-        public static async Task SlashCommandErrored(SlashCommandsExtension sender, SlashCommandErrorEventArgs args)
-        {
-            if (args.Exception is SlashExecutionChecksFailedException slashExecutionChecksFailedException)
-            {
-                var attribute = slashExecutionChecksFailedException.FailedChecks[0];
-
-                if (attribute is SlashCooldownAttribute slashCooldownAttribute)
-                {
-                    long unix = ((DateTimeOffset)DateTime.Now.Add(slashCooldownAttribute.GetRemainingCooldown(args.Context))).ToUnixTimeSeconds();
-                    await args.Context.CreateResponseAsync($"⚠️ This command is on cooldown. (Finished <t:{unix}:R>)", true);
-                }
-                else if (attribute is SlashRequireBotPermissionsAttribute slashRequireBotPermissionsAttribute)
-                {
-                    await args.Context.CreateResponseAsync($"⚠️ I need `{slashRequireBotPermissionsAttribute.Permissions}` permissions for this command to work.", true);
-                }
-                else if (attribute is SlashRequireUserAccountAttribute)
-                {
-                    await args.Context.CreateResponseAsync($"⚠️ You need a user account to use this command. Create one with {Core.Utilities.GetCommandMention(args.Context.Client, "user register")}.", true);
-                }
-                else if (attribute is SlashRequireGuildAccountAttribute)
-                {
-                    await args.Context.CreateResponseAsync($"⚠️ The server needs an account to use this command. Create one with {Core.Utilities.GetCommandMention(args.Context.Client, "server register")}.", true);
-                }
-                else if (attribute is SlashUserBannableAttribute slashUserBannableAttribute)
-                {
-                    using var data = new Data("data.json").Initialize();
-
-                    await args.Context.CreateResponseAsync(new DiscordInteractionResponseBuilder()
-                        .WithContent($"⚠️ You are banned from RainBOT for \"{data.UserBans.Find(x => x.UserId == args.Context.User.Id).Reason}\".")
-                        .AddComponents(new DiscordLinkButtonComponent("https://forms.gle/mBBhmmT9qC57xjkG7", "Appeal"))
-                        .AsEphemeral());
-                }
-                else if (attribute is SlashGuildBannableAttribute slashGuildBannableAttribute)
-                {
-                    using var data = new Data("data.json").Initialize();
-
-                    await args.Context.CreateResponseAsync(new DiscordInteractionResponseBuilder()
-                        .WithContent($"⚠️ This server is banned from RainBOT for \"{data.GuildBans.Find(x => x.GuildId == args.Context.Guild.Id).Reason}\".")
-                        .AddComponents(new DiscordLinkButtonComponent("https://forms.gle/mBBhmmT9qC57xjkG7", "Appeal"))
-                        .AsEphemeral());
-                }
-            }
-            else
-            {
-                await args.Context.CreateResponseAsync(new DiscordInteractionResponseBuilder()
-                    .WithContent($"❌ An unexpected error has occurred. If you think this is a bug, please report it.\n\n```{args.Exception.Message}```")
-                    .AddComponents(new DiscordLinkButtonComponent("https://github.com/BujjuIsDumb/RainBOT/issues", "Report"))
-                    .AsEphemeral());
-            }
         }
 
         public static async Task MessageCreated(DiscordClient sender, MessageCreateEventArgs args)
@@ -136,6 +76,24 @@ namespace RainBOT
                     .WithColor(new DiscordColor(3092790));
 
                 await args.Message.RespondAsync(embed);
+            }
+        }
+
+        public static async Task SlashCommandErrored(SlashCommandsExtension sender, SlashCommandErrorEventArgs args)
+        {
+            if (args.Exception is SlashExecutionChecksFailedException slashExecutionChecksFailedException)
+            {
+                if (slashExecutionChecksFailedException.FailedChecks[0] is SlashCooldownAttribute slashCooldownAttribute)
+                    await args.Context.CreateResponseAsync($"⚠️ This command is on cooldown. (Finished <t:{((DateTimeOffset)DateTime.Now.Add(slashCooldownAttribute.GetRemainingCooldown(args.Context))).ToUnixTimeSeconds()}:R>)", true);
+                else if (slashExecutionChecksFailedException.FailedChecks[0] is SlashRequireBotPermissionsAttribute slashRequireBotPermissionsAttribute)
+                    await args.Context.CreateResponseAsync($"⚠️ I need `{slashRequireBotPermissionsAttribute.Permissions}` permissions for this command to work.", true);
+            }
+            else
+            {
+                await args.Context.CreateResponseAsync(new DiscordInteractionResponseBuilder()
+                    .WithContent($"❌ An unexpected error has occurred. If you think this is a bug, please report it.\n\n```{args.Exception.Message}```")
+                    .AddComponents(new DiscordLinkButtonComponent("https://github.com/BujjuIsDumb/RainBOT/issues", "Report"))
+                    .AsEphemeral());
             }
         }
     }

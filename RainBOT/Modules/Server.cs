@@ -25,7 +25,6 @@ using DSharpPlus.Entities;
 using DSharpPlus.SlashCommands;
 using Newtonsoft.Json;
 using RainBOT.Core;
-using RainBOT.Core.Attributes;
 using RainBOT.Core.Services;
 using RainBOT.Core.Services.Models;
 
@@ -36,30 +35,9 @@ namespace RainBOT.Modules
     [GuildOnly]
     public class Server : ApplicationCommandModule
     {
-        public Data Data { private get; set; }
-
-        [SlashCommand("register", "Create a server account.")]
-        [SlashGuildBannable]
-        public async Task ServerRegisterAsync(InteractionContext ctx)
-        {
-            if (!Data.GuildAccounts.Exists(x => x.GuildId == ctx.Guild.Id))
-            {
-                Data.GuildAccounts.Add(new GuildAccountData()
-                {
-                    GuildId = ctx.Guild.Id
-                });
-                Data.Update();
-
-                await ctx.CreateResponseAsync("✅ Created a server account.", true);
-            }
-            else
-            {
-                await ctx.CreateResponseAsync("⚠️ This server is already registered.", true);
-            }
-        }
+        public Database Data { private get; set; }
 
         [SlashCommand("settings", "Manage the settings of your server account.")]
-        [SlashRequireGuildAccount]
         public async Task ServerSettingsAsync(InteractionContext ctx,
             [Choice("Vent Moderators", 0)]
             [Choice("Anonymous Venting", 1)]
@@ -218,8 +196,7 @@ namespace RainBOT.Modules
                 .WithTitle("Your data")
                 .WithColor(new DiscordColor(3092790));
 
-            foreach (var guildAccount in Data.GuildAccounts.FindAll(x => x.GuildId == ctx.Guild.Id)) embed.AddField("Server Account", $"```json\n{JsonConvert.SerializeObject(guildAccount, Formatting.Indented)}```");
-            foreach (var guildBan in Data.GuildBans.FindAll(x => x.GuildId == ctx.Guild.Id)) embed.AddField("Server Ban", $"```json\n{JsonConvert.SerializeObject(guildBan, Formatting.Indented)}```");
+            foreach (var guildAccount in Data.Guilds.FindAll(x => x.GuildId == ctx.Guild.Id)) embed.AddField("Server Account", $"```json\n{JsonConvert.SerializeObject(guildAccount, Formatting.Indented)}```");
             if (embed.Fields.Count == 0) embed.WithDescription("There is no data associated with this user.");
 
             await ctx.CreateResponseAsync(embed, true);

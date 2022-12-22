@@ -26,39 +26,16 @@ using DSharpPlus.Entities;
 using DSharpPlus.SlashCommands;
 using Newtonsoft.Json;
 using RainBOT.Core;
-using RainBOT.Core.Attributes;
 using RainBOT.Core.Services;
-using RainBOT.Core.Services.Models;
 
 namespace RainBOT.Modules
 {
     [SlashCommandGroup("user", "Manage your user account.")]
     public class User : ApplicationCommandModule
     {
-        public Data Data { private get; set; }
-
-        [SlashCommand("register", "Create a user account.")]
-        [SlashUserBannable]
-        public async Task UserRegisterAsync(InteractionContext ctx)
-        {
-            if (!Data.UserAccounts.Exists(x => x.UserId == ctx.User.Id))
-            {
-                Data.UserAccounts.Add(new UserAccountData()
-                {
-                    UserId = ctx.User.Id
-                });
-                Data.Update();
-
-                await ctx.CreateResponseAsync("✅ Created a user account.", true);
-            }
-            else
-            {
-                await ctx.CreateResponseAsync("⚠️ You already have an account.", true);
-            }
-        }
+        public Database Data { private get; set; }
 
         [SlashCommand("settings", "Manage the settings of your user account.")]
-        [SlashRequireUserAccount]
         public async Task UserSettingsAsync(InteractionContext ctx,
             [Choice("Allow Vent Responses", 0)]
             [Choice("Bio Style", 1)]
@@ -182,9 +159,9 @@ namespace RainBOT.Modules
                 .WithTitle("Your data")
                 .WithColor(new DiscordColor(3092790));
 
-            foreach (var userAccount in Data.UserAccounts.FindAll(x => x.UserId == ctx.User.Id)) embed.AddField("User Account", $"```json\n{JsonConvert.SerializeObject(userAccount, Formatting.Indented)}```");
+            foreach (var userAccount in Data.Users.FindAll(x => x.UserId == ctx.User.Id)) embed.AddField("User Account", $"```json\n{JsonConvert.SerializeObject(userAccount, Formatting.Indented)}```");
             foreach (var report in Data.Reports.FindAll(x => x.UserId == ctx.User.Id || x.CreatorUserId == ctx.User.Id)) embed.AddField("Report", $"```json\n{JsonConvert.SerializeObject(report, Formatting.Indented)}```");
-            foreach (var userBan in Data.UserBans.FindAll(x => x.UserId == ctx.User.Id)) embed.AddField("User Ban", $"```json\n{JsonConvert.SerializeObject(userBan, Formatting.Indented)}```");
+            foreach (var userBan in Data.Bans.FindAll(x => x.UserId == ctx.User.Id)) embed.AddField("User Ban", $"```json\n{JsonConvert.SerializeObject(userBan, Formatting.Indented)}```");
             if (embed.Fields.Count == 0) embed.WithDescription("There is no data associated with this user.");
 
             await ctx.CreateResponseAsync(embed, true);

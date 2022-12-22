@@ -26,21 +26,18 @@ using DSharpPlus.Exceptions;
 using DSharpPlus.SlashCommands;
 using DSharpPlus.SlashCommands.Attributes;
 using RainBOT.Core;
-using RainBOT.Core.Attributes;
 using RainBOT.Core.Services;
 
 namespace RainBOT.Modules
 {
     public class MentalHealth : ApplicationCommandModule
     {
-        public Data Data { private get; set; }
+        public Database Data { private get; set; }
 
         [SlashCommand("vent", "Create a vent.")]
         [GuildOnly]
         [SlashCooldown(5, 300, SlashCooldownBucketType.User)]
         [SlashRequireBotPermissions(Permissions.AccessChannels | Permissions.SendMessages | Permissions.EmbedLinks)]
-        [SlashRequireUserAccount]
-        [SlashRequireGuildAccount]
         public async Task VentAsync(InteractionContext ctx,
             [Option("anonymous", "Whether or not the vent will show you name to non-moderators.")] bool anonymous,
             [Option("tw", "Whether or not the vent contains potentially triggering content.")] bool tw)

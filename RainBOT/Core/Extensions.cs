@@ -28,8 +28,26 @@ namespace RainBOT.Core
 {
     public static class Extensions
     {
-        public static UserAccountData GetUserAccount(this DiscordUser user, Data data) => data.UserAccounts.Find(x => x.UserId == user.Id);
+        public static User GetUserAccount(this DiscordUser user, Database data)
+        {
+            if (!data.Users.Exists(x => x.UserId == user.Id))
+            {
+                data.Users.Add(new User() { UserId = user.Id });
+                data.Update();
+            }
 
-        public static GuildAccountData GetGuildAccount(this DiscordGuild guild, Data data) => data.GuildAccounts.Find(x => x.GuildId == guild.Id);
+            return data.Users.Find(x => x.UserId == user.Id);
+        }
+
+        public static Guild GetGuildAccount(this DiscordGuild guild, Database data)
+        {
+            if (!data.Guilds.Exists(x => x.GuildId == guild.Id))
+            {
+                data.Guilds.Add(new Guild() { GuildId = guild.Id });
+                data.Update();
+            }
+
+            return data.Guilds.Find(x => x.GuildId == guild.Id);
+        }
     }
 }

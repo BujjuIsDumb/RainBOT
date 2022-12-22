@@ -31,7 +31,7 @@ namespace RainBOT.Modules
     [SlashCommandGroup("cw", "Content warnings are warnings that messages contain potentially triggering content.")]
     public class ContentWarnings : ApplicationCommandModule
     {
-        public Data Data { private get; set; }
+        public Database Data { private get; set; }
 
         [SlashCommand("info", "Learn more about content warnings.")]
         public async Task CwInfoAsync(InteractionContext ctx)

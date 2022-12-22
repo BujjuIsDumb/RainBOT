@@ -26,20 +26,18 @@ using DSharpPlus.Exceptions;
 using DSharpPlus.SlashCommands;
 using DSharpPlus.SlashCommands.Attributes;
 using RainBOT.Core;
-using RainBOT.Core.Attributes;
 using RainBOT.Core.Services;
 
 namespace RainBOT.Modules
 {
     public class Verification : ApplicationCommandModule
     {
-        public Data Data { private get; set; }
+        public Database Data { private get; set; }
 
         [SlashCommand("verify", "Request verification for the member role.")]
         [GuildOnly]
         [SlashCooldown(5, 300, SlashCooldownBucketType.User)]
         [SlashRequireBotPermissions(Permissions.CreatePrivateThreads | Permissions.ManageRoles | Permissions.KickMembers | Permissions.BanMembers | Permissions.ManageThreads)]
-        [SlashRequireGuildAccount]
         public async Task VerifyAsync(InteractionContext ctx)
         {
             // Build modal.

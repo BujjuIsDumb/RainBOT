@@ -23,19 +23,16 @@
 using DSharpPlus;
 using DSharpPlus.Entities;
 using DSharpPlus.SlashCommands;
-using RainBOT.Core.Attributes;
 using RainBOT.Core.Services;
-using RainBOT.Core.Services.Models;
 
 namespace RainBOT.Modules
 {
     [SlashCommandGroup("report", "Report a user to warn the moderators when they join a server.")]
     public class Report : ApplicationCommandModule
     {
-        public Data Data { private get; set; }
+        public Database Data { private get; set; }
 
         [SlashCommand("create", "Create a report.")]
-        [SlashRequireUserAccount]
         public async Task ReportCreateAsync(InteractionContext ctx,
             [Option("user", "The user to report.")] DiscordUser user)
         {
@@ -59,7 +56,7 @@ namespace RainBOT.Modules
             {
                 if (args.Interaction.Data.CustomId == reportModal.CustomId)
                 {
-                    Data.Reports.Add(new ReportData()
+                    Data.Reports.Add(new Core.Services.Models.Report()
                     {
                         UserId = user.Id,
                         CreatorUserId = ctx.User.Id,
@@ -77,7 +74,6 @@ namespace RainBOT.Modules
         }
 
         [SlashCommand("revoke", "Remove a report.")]
-        [SlashRequireUserAccount]
         public async Task ReportRevokeAsync(InteractionContext ctx,
             [Option("user", "The user to remove the report from.")] DiscordUser user)
         {

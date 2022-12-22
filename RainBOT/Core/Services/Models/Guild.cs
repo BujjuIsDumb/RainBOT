@@ -20,19 +20,28 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-using DSharpPlus.SlashCommands;
-using RainBOT.Core.Services;
+using Newtonsoft.Json;
 
-namespace RainBOT.Core.Attributes
+namespace RainBOT.Core.Services.Models
 {
-    public class ContextMenuRequireUserAccountAttribute : ContextMenuCheckBaseAttribute
+    public class Guild
     {
-        public override async Task<bool> ExecuteChecksAsync(ContextMenuContext ctx)
-        {
-            using var data = new Data("data.json").Initialize();
+        [JsonProperty("guild_id")]
+        public ulong GuildId { get; set; } = 0;
 
-            // Return true if there is no ban for the user; return false if there is.
-            return await Task.FromResult(data.UserAccounts.Exists(x => x.UserId == ctx.User.Id));
-        }
+        [JsonProperty("vent_moderators")]
+        public ulong[] VentModerators { get; set; } = Array.Empty<ulong>();
+
+        [JsonProperty("anonymous_venting")]
+        public bool AnonymousVenting { get; set; } = true;
+
+        [JsonProperty("delete_verification_requests")]
+        public bool DeleteVerificationRequests { get; set; } = false;
+
+        [JsonProperty("create_vetting_thread")]
+        public bool CreateVettingThread { get; set; } = true;
+
+        [JsonProperty("verification_form_questions")]
+        public string[] VerificationFormQuestions { get; set; } = Array.Empty<string>();
     }
 }

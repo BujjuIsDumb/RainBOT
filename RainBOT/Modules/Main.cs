@@ -30,13 +30,13 @@ namespace RainBOT.Modules
 {
     public class Main : ApplicationCommandModule
     {
-        public Data Data { private get; set; }
+        public Database Data { private get; set; }
 
         [SlashCommand("about", "Get information about me.")]
         public async Task InfoAsync(InteractionContext ctx)
         {
             var embed = new DiscordEmbedBuilder()
-                .WithTitle($"RainBOT v{Assembly.GetExecutingAssembly().GetCustomAttribute<AssemblyInformationalVersionAttribute>().InformationalVersion}")
+                .WithTitle($"RainBOT")
                 .WithDescription("A bot designed to help start, manage, and moderate 2SLGBTQIA+ safespace servers.")
                 .WithColor(new DiscordColor(3092790))
                 .WithThumbnail("https://i.imgur.com/IHdrwiJ.png");

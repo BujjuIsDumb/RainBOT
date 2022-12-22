@@ -24,12 +24,27 @@ using Newtonsoft.Json;
 
 namespace RainBOT.Core.Services.Models
 {
-    public class GuildBanData
+    public class User
     {
-        [JsonProperty("guild_id")]
-        public ulong GuildId { get; set; } = 0;
+        [JsonProperty("user_id")]
+        public ulong UserId { get; set; } = 0;
 
-        [JsonProperty("reason")]
-        public string Reason { get; set; } = string.Empty;
+        [JsonProperty("bio_fields")]
+        public BioFieldData[] BioFields { get; set; } = Array.Empty<BioFieldData>();
+
+        [JsonProperty("bio_style")]
+        public string BioStyle { get; set; } = "2F3136";
+
+        [JsonProperty("allow_vent_responses")]
+        public bool AllowVentResponses { get; set; } = true;
+
+        public class BioFieldData
+        {
+            [JsonProperty("name")]
+            public string Name { get; set; } = string.Empty;
+
+            [JsonProperty("value")]
+            public string Value { get; set; } = string.Empty;
+        }
     }
 }

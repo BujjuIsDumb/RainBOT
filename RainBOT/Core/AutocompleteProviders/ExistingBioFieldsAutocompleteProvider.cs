@@ -30,9 +30,9 @@ namespace RainBOT.Core.AutocompleteProviders
     {
         public Task<IEnumerable<DiscordAutoCompleteChoice>> Provider(AutocompleteContext ctx)
         {
-            using var data = new Data("data.json").Initialize();
+            using var data = new Database("data.json").Initialize();
 
-            var account = data.UserAccounts.Find(x => x.UserId == ctx.User.Id);
+            var account = data.Users.Find(x => x.UserId == ctx.User.Id);
             var list = new List<DiscordAutoCompleteChoice>();
 
             if (account is not null)

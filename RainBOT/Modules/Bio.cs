@@ -24,20 +24,17 @@ using DSharpPlus;
 using DSharpPlus.Entities;
 using DSharpPlus.SlashCommands;
 using RainBOT.Core;
-using RainBOT.Core.Attributes;
 using RainBOT.Core.AutocompleteProviders;
 using RainBOT.Core.Services;
-using RainBOT.Core.Services.Models;
 
 namespace RainBOT.Modules
 {
     [SlashCommandGroup("bio", "Create a bio with information about yourself.")]
     public class Bio : ApplicationCommandModule
     {
-        public Data Data { private get; set; }
+        public Database Data { private get; set; }
 
         [SlashCommand("create", "Create a bio field.")]
-        [SlashRequireUserAccount]
         public async Task BioCreateAsync(InteractionContext ctx,
             [Autocomplete(typeof(TemplateBioFieldsAutocompleteProvider))]
             [MaximumLength(256)]
@@ -57,7 +54,7 @@ namespace RainBOT.Modules
             }
 
             var bioFields = ctx.User.GetUserAccount(Data).BioFields.ToList();
-            bioFields.Add(new UserAccountData.BioFieldData()
+            bioFields.Add(new Core.Services.Models.User.BioFieldData()
             {
                 Name = field,
                 Value = value
@@ -70,7 +67,6 @@ namespace RainBOT.Modules
         }
 
         [SlashCommand("edit", "Edit a bio field.")]
-        [SlashRequireUserAccount]
         public async Task BioEditAsync(InteractionContext ctx,
             [Autocomplete(typeof(ExistingBioFieldsAutocompleteProvider))]
             [Option("field", "The name of the field to edit.", true)] string field,
@@ -93,7 +89,6 @@ namespace RainBOT.Modules
         }
 
         [SlashCommand("delete", "Delete a bio field.")]
-        [SlashRequireUserAccount]
         public async Task BioClearAsync(InteractionContext ctx,
             [Autocomplete(typeof(ExistingBioFieldsAutocompleteProvider))]
             [Option("field", "The name of the field to delete.", true)] string field)
@@ -117,41 +112,39 @@ namespace RainBOT.Modules
         public async Task BioGetAsync(InteractionContext ctx,
             [Option("user", "The user to get the bio of.")] DiscordUser user)
         {
-            if (Data.UserAccounts.Find(x => x.UserId == user.Id) is not null)
+            if (!Data.Users.Exists(x => x.UserId == user.Id))
             {
-                var embed = new DiscordEmbedBuilder()
-                    .WithTitle($"{user.Username}'s Bio")
-                    .WithThumbnail(user.AvatarUrl)
-                    .WithColor(new DiscordColor(Data.UserAccounts.Find(x => x.UserId == user.Id).BioStyle));
+                await ctx.CreateResponseAsync($"⚠️ **{user.Username}** doesn't have a bio.", true);
+                return;
+            }
 
-                foreach (var field in Data.UserAccounts.Find(x => x.UserId == user.Id).BioFields) embed.AddField(field.Name, "> " + field.Value);
-                if (embed.Fields.Count <= 0) await ctx.CreateResponseAsync($"⚠️ **{user.Username}** doesn't have a bio.", true);
-                else await ctx.CreateResponseAsync(embed, true);
-            }
-            else
-            {
-                await ctx.CreateResponseAsync($"⚠️ **{user.Username}** doesn't have an account.", true);
-            }
+            var embed = new DiscordEmbedBuilder()
+                .WithTitle($"{user.Username}'s Bio")
+                .WithThumbnail(user.AvatarUrl)
+                .WithColor(new DiscordColor(user.GetUserAccount(Data).BioStyle));
+
+            foreach (var field in user.GetUserAccount(Data).BioFields) embed.AddField(field.Name, "> " + field.Value);
+            if (embed.Fields.Count <= 0) await ctx.CreateResponseAsync($"⚠️ **{user.Username}** doesn't have a bio.", true);
+            else await ctx.CreateResponseAsync(embed, true);
         }
 
         [ContextMenu(ApplicationCommandType.UserContextMenu, "View Bio")]
         public async Task ViewBioAsync(ContextMenuContext ctx)
         {
-            if (Data.UserAccounts.Find(x => x.UserId == ctx.TargetUser.Id) is not null)
+            if (!Data.Users.Exists(x => x.UserId == ctx.TargetUser.Id))
             {
-                var embed = new DiscordEmbedBuilder()
-                    .WithTitle($"{ctx.TargetUser.Username}'s Bio")
-                    .WithThumbnail(ctx.TargetUser.AvatarUrl)
-                    .WithColor(new DiscordColor(Data.UserAccounts.Find(x => x.UserId == ctx.TargetUser.Id).BioStyle));
+                await ctx.CreateResponseAsync($"⚠️ **{ctx.TargetUser.Username}** doesn't have a bio.", true);
+                return;
+            }
 
-                foreach (var field in Data.UserAccounts.Find(x => x.UserId == ctx.TargetUser.Id).BioFields) embed.AddField(field.Name, "> " + field.Value);
-                if (embed.Fields.Count <= 0) await ctx.CreateResponseAsync($"⚠️ **{ctx.TargetUser.Username}** doesn't have a bio.", true);
-                else await ctx.CreateResponseAsync(embed, true);
-            }
-            else
-            {
-                await ctx.CreateResponseAsync($"⚠️ **{ctx.TargetUser.Username}** doesn't have an account.", true);
-            }
+            var embed = new DiscordEmbedBuilder()
+                .WithTitle($"{ctx.TargetUser.Username}'s Bio")
+                .WithThumbnail(ctx.TargetUser.AvatarUrl)
+                .WithColor(new DiscordColor(ctx.TargetUser.GetUserAccount(Data).BioStyle));
+
+            foreach (var field in ctx.TargetUser.GetUserAccount(Data).BioFields) embed.AddField(field.Name, "> " + field.Value);
+            if (embed.Fields.Count <= 0) await ctx.CreateResponseAsync($"⚠️ **{ctx.TargetUser.Username}** doesn't have a bio.", true);
+            else await ctx.CreateResponseAsync(embed, true);
         }
     }
 }

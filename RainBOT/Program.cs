@@ -34,7 +34,7 @@ namespace RainBOT
             if (!File.Exists("config.json"))
                 File.WriteAllText("config.json", JsonConvert.SerializeObject(new Config(), Formatting.Indented));
             if (!File.Exists("data.json"))
-                File.WriteAllText("data.json", JsonConvert.SerializeObject(new Data(null), Formatting.Indented));
+                File.WriteAllText("data.json", JsonConvert.SerializeObject(new Database(null), Formatting.Indented));
 
             new RbClient().InitializeAsync().GetAwaiter().GetResult();
         }
