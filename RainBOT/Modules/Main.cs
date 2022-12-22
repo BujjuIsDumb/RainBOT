@@ -30,7 +30,7 @@ namespace RainBOT.Modules
     {
         public Database Data { private get; set; }
 
-        [SlashCommand("about", "Get information about me.")]
+        [SlashCommand("info", "Get information about me.")]
         public async Task InfoAsync(InteractionContext ctx)
         {
             var embed = new DiscordEmbedBuilder()
