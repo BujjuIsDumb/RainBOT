@@ -42,26 +42,26 @@ namespace RainBOT.Modules
             [MaximumLength(1024)]
             [Option("value", "What to set the field to.")] string value)
         {
-            if (ctx.User.GetUserAccount(Data).BioFields.ToList().Exists(x => x.Name == field))
+            if (ctx.User.GetUserData(Data).BioFields.ToList().Exists(x => x.Name == field))
             {
                 await ctx.CreateResponseAsync($"⚠️ You already have a field with that name. Use {Core.Utilities.GetCommandMention(ctx.Client, "bio edit")}.", true);
                 return;
             }
 
-            if (ctx.User.GetUserAccount(Data).BioFields.Length >= 25)
+            if (ctx.User.GetUserData(Data).BioFields.Length >= 25)
             {
                 await ctx.CreateResponseAsync("⚠️ You can only have up to 10 bio fields.", true);
                 return;
             }
 
-            var bioFields = ctx.User.GetUserAccount(Data).BioFields.ToList();
+            var bioFields = ctx.User.GetUserData(Data).BioFields.ToList();
             bioFields.Add(new Core.Services.Models.User.BioFieldData()
             {
                 Name = field,
                 Value = value
             });
 
-            ctx.User.GetUserAccount(Data).BioFields = bioFields.ToArray();
+            ctx.User.GetUserData(Data).BioFields = bioFields.ToArray();
             Data.Update();
 
             await ctx.CreateResponseAsync("✅ Created the field.", true);
@@ -74,16 +74,16 @@ namespace RainBOT.Modules
             [MaximumLength(1024)]
             [Option("value", "What to set the field to.")] string value)
         {
-            if (!ctx.User.GetUserAccount(Data).BioFields.ToList().Exists(x => x.Name == field))
+            if (!ctx.User.GetUserData(Data).BioFields.ToList().Exists(x => x.Name == field))
             {
                 await ctx.CreateResponseAsync($"⚠️ You don't have a field with that name. Use {Core.Utilities.GetCommandMention(ctx.Client, "bio create")}.", true);
                 return;
             }
 
-            var bioFields = ctx.User.GetUserAccount(Data).BioFields.ToList();
+            var bioFields = ctx.User.GetUserData(Data).BioFields.ToList();
             bioFields.Find(x => x.Name == field).Value = value;
 
-            ctx.User.GetUserAccount(Data).BioFields = bioFields.ToArray();
+            ctx.User.GetUserData(Data).BioFields = bioFields.ToArray();
             Data.Update();
 
             await ctx.CreateResponseAsync("✅ Edited the field.", true);
@@ -94,16 +94,16 @@ namespace RainBOT.Modules
             [Autocomplete(typeof(ExistingBioFieldsAutocompleteProvider))]
             [Option("field", "The name of the field to delete.", true)] string field)
         {
-            if (!ctx.User.GetUserAccount(Data).BioFields.ToList().Exists(x => x.Name == field))
+            if (!ctx.User.GetUserData(Data).BioFields.ToList().Exists(x => x.Name == field))
             {
                 await ctx.CreateResponseAsync($"⚠️ You don't have a field with that name.", true);
                 return;
             }
 
-            var bioFields = ctx.User.GetUserAccount(Data).BioFields.ToList();
+            var bioFields = ctx.User.GetUserData(Data).BioFields.ToList();
             bioFields.Remove(bioFields.Find(x => x.Name == field));
 
-            ctx.User.GetUserAccount(Data).BioFields = bioFields.ToArray();
+            ctx.User.GetUserData(Data).BioFields = bioFields.ToArray();
             Data.Update();
 
             await ctx.CreateResponseAsync("✅ Deleted the field.", true);
@@ -122,9 +122,9 @@ namespace RainBOT.Modules
             var embed = new DiscordEmbedBuilder()
                 .WithTitle($"{user.Username}'s Bio")
                 .WithThumbnail(user.AvatarUrl)
-                .WithColor(new DiscordColor(user.GetUserAccount(Data).BioStyle));
+                .WithColor(new DiscordColor(user.GetUserData(Data).BioStyle));
 
-            foreach (var field in user.GetUserAccount(Data).BioFields) embed.AddField(field.Name, "> " + field.Value);
+            foreach (var field in user.GetUserData(Data).BioFields) embed.AddField(field.Name, "> " + field.Value);
             if (embed.Fields.Count <= 0) await ctx.CreateResponseAsync($"⚠️ **{user.Username}** doesn't have a bio.", true);
             else await ctx.CreateResponseAsync(embed, true);
         }
@@ -141,9 +141,9 @@ namespace RainBOT.Modules
             var embed = new DiscordEmbedBuilder()
                 .WithTitle($"{ctx.TargetUser.Username}'s Bio")
                 .WithThumbnail(ctx.TargetUser.AvatarUrl)
-                .WithColor(new DiscordColor(ctx.TargetUser.GetUserAccount(Data).BioStyle));
+                .WithColor(new DiscordColor(ctx.TargetUser.GetUserData(Data).BioStyle));
 
-            foreach (var field in ctx.TargetUser.GetUserAccount(Data).BioFields) embed.AddField(field.Name, "> " + field.Value);
+            foreach (var field in ctx.TargetUser.GetUserData(Data).BioFields) embed.AddField(field.Name, "> " + field.Value);
             if (embed.Fields.Count <= 0) await ctx.CreateResponseAsync($"⚠️ **{ctx.TargetUser.Username}** doesn't have a bio.", true);
             else await ctx.CreateResponseAsync(embed, true);
         }

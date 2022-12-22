@@ -44,7 +44,7 @@ namespace RainBOT.Modules
         {
             var responseCache = new List<(DiscordUser creator, string response)>();
 
-            if (anonymous && !ctx.Guild.GetGuildAccount(Data).AnonymousVenting)
+            if (anonymous && !ctx.Guild.GetGuildData(Data).AnonymousVenting)
             {
                 await ctx.CreateResponseAsync("⚠️ You are not allowed to make anonymous vents in this server.", true);
                 return;
@@ -86,7 +86,7 @@ namespace RainBOT.Modules
                     {
                         if (args.Id == respondButton.CustomId)
                         {
-                            if (ctx.User.GetUserAccount(Data).AllowVentResponses)
+                            if (ctx.User.GetUserData(Data).AllowVentResponses)
                             {
                                 // Build modal.
                                 var respondModal = new DiscordInteractionResponseBuilder()
@@ -135,7 +135,7 @@ namespace RainBOT.Modules
                         {
                             var moderator = args.User as DiscordMember;
 
-                            if (ctx.Guild.GetGuildAccount(Data).VentModerators.Contains(moderator.Id) || moderator.Permissions.HasPermission(Permissions.Administrator) || moderator.IsOwner)
+                            if (ctx.Guild.GetGuildData(Data).VentModerators.Contains(moderator.Id) || moderator.Permissions.HasPermission(Permissions.Administrator) || moderator.IsOwner)
                             {
                                 var embed = new DiscordEmbedBuilder()
                                     .WithTitle($"Vent from {ctx.User.Username}")

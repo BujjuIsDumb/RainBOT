@@ -28,7 +28,7 @@ namespace RainBOT.Core
 {
     public static class Extensions
     {
-        public static User GetUserAccount(this DiscordUser user, Database data)
+        public static User GetUserData(this DiscordUser user, Database data)
         {
             if (!data.Users.Exists(x => x.UserId == user.Id))
             {
@@ -39,7 +39,7 @@ namespace RainBOT.Core
             return data.Users.Find(x => x.UserId == user.Id);
         }
 
-        public static Guild GetGuildAccount(this DiscordGuild guild, Database data)
+        public static Guild GetGuildData(this DiscordGuild guild, Database data)
         {
             if (!data.Guilds.Exists(x => x.GuildId == guild.Id))
             {

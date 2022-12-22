@@ -46,9 +46,9 @@ namespace RainBOT.Modules
                 .WithCustomId($"verificationFormModal-{DateTimeOffset.Now.ToUnixTimeSeconds()}");
 
             // Add text input component for every question.
-            for (int i = 0; i < ctx.Guild.GetGuildAccount(Data).VerificationFormQuestions.Count(); i++)
+            for (int i = 0; i < ctx.Guild.GetGuildData(Data).VerificationFormQuestions.Count(); i++)
             {
-                string formQuestion = ctx.Guild.GetGuildAccount(Data).VerificationFormQuestions[i];
+                string formQuestion = ctx.Guild.GetGuildData(Data).VerificationFormQuestions[i];
                 verificationFormModal.AddComponents(new TextInputComponent(label: formQuestion, customId: $"question{i}", required: true, style: TextInputStyle.Paragraph, min_length: 5, max_length: 500));
             }
 
@@ -70,9 +70,9 @@ namespace RainBOT.Modules
                         .WithColor(new DiscordColor(3092790));
 
                     // Add field for every question.
-                    for (int i = 0; i < ctx.Guild.GetGuildAccount(Data).VerificationFormQuestions.Count(); i++)
+                    for (int i = 0; i < ctx.Guild.GetGuildData(Data).VerificationFormQuestions.Count(); i++)
                     {
-                        string formQuestion = ctx.Guild.GetGuildAccount(Data).VerificationFormQuestions[i];
+                        string formQuestion = ctx.Guild.GetGuildData(Data).VerificationFormQuestions[i];
                         embed.AddField(formQuestion, args.Values[$"question{i}"]);
                     }
 
@@ -89,7 +89,7 @@ namespace RainBOT.Modules
 
                     // Create vetting thread.
                     DiscordThreadChannel thread = null;
-                    if (ctx.Guild.GetGuildAccount(Data).CreateVettingThread)
+                    if (ctx.Guild.GetGuildData(Data).CreateVettingThread)
                     {
                         thread = await ctx.Channel.CreateThreadAsync($"{ctx.User.Username}'s Verification Request", AutoArchiveDuration.Day, ChannelType.PrivateThread, $"Created vetting thread (/verify executed by {ctx.User.Username})");
                         await (await thread.SendMessageAsync($"{ctx.User.Mention}")).DeleteAsync();
@@ -141,7 +141,7 @@ namespace RainBOT.Modules
                                             return;
                                         }
 
-                                        if (ctx.Guild.GetGuildAccount(Data).DeleteVerificationRequests)
+                                        if (ctx.Guild.GetGuildData(Data).DeleteVerificationRequests)
                                         {
                                             await originalInteraction.DeleteOriginalResponseAsync();
                                             if (thread is not null) await thread.DeleteAsync($"Delete vetting thread (/verify executed by {ctx.User.Username})");
@@ -227,7 +227,7 @@ namespace RainBOT.Modules
                                             return;
                                         }
 
-                                        if (ctx.Guild.GetGuildAccount(Data).DeleteVerificationRequests)
+                                        if (ctx.Guild.GetGuildData(Data).DeleteVerificationRequests)
                                         {
                                             await originalInteraction.DeleteOriginalResponseAsync();
                                             if (thread is not null) await thread.DeleteAsync($"Delete vetting thread (/verify executed by {ctx.User.Username})");
