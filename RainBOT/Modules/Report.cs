@@ -23,7 +23,9 @@
 using DSharpPlus;
 using DSharpPlus.Entities;
 using DSharpPlus.SlashCommands;
+using RainBOT.Core.Pagination;
 using RainBOT.Core.Services;
+using RainBOT.Core.Services.Models;
 
 namespace RainBOT.Modules
 {
@@ -102,12 +104,11 @@ namespace RainBOT.Modules
                 return;
             }
 
-            /*
             // Generate pages.
             var pages = new List<Page>();
             foreach (var report in Data.Reports.FindAll(x => x.UserId == user.Id))
             {
-                pages.Add(new Page(embed: new DiscordEmbedBuilder()
+                pages.Add(new Page().AddEmbed(new DiscordEmbedBuilder()
                     .WithAuthor(name: (await ctx.Client.GetUserAsync(report.CreatorUserId)).Username, iconUrl: (await ctx.Client.GetUserAsync(report.CreatorUserId)).AvatarUrl)
                     .WithTitle(report.Subject)
                     .WithDescription(report.Body)
@@ -115,8 +116,7 @@ namespace RainBOT.Modules
                     .WithColor(new DiscordColor(3092790))));
             }
 
-            await ctx.Client.GetInteractivity().SendPaginatedResponseAsync(ctx.Interaction, true, ctx.User, pages);
-            */
+            await ctx.Interaction.CreatePaginatedResponseAsync(ctx.Client, pages, true);
         }
 
         [ContextMenu(ApplicationCommandType.UserContextMenu, "View Reports")]
@@ -128,12 +128,11 @@ namespace RainBOT.Modules
                 return;
             }
 
-            /*
             // Generate pages.
             var pages = new List<Page>();
             foreach (var report in Data.Reports.FindAll(x => x.UserId == ctx.TargetUser.Id))
             {
-                pages.Add(new Page(embed: new DiscordEmbedBuilder()
+                pages.Add(new Page().AddEmbed(new DiscordEmbedBuilder()
                     .WithAuthor(name: (await ctx.Client.GetUserAsync(report.CreatorUserId)).Username, iconUrl: (await ctx.Client.GetUserAsync(report.CreatorUserId)).AvatarUrl)
                     .WithTitle(report.Subject)
                     .WithDescription(report.Body)
@@ -141,8 +140,7 @@ namespace RainBOT.Modules
                     .WithColor(new DiscordColor(3092790))));
             }
 
-            await ctx.Client.GetInteractivity().SendPaginatedResponseAsync(ctx.Interaction, true, ctx.User, pages);
-            */
+            await ctx.Interaction.CreatePaginatedResponseAsync(ctx.Client, pages, true);
         }
     }
 }
