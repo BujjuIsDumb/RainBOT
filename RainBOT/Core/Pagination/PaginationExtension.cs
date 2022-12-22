@@ -37,7 +37,6 @@ namespace RainBOT.Core.Pagination
             DiscordButtonComponent previous = new DiscordButtonComponent(ButtonStyle.Danger, $"previous-{DateTimeOffset.Now.ToUnixTimeSeconds()}", "Previous");
             DiscordButtonComponent next = new DiscordButtonComponent(ButtonStyle.Success, $"next-{DateTimeOffset.Now.ToUnixTimeSeconds()}", "Next");
 
-            // Respond to button input.
             client.ComponentInteractionCreated += async (sender, args) =>
             {
                 if (args.Id == previous.CustomId)
@@ -62,7 +61,6 @@ namespace RainBOT.Core.Pagination
                 }
             };
 
-            // Create the response;
             await interaction.CreateResponseAsync(InteractionResponseType.ChannelMessageWithSource, pages.First().ToDiscordInteractionResponseBuilder(ephemeral).AddComponents(previous, next));
             return await interaction.GetOriginalResponseAsync();
         }

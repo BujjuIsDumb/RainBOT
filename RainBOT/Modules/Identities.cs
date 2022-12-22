@@ -21,7 +21,6 @@
 // SOFTWARE.
 
 using DSharpPlus.SlashCommands;
-using RainBOT.Core;
 using RainBOT.Core.AutocompleteProviders;
 using RainBOT.Core.Services;
 
@@ -36,8 +35,7 @@ namespace RainBOT.Modules
         public async Task IdentitiesDefineAsync(InteractionContext ctx,
             [Option("identity", "The identity to define.", true)][Autocomplete(typeof(IdentitiesDefineAutocompleteProvider))] string identity)
         {
-            if (Definitions.Identities.TryGetValue(identity.ToLower(), out string definition)) await ctx.CreateResponseAsync($"`{identity}` {definition}", true);
-            else await ctx.CreateResponseAsync("⚠️ That identity isn't defined.", true);
+
         }
     }
 }

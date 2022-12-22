@@ -31,14 +31,12 @@ namespace RainBOT.Core
         {
             foreach (var registeredCommand in client.GetSlashCommands().RegisteredCommands)
             {
-                // Find the command/command group.
                 var command = registeredCommand.Value.ToList().Find(x => x.Name == name.Split(' ')[0]);
 
                 if (command is not null)
                     return $"</{name}:{command.Id}>";
             }
 
-            // Return without ID if the command/command group isn't found
             return $"</{name}:0>";
         }
     }

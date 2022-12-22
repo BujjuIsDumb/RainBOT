@@ -37,7 +37,6 @@ namespace RainBOT.Core.AutocompleteProviders
 
             if (account is not null)
             {
-                // Add an autocomplete suggestion for every field.
                 foreach (var field in account.BioFields)
                     list.Add(new DiscordAutoCompleteChoice(field.Name, field.Name));
             }
