@@ -30,7 +30,6 @@ using DSharpPlus.SlashCommands.EventArgs;
 using Microsoft.Extensions.DependencyInjection;
 using RainBOT.Core;
 using RainBOT.Core.Services;
-using RainBOT.Core.Services.Models;
 
 namespace RainBOT
 {

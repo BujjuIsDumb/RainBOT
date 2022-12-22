@@ -141,6 +141,7 @@ namespace RainBOT.Modules
                                 case "black": ctx.User.GetUserAccount(Data).BioStyle = "202225"; break;
                                 case "white": ctx.User.GetUserAccount(Data).BioStyle = "FFFFFF"; break;
                             }
+
                             Data.Update();
 
                             await args.Interaction.CreateResponseAsync(InteractionResponseType.ChannelMessageWithSource, new DiscordInteractionResponseBuilder()

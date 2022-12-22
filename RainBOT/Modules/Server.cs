@@ -26,7 +26,6 @@ using DSharpPlus.SlashCommands;
 using Newtonsoft.Json;
 using RainBOT.Core;
 using RainBOT.Core.Services;
-using RainBOT.Core.Services.Models;
 
 namespace RainBOT.Modules
 {

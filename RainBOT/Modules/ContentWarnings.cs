@@ -91,7 +91,10 @@ namespace RainBOT.Modules
                     sb1.Append(c);
                     sb2.Append(", ");
                 }
-                else sb1.Append(c);
+                else
+                {
+                    sb1.Append(c);
+                }
             }
 
             string vowelKey = sb2.ToString().Replace(", , ", ", ").TrimEnd(',', ' ');

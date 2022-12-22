@@ -41,6 +41,5 @@ namespace RainBOT.Core
             // Return without ID if the command/command group isn't found
             return $"</{name}:0>";
         }
-
     }
 }

@@ -51,6 +51,7 @@ namespace RainBOT.Modules
                 string formQuestion = ctx.Guild.GetGuildAccount(Data).VerificationFormQuestions[i];
                 verificationFormModal.AddComponents(new TextInputComponent(label: formQuestion, customId: $"question{i}", required: true, style: TextInputStyle.Paragraph, min_length: 5, max_length: 500));
             }
+
             verificationFormModal.AddComponents(new TextInputComponent(label: "Notes", customId: "notes", required: false, style: TextInputStyle.Paragraph, min_length: 5, max_length: 500));
 
             await ctx.CreateResponseAsync(InteractionResponseType.Modal, verificationFormModal);
