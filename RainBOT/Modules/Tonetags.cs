@@ -26,15 +26,13 @@ using DSharpPlus.Entities;
 using DSharpPlus.SlashCommands;
 using RainBOT.Core;
 using RainBOT.Core.AutocompleteProviders;
-using RainBOT.Core.Entities.Services;
+using RainBOT.Core.Services;
 
 namespace RainBOT.Modules
 {
     [SlashCommandGroup("tonetags", "Tonetags convey tone to people who struggle to identify on their own.")]
     public class Tonetags : ApplicationCommandModule
     {
-        public Config Config { private get; set; }
-
         public Data Data { private get; set; }
 
         [SlashCommand("info", "Learn more about tonetags.")]

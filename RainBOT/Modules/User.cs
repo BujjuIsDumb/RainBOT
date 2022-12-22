@@ -20,7 +20,6 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-using System.Text;
 using System.Text.RegularExpressions;
 using DSharpPlus;
 using DSharpPlus.Entities;
@@ -28,16 +27,14 @@ using DSharpPlus.SlashCommands;
 using Newtonsoft.Json;
 using RainBOT.Core;
 using RainBOT.Core.Attributes;
-using RainBOT.Core.Entities.Models;
-using RainBOT.Core.Entities.Services;
+using RainBOT.Core.Services;
+using RainBOT.Core.Services.Models;
 
 namespace RainBOT.Modules
 {
     [SlashCommandGroup("user", "Manage your user account.")]
     public class User : ApplicationCommandModule
     {
-        public Config Config { private get; set; }
-
         public Data Data { private get; set; }
 
         [SlashCommand("register", "Create a user account.")]
@@ -69,7 +66,7 @@ namespace RainBOT.Modules
         {
             if (setting == 0)
             {
-                var allowVentResponsesSelect = new DiscordSelectComponent(Core.Utilities.CreateCustomId("allowVentResponsesSelect"), "Select an option", new List<DiscordSelectComponentOption>()
+                var allowVentResponsesSelect = new DiscordSelectComponent($"allowVentResponsesSelect-{DateTimeOffset.Now.ToUnixTimeSeconds()}", "Select an option", new List<DiscordSelectComponentOption>()
                 {
                     new DiscordSelectComponentOption("Yes", "yes", "Allow users to respond to your vents.", false, new DiscordComponentEmoji(DiscordEmoji.FromUnicode("✅"))),
                     new DiscordSelectComponentOption("No", "no", "Do not allow users to respond to your vents.", false, new DiscordComponentEmoji(DiscordEmoji.FromUnicode("🚫")))
@@ -96,7 +93,7 @@ namespace RainBOT.Modules
             }
             else if (setting == 1)
             {
-                var bioStyleSelect = new DiscordSelectComponent(Core.Utilities.CreateCustomId("bioStyleSelect"), "Select an option", new List<DiscordSelectComponentOption>()
+                var bioStyleSelect = new DiscordSelectComponent($"bioStyleSelect-{DateTimeOffset.Now.ToUnixTimeSeconds()}", "Select an option", new List<DiscordSelectComponentOption>()
                 {
                     new DiscordSelectComponentOption("None", "none", "Don't use a color for your bio.", false, new DiscordComponentEmoji(DiscordEmoji.FromUnicode("❌"))),
                     new DiscordSelectComponentOption("Red", "red", "Make your bio color red.", false, new DiscordComponentEmoji(DiscordEmoji.FromUnicode("🔴"))),
@@ -125,7 +122,7 @@ namespace RainBOT.Modules
                             // Build modal.
                             var colorModal = new DiscordInteractionResponseBuilder()
                                 .WithTitle("Choose a color")
-                                .WithCustomId(Core.Utilities.CreateCustomId("colorModal"))
+                                .WithCustomId($"colorModal-{DateTimeOffset.Now.ToUnixTimeSeconds()}")
                                 .AddComponents(new TextInputComponent(label: "Color (Hexadecimal)", customId: "color", placeholder: "#2F3136", style: TextInputStyle.Short, min_length: 7, max_length: 7));
 
                             await args.Interaction.CreateResponseAsync(InteractionResponseType.Modal, colorModal);

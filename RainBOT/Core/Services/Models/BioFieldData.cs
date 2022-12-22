@@ -22,23 +22,14 @@
 
 using Newtonsoft.Json;
 
-namespace RainBOT.Core.Entities.Models
+namespace RainBOT.Core.Services.Models
 {
-    public class ReportData
+    public class BioFieldData
     {
-        [JsonProperty("user_id")]
-        public ulong UserId { get; set; } = 0;
+        [JsonProperty("name")]
+        public string Name { get; set; } = string.Empty;
 
-        [JsonProperty("creator_user_id")]
-        public ulong CreatorUserId { get; set; } = 0;
-
-        [JsonProperty("subject")]
-        public string Subject { get; set; } = string.Empty;
-
-        [JsonProperty("body")]
-        public string Body { get; set; } = string.Empty;
-
-        [JsonProperty("creation_timestamp")]
-        public DateTimeOffset CreationTimestamp { get; set; } = DateTimeOffset.UnixEpoch;
+        [JsonProperty("value")]
+        public string Value { get; set; } = string.Empty;
     }
 }

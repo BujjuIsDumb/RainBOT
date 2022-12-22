@@ -24,15 +24,13 @@ using DSharpPlus;
 using DSharpPlus.Entities;
 using DSharpPlus.SlashCommands;
 using DSharpPlus.SlashCommands.Attributes;
-using RainBOT.Core.Entities.Services;
+using RainBOT.Core.Services;
 
 namespace RainBOT.Modules
 {
     [GuildOnly]
     public class Moderation : ApplicationCommandModule
     {
-        public Config Config { private get; set; }
-
         public Data Data { private get; set; }
 
         [SlashCommand("purge", "Delete multiple messages at once.")]
@@ -42,8 +40,8 @@ namespace RainBOT.Modules
         public async Task PurgeAsync(InteractionContext ctx,
             [Option("amount", "The amount of messages to delete.")] long amount)
         {
-            var confimButton = new DiscordButtonComponent(ButtonStyle.Primary, Core.Utilities.CreateCustomId("confimButton"), "Yes", false, new DiscordComponentEmoji(DiscordEmoji.FromUnicode("✅")));
-            var nevermindButton = new DiscordButtonComponent(ButtonStyle.Primary, Core.Utilities.CreateCustomId("nevermindButton"), "Nevermind", false, new DiscordComponentEmoji(DiscordEmoji.FromUnicode("❌")));
+            var confimButton = new DiscordButtonComponent(ButtonStyle.Primary, $"confirmButton-{DateTimeOffset.Now.ToUnixTimeSeconds()}", "Yes", false, new DiscordComponentEmoji(DiscordEmoji.FromUnicode("✅")));
+            var nevermindButton = new DiscordButtonComponent(ButtonStyle.Primary, $"nevermindButton-{DateTimeOffset.Now.ToUnixTimeSeconds()}", "Nevermind", false, new DiscordComponentEmoji(DiscordEmoji.FromUnicode("❌")));
 
             await ctx.CreateResponseAsync(new DiscordInteractionResponseBuilder()
                 .WithContent($"Are you sure you want to delete {amount} messages?")

@@ -42,28 +42,5 @@ namespace RainBOT.Core
             return $"</{name}:0>";
         }
 
-        public static int CompareStrings(string string1, string string2)
-        {
-            int similarity = 0;
-
-            foreach (char c in string1)
-            {
-                // Increase by 1 if the second string contains the character.
-                // Increase by 2 if the second string contains the character in the same place.
-
-                if (string2.Contains(c)) similarity++;
-                if (string2.IndexOf(c) == string1.IndexOf(c)) similarity++;
-            }
-
-            return similarity * -1;
-        }
-
-        public static string CreateCustomId(string componentName)
-        {
-            // Create a custom ID.
-            // Uses snowflakes to differentiate between uses.
-            // Uses component name to differentiate between different components created at the same time.
-            return $"{componentName}-{DateTimeOffset.Now.ToUnixTimeSeconds()}";
-        }
     }
 }

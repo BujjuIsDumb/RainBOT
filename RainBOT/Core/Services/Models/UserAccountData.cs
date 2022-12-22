@@ -22,14 +22,20 @@
 
 using Newtonsoft.Json;
 
-namespace RainBOT.Core.Entities.Models
+namespace RainBOT.Core.Services.Models
 {
-    public class BioFieldData
+    public class UserAccountData
     {
-        [JsonProperty("name")]
-        public string Name { get; set; } = string.Empty;
+        [JsonProperty("user_id")]
+        public ulong UserId { get; set; } = 0;
 
-        [JsonProperty("value")]
-        public string Value { get; set; } = string.Empty;
+        [JsonProperty("bio_fields")]
+        public BioFieldData[] BioFields { get; set; } = Array.Empty<BioFieldData>();
+
+        [JsonProperty("bio_style")]
+        public string BioStyle { get; set; } = "2F3136";
+
+        [JsonProperty("allow_vent_responses")]
+        public bool AllowVentResponses { get; set; } = true;
     }
 }

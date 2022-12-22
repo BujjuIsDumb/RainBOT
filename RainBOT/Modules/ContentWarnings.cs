@@ -24,15 +24,13 @@ using System.Text;
 using DSharpPlus.Entities;
 using DSharpPlus.SlashCommands;
 using RainBOT.Core;
-using RainBOT.Core.Entities.Services;
+using RainBOT.Core.Services;
 
 namespace RainBOT.Modules
 {
     [SlashCommandGroup("cw", "Content warnings are warnings that messages contain potentially triggering content.")]
     public class ContentWarnings : ApplicationCommandModule
     {
-        public Config Config { private get; set; }
-
         public Data Data { private get; set; }
 
         [SlashCommand("info", "Learn more about content warnings.")]

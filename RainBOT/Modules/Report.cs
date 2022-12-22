@@ -24,16 +24,14 @@ using DSharpPlus;
 using DSharpPlus.Entities;
 using DSharpPlus.SlashCommands;
 using RainBOT.Core.Attributes;
-using RainBOT.Core.Entities.Models;
-using RainBOT.Core.Entities.Services;
+using RainBOT.Core.Services;
+using RainBOT.Core.Services.Models;
 
 namespace RainBOT.Modules
 {
     [SlashCommandGroup("report", "Report a user to warn the moderators when they join a server.")]
     public class Report : ApplicationCommandModule
     {
-        public Config Config { private get; set; }
-
         public Data Data { private get; set; }
 
         [SlashCommand("create", "Create a report.")]
@@ -50,7 +48,7 @@ namespace RainBOT.Modules
             // Build modal.
             var reportModal = new DiscordInteractionResponseBuilder()
                 .WithTitle("Detail the report")
-                .WithCustomId(Core.Utilities.CreateCustomId("reportModal"))
+                .WithCustomId($"reportModal-{DateTimeOffset.Now.ToUnixTimeSeconds()}")
                 .AddComponents(new TextInputComponent(label: "Subject", customId: "subject", placeholder: $"Summarize the report. (i.e., Raider)", style: TextInputStyle.Short, min_length: 5, max_length: 30))
                 .AddComponents(new TextInputComponent(label: "Body", customId: "body", placeholder: $"Explain what {user.Username} did.", style: TextInputStyle.Paragraph, min_length: 25, max_length: 1200));
 

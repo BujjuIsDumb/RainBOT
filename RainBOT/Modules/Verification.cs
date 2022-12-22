@@ -27,14 +27,12 @@ using DSharpPlus.SlashCommands;
 using DSharpPlus.SlashCommands.Attributes;
 using RainBOT.Core;
 using RainBOT.Core.Attributes;
-using RainBOT.Core.Entities.Services;
+using RainBOT.Core.Services;
 
 namespace RainBOT.Modules
 {
     public class Verification : ApplicationCommandModule
     {
-        public Config Config { private get; set; }
-
         public Data Data { private get; set; }
 
         [SlashCommand("verify", "Request verification for the member role.")]
@@ -47,7 +45,7 @@ namespace RainBOT.Modules
             // Build modal.
             var verificationFormModal = new DiscordInteractionResponseBuilder()
                 .WithTitle("Verification Form")
-                .WithCustomId(Core.Utilities.CreateCustomId("verificationFormModal"));
+                .WithCustomId($"verificationFormModal-{DateTimeOffset.Now.ToUnixTimeSeconds()}");
 
             // Add text input component for every question.
             for (int i = 0; i < ctx.Guild.GetGuildAccount(Data).VerificationFormQuestions.Count(); i++)
@@ -83,8 +81,8 @@ namespace RainBOT.Modules
                     if (!string.IsNullOrEmpty(args.Values["notes"]))
                         embed.AddField("Notes", args.Values["notes"]);
 
-                    var acceptButton = new DiscordButtonComponent(ButtonStyle.Success, Core.Utilities.CreateCustomId("acceptButton"), "Accept", false, new DiscordComponentEmoji(DiscordEmoji.FromUnicode("✅")));
-                    var denyButton = new DiscordButtonComponent(ButtonStyle.Danger, Core.Utilities.CreateCustomId("denyButton"), "Deny", false, new DiscordComponentEmoji(DiscordEmoji.FromUnicode("⛔")));
+                    var acceptButton = new DiscordButtonComponent(ButtonStyle.Success, $"acceptButton-{DateTimeOffset.Now.ToUnixTimeSeconds()}", "Accept", false, new DiscordComponentEmoji(DiscordEmoji.FromUnicode("✅")));
+                    var denyButton = new DiscordButtonComponent(ButtonStyle.Danger, $"denyButton-{DateTimeOffset.Now.ToUnixTimeSeconds()}", "Deny", false, new DiscordComponentEmoji(DiscordEmoji.FromUnicode("⛔")));
 
                     await args.Interaction.CreateResponseAsync(InteractionResponseType.ChannelMessageWithSource, new DiscordInteractionResponseBuilder()
                         .AddEmbed(embed)
@@ -105,7 +103,7 @@ namespace RainBOT.Modules
                     {
                         if (args.Id == acceptButton.CustomId)
                         {
-                            var acceptSelect = new DiscordRoleSelectComponent(Core.Utilities.CreateCustomId("acceptSelect"), "Select a role.");
+                            var acceptSelect = new DiscordRoleSelectComponent($"acceptSelect-{DateTimeOffset.Now.ToUnixTimeSeconds()}", "Select a role.");
 
                             await args.Interaction.CreateResponseAsync(InteractionResponseType.ChannelMessageWithSource, new DiscordInteractionResponseBuilder()
                                 .WithContent("Please select a role to give the user.")
@@ -186,7 +184,7 @@ namespace RainBOT.Modules
                         }
                         else if (args.Id == denyButton.CustomId)
                         {
-                            var denySelect = new DiscordSelectComponent(Core.Utilities.CreateCustomId("denySelect"), "Select an action.", new DiscordSelectComponentOption[]
+                            var denySelect = new DiscordSelectComponent($"denySelect-{DateTimeOffset.Now.ToUnixTimeSeconds()}", "Select an action.", new DiscordSelectComponentOption[]
                             {
                                 new DiscordSelectComponentOption(label: "Kick", value: "kick", emoji: new DiscordComponentEmoji(DiscordEmoji.FromUnicode("👟"))),
                                 new DiscordSelectComponentOption(label: "Ban", value: "ban", emoji: new DiscordComponentEmoji(DiscordEmoji.FromUnicode("🔨")))

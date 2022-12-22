@@ -22,20 +22,20 @@
 
 using Newtonsoft.Json;
 
-namespace RainBOT.Core.Entities.Models
+namespace RainBOT.Core.Services.Models
 {
-    public class UserAccountData
+    public class WarnData
     {
         [JsonProperty("user_id")]
         public ulong UserId { get; set; } = 0;
 
-        [JsonProperty("bio_fields")]
-        public BioFieldData[] BioFields { get; set; } = Array.Empty<BioFieldData>();
+        [JsonProperty("creator_user_id")]
+        public ulong CreatorUserId { get; set; } = 0;
 
-        [JsonProperty("bio_style")]
-        public string BioStyle { get; set; } = "2F3136";
+        [JsonProperty("description")]
+        public string Description { get; set; } = string.Empty;
 
-        [JsonProperty("allow_vent_responses")]
-        public bool AllowVentResponses { get; set; } = true;
+        [JsonProperty("creation_timestamp")]
+        public DateTimeOffset CreationTimestamp { get; set; } = DateTimeOffset.UnixEpoch;
     }
 }

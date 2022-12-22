@@ -21,7 +21,7 @@
 // SOFTWARE.
 
 using DSharpPlus.SlashCommands;
-using RainBOT.Core.Entities.Services;
+using RainBOT.Core.Services;
 
 namespace RainBOT.Core.Attributes
 {

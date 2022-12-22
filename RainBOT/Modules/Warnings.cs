@@ -25,8 +25,8 @@ using DSharpPlus.Entities;
 using DSharpPlus.SlashCommands;
 using RainBOT.Core;
 using RainBOT.Core.Attributes;
-using RainBOT.Core.Entities.Models;
-using RainBOT.Core.Entities.Services;
+using RainBOT.Core.Services;
+using RainBOT.Core.Services.Models;
 
 namespace RainBOT.Modules
 {
@@ -36,8 +36,6 @@ namespace RainBOT.Modules
     [SlashRequireGuildAccount]
     public class Warnings : ApplicationCommandModule
     {
-        public Config Config { private get; set; }
-
         public Data Data { private get; set; }
 
         [SlashCommand("create", "Create a warning.")]
@@ -106,7 +104,7 @@ namespace RainBOT.Modules
                 warnSelectOptions.Add(new DiscordSelectComponentOption($"Warning from {creator.Username}", creator.Id.ToString()));
             }
 
-            var warnSelect = new DiscordSelectComponent(Core.Utilities.CreateCustomId("warnSelect"), "Select a warning", warnSelectOptions);
+            var warnSelect = new DiscordSelectComponent($"warnSelect-{DateTimeOffset.Now.ToUnixTimeSeconds()}", "Select a warning", warnSelectOptions);
 
             await ctx.CreateResponseAsync(new DiscordInteractionResponseBuilder()
                 .WithContent("Please select a warning to view.")
@@ -151,7 +149,7 @@ namespace RainBOT.Modules
                 warnSelectOptions.Add(new DiscordSelectComponentOption($"Warning from {creator.Username}", creator.Id.ToString()));
             }
 
-            var warnSelect = new DiscordSelectComponent(Core.Utilities.CreateCustomId("warnSelect"), "Select a warning", warnSelectOptions);
+            var warnSelect = new DiscordSelectComponent($"warnSelect-{DateTimeOffset.Now.ToUnixTimeSeconds()}", "Select a warning", warnSelectOptions);
 
             await ctx.CreateResponseAsync(new DiscordInteractionResponseBuilder()
                 .WithContent("Please select a warn to view.")

@@ -22,7 +22,7 @@
 
 using DSharpPlus.Entities;
 using DSharpPlus.SlashCommands;
-using RainBOT.Core.Entities.Services;
+using RainBOT.Core.Services;
 
 namespace RainBOT.Core.AutocompleteProviders
 {
@@ -42,7 +42,7 @@ namespace RainBOT.Core.AutocompleteProviders
                     list.Add(new DiscordAutoCompleteChoice(field.Name, field.Name));
             }
 
-            return Task.FromResult(list.OrderBy(x => Utilities.CompareStrings((string)ctx.OptionValue, x.Name)) as IEnumerable<DiscordAutoCompleteChoice>);
+            return Task.FromResult(list.OrderBy(x => AutocompleteHelper.CompareStrings((string)ctx.OptionValue, x.Name)) as IEnumerable<DiscordAutoCompleteChoice>);
         }
     }
 }

@@ -20,16 +20,20 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
+using DSharpPlus.Entities;
 using Newtonsoft.Json;
 
-namespace RainBOT.Core.Entities.Models
+namespace RainBOT.Core
 {
-    public class GuildBanData
+    public class Config
     {
-        [JsonProperty("guild_id")]
-        public ulong GuildId { get; set; } = 0;
+        [JsonProperty("token")]
+        public string Token { get; private set; }
 
-        [JsonProperty("reason")]
-        public string Reason { get; set; } = string.Empty;
+        [JsonProperty("guild_id")]
+        public ulong? GuildId { get; private set; }
+
+        public static Config Load(string fileName)
+            => JsonConvert.DeserializeObject<Config>(File.ReadAllText(fileName));
     }
 }

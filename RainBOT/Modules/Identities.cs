@@ -23,15 +23,13 @@
 using DSharpPlus.SlashCommands;
 using RainBOT.Core;
 using RainBOT.Core.AutocompleteProviders;
-using RainBOT.Core.Entities.Services;
+using RainBOT.Core.Services;
 
 namespace RainBOT.Modules
 {
     [SlashCommandGroup("identities", "2SLGBTQIA+ identities/labels.")]
     public class Identities : ApplicationCommandModule
     {
-        public Config Config { private get; set; }
-
         public Data Data { private get; set; }
 
         [SlashCommand("define", "Define a 2SLGBTQIA+ identity.")]

@@ -22,29 +22,14 @@
 
 using Newtonsoft.Json;
 
-namespace RainBOT.Core.Entities.Models
+namespace RainBOT.Core.Services.Models
 {
-    public class GuildAccountData
+    public class GuildBanData
     {
         [JsonProperty("guild_id")]
         public ulong GuildId { get; set; } = 0;
 
-        [JsonProperty("vent_moderators")]
-        public ulong[] VentModerators { get; set; } = Array.Empty<ulong>();
-
-        [JsonProperty("anonymous_venting")]
-        public bool AnonymousVenting { get; set; } = true;
-
-        [JsonProperty("delete_verification_requests")]
-        public bool DeleteVerificationRequests { get; set; } = false;
-
-        [JsonProperty("create_vetting_thread")]
-        public bool CreateVettingThread { get; set; } = true;
-
-        [JsonProperty("verification_form_questions")]
-        public string[] VerificationFormQuestions { get; set; } = Array.Empty<string>();
-
-        [JsonProperty("warnings")]
-        public WarnData[] Warnings { get; set; } = Array.Empty<WarnData>();
+        [JsonProperty("reason")]
+        public string Reason { get; set; } = string.Empty;
     }
 }

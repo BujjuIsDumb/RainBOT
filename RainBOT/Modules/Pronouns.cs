@@ -21,15 +21,13 @@
 // SOFTWARE.
 
 using DSharpPlus.SlashCommands;
-using RainBOT.Core.Entities.Services;
+using RainBOT.Core.Services;
 
 namespace RainBOT.Modules
 {
     [SlashCommandGroup("pronouns", "Try new pronouns to see if they fit.")]
     public class Pronouns : ApplicationCommandModule
     {
-        public Config Config { private get; set; }
-
         public Data Data { private get; set; }
 
         [SlashCommand("try", "Try new pronouns.")]

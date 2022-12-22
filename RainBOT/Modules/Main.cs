@@ -24,14 +24,12 @@ using System.Diagnostics;
 using System.Reflection;
 using DSharpPlus.Entities;
 using DSharpPlus.SlashCommands;
-using RainBOT.Core.Entities.Services;
+using RainBOT.Core.Services;
 
 namespace RainBOT.Modules
 {
-    public class Basics : ApplicationCommandModule
+    public class Main : ApplicationCommandModule
     {
-        public Config Config { private get; set; }
-
         public Data Data { private get; set; }
 
         [SlashCommand("help", "Get help with something.")]
@@ -162,7 +160,7 @@ namespace RainBOT.Modules
         {
             await ctx.CreateResponseAsync(new DiscordInteractionResponseBuilder()
                 .WithContent("Click the button to view my source code.")
-                .AddComponents(new DiscordLinkButtonComponent(Config.SourceUrl, "Source"))
+                .AddComponents(new DiscordLinkButtonComponent("https://github.com/BujjuIsDumb/RainBOT", "Source"))
                 .AsEphemeral());
         }
 
@@ -171,7 +169,7 @@ namespace RainBOT.Modules
         {
             await ctx.CreateResponseAsync(new DiscordInteractionResponseBuilder()
                 .WithContent("Click the button to join the support server.")
-                .AddComponents(new DiscordLinkButtonComponent(Config.SupportUrl, "Server"))
+                .AddComponents(new DiscordLinkButtonComponent("https://discord.gg/tKsqy5ZWFZ", "Server"))
                 .AsEphemeral());
         }
 
@@ -180,7 +178,7 @@ namespace RainBOT.Modules
         {
             await ctx.CreateResponseAsync(new DiscordInteractionResponseBuilder()
                 .WithContent("Click the button to invite me to your server.")
-                .AddComponents(new DiscordLinkButtonComponent(Config.InviteUrl, "Invite"))
+                .AddComponents(new DiscordLinkButtonComponent("https://discord.com/api/oauth2/authorize?client_id=1004158946740809839&permissions=86167809030&scope=bot%20applications.commands", "Invite"))
                 .AsEphemeral());
         }
 
@@ -189,7 +187,7 @@ namespace RainBOT.Modules
         {
             await ctx.CreateResponseAsync(new DiscordInteractionResponseBuilder()
                 .WithContent("Click the button to go to my wiki.")
-                .AddComponents(new DiscordLinkButtonComponent(Config.WikiUrl, "Wiki"))
+                .AddComponents(new DiscordLinkButtonComponent("https://github.com/BujjuIsDumb/RainBOT/wiki", "Wiki"))
                 .AsEphemeral());
         }
     }

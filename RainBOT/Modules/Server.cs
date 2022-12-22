@@ -20,16 +20,14 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-using System.Linq;
-using System.Text;
 using DSharpPlus;
 using DSharpPlus.Entities;
 using DSharpPlus.SlashCommands;
 using Newtonsoft.Json;
 using RainBOT.Core;
 using RainBOT.Core.Attributes;
-using RainBOT.Core.Entities.Models;
-using RainBOT.Core.Entities.Services;
+using RainBOT.Core.Services;
+using RainBOT.Core.Services.Models;
 
 namespace RainBOT.Modules
 {
@@ -38,8 +36,6 @@ namespace RainBOT.Modules
     [GuildOnly]
     public class Server : ApplicationCommandModule
     {
-        public Config Config { private get; set; }
-
         public Data Data { private get; set; }
 
         [SlashCommand("register", "Create a server account.")]
@@ -74,7 +70,7 @@ namespace RainBOT.Modules
         {
             if (setting == 0)
             {
-                var ventModeratorsSelect = new DiscordUserSelectComponent(Core.Utilities.CreateCustomId("ventModeratorsSelect"), "Select users", false, 1, 25);
+                var ventModeratorsSelect = new DiscordUserSelectComponent($"ventModeratorsSelect-{DateTimeOffset.Now.ToUnixTimeSeconds()}", "Select users", false, 1, 25);
 
                 await ctx.CreateResponseAsync(InteractionResponseType.ChannelMessageWithSource, new DiscordInteractionResponseBuilder()
                     .WithContent("Please select the people who you want to be able to moderate anonymous vents.")
@@ -103,7 +99,7 @@ namespace RainBOT.Modules
             }
             else if (setting == 1)
             {
-                var anonymousVentingSelect = new DiscordSelectComponent(Core.Utilities.CreateCustomId("anonymousVentingSelect"), "Select an option", new List<DiscordSelectComponentOption>()
+                var anonymousVentingSelect = new DiscordSelectComponent($"anonymousVentingSelect-{DateTimeOffset.Now.ToUnixTimeSeconds()}", "Select an option", new List<DiscordSelectComponentOption>()
                 {
                     new DiscordSelectComponentOption("Yes", "yes", "Allow users to create anonymous vents.", false, new DiscordComponentEmoji(DiscordEmoji.FromUnicode("✅"))),
                     new DiscordSelectComponentOption("No", "no", "Do not allow users to create anonymous vents.", false, new DiscordComponentEmoji(DiscordEmoji.FromUnicode("🚫")))
@@ -130,7 +126,7 @@ namespace RainBOT.Modules
             }
             else if (setting == 2)
             {
-                var deleteVerificationRequestsSelect = new DiscordSelectComponent(Core.Utilities.CreateCustomId("deleteVerificationRequestsSelect"), "Select an option", new List<DiscordSelectComponentOption>()
+                var deleteVerificationRequestsSelect = new DiscordSelectComponent($"deleteVerificationRequestsSelect-{DateTimeOffset.Now.ToUnixTimeSeconds()}", "Select an option", new List<DiscordSelectComponentOption>()
                 {
                     new DiscordSelectComponentOption("Yes", "yes", "Delete verification requests after they're accepted/denied.", false, new DiscordComponentEmoji(DiscordEmoji.FromUnicode("✅"))),
                     new DiscordSelectComponentOption("No", "no", "Do not delete verification requests after they're accepted/denied.", false, new DiscordComponentEmoji(DiscordEmoji.FromUnicode("🚫")))
@@ -157,7 +153,7 @@ namespace RainBOT.Modules
             }
             else if (setting == 3)
             {
-                var createVettingThreadSelect = new DiscordSelectComponent(Core.Utilities.CreateCustomId("createVettingThreadSelect"), "Select an option", new List<DiscordSelectComponentOption>()
+                var createVettingThreadSelect = new DiscordSelectComponent($"createVettingThreadSelect-{DateTimeOffset.Now.ToUnixTimeSeconds()}", "Select an option", new List<DiscordSelectComponentOption>()
                 {
                     new DiscordSelectComponentOption("Yes", "yes", "Create vetting threads for verification requests.", false, new DiscordComponentEmoji(DiscordEmoji.FromUnicode("✅"))),
                     new DiscordSelectComponentOption("No", "no", "Do not create vetting threads for verification requests.", false, new DiscordComponentEmoji(DiscordEmoji.FromUnicode("🚫")))
@@ -187,7 +183,7 @@ namespace RainBOT.Modules
                 // Build modal.
                 var verificationFormModal = new DiscordInteractionResponseBuilder()
                     .WithTitle("Create the verification form")
-                    .WithCustomId(Core.Utilities.CreateCustomId("verificationFormModal"))
+                    .WithCustomId($"verificationFormModal-{DateTimeOffset.Now.ToUnixTimeSeconds()}")
                     .AddComponents(new TextInputComponent(label: "Question 1", customId: "question1", required: false, style: TextInputStyle.Short, min_length: 5, max_length: 30))
                     .AddComponents(new TextInputComponent(label: "Question 2", customId: "question2", required: false, style: TextInputStyle.Short, min_length: 5, max_length: 30))
                     .AddComponents(new TextInputComponent(label: "Question 3", customId: "question3", required: false, style: TextInputStyle.Short, min_length: 5, max_length: 30))

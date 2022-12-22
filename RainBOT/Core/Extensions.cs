@@ -21,8 +21,8 @@
 // SOFTWARE.
 
 using DSharpPlus.Entities;
-using RainBOT.Core.Entities.Models;
-using RainBOT.Core.Entities.Services;
+using RainBOT.Core.Services;
+using RainBOT.Core.Services.Models;
 
 namespace RainBOT.Core
 {

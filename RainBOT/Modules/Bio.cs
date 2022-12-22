@@ -26,16 +26,14 @@ using DSharpPlus.SlashCommands;
 using RainBOT.Core;
 using RainBOT.Core.Attributes;
 using RainBOT.Core.AutocompleteProviders;
-using RainBOT.Core.Entities.Models;
-using RainBOT.Core.Entities.Services;
+using RainBOT.Core.Services;
+using RainBOT.Core.Services.Models;
 
 namespace RainBOT.Modules
 {
     [SlashCommandGroup("bio", "Create a bio with information about yourself.")]
     public class Bio : ApplicationCommandModule
     {
-        public Config Config { private get; set; }
-
         public Data Data { private get; set; }
 
         [SlashCommand("create", "Create a bio field.")]
