@@ -22,8 +22,6 @@
 
 using DSharpPlus;
 using DSharpPlus.Entities;
-using DSharpPlus.Interactivity;
-using DSharpPlus.Interactivity.Extensions;
 using DSharpPlus.SlashCommands;
 using RainBOT.Core.Attributes;
 using RainBOT.Core.Entities.Models;
@@ -110,6 +108,7 @@ namespace RainBOT.Modules
                 return;
             }
 
+            /*
             // Generate pages.
             var pages = new List<Page>();
             foreach (var report in Data.Reports.FindAll(x => x.UserId == user.Id))
@@ -123,6 +122,7 @@ namespace RainBOT.Modules
             }
 
             await ctx.Client.GetInteractivity().SendPaginatedResponseAsync(ctx.Interaction, true, ctx.User, pages);
+            */
         }
 
         [ContextMenu(ApplicationCommandType.UserContextMenu, "View Reports")]
@@ -134,6 +134,7 @@ namespace RainBOT.Modules
                 return;
             }
 
+            /*
             // Generate pages.
             var pages = new List<Page>();
             foreach (var report in Data.Reports.FindAll(x => x.UserId == ctx.TargetUser.Id))
@@ -147,6 +148,7 @@ namespace RainBOT.Modules
             }
 
             await ctx.Client.GetInteractivity().SendPaginatedResponseAsync(ctx.Interaction, true, ctx.User, pages);
+            */
         }
     }
 }
