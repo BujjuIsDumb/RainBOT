@@ -65,7 +65,7 @@ namespace RainBOT.Modules
                     var embed = new DiscordEmbedBuilder()
                         .WithAuthor(name: ctx.User.Username, iconUrl: ctx.User.AvatarUrl)
                         .WithTitle("📨 A new verification request has arrived!")
-                        .WithDescription($"{(reports > 0 ? $"This user has {reports} report{(reports == 1 ? string.Empty : "s")}. ({Core.Utilities.GetCommandMention(ctx.Client, "report list")})" : string.Empty)}")
+                        .WithDescription(reports > 0 ? $"This user has {reports} report{(reports == 1 ? string.Empty : "s")}. ({Core.Utilities.GetCommandMention(ctx.Client, "report list")})" : null)
                         .WithFooter((DateTime.Now - ctx.User.CreationTimestamp.DateTime).TotalDays <= 7 ? "This account is less than a week old." : null)
                         .WithColor(new DiscordColor(3092790));
 
