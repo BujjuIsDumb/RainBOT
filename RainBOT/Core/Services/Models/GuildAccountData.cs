@@ -43,8 +43,5 @@ namespace RainBOT.Core.Services.Models
 
         [JsonProperty("verification_form_questions")]
         public string[] VerificationFormQuestions { get; set; } = Array.Empty<string>();
-
-        [JsonProperty("warnings")]
-        public WarnData[] Warnings { get; set; } = Array.Empty<WarnData>();
     }
 }

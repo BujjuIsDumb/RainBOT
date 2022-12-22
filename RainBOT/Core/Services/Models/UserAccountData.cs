@@ -37,5 +37,14 @@ namespace RainBOT.Core.Services.Models
 
         [JsonProperty("allow_vent_responses")]
         public bool AllowVentResponses { get; set; } = true;
+
+        public class BioFieldData
+        {
+            [JsonProperty("name")]
+            public string Name { get; set; } = string.Empty;
+
+            [JsonProperty("value")]
+            public string Value { get; set; } = string.Empty;
+        }
     }
 }

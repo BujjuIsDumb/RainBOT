@@ -57,7 +57,7 @@ namespace RainBOT.Modules
             }
 
             var bioFields = ctx.User.GetUserAccount(Data).BioFields.ToList();
-            bioFields.Add(new BioFieldData()
+            bioFields.Add(new UserAccountData.BioFieldData()
             {
                 Name = field,
                 Value = value
