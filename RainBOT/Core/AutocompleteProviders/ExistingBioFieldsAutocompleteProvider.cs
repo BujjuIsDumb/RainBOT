@@ -22,27 +22,29 @@
 
 using DSharpPlus.Entities;
 using DSharpPlus.SlashCommands;
-using RainBOT.Core.Entities.Services;
+using RainBOT.Core.Services;
 
 namespace RainBOT.Core.AutocompleteProviders
 {
+    /// <summary>
+    ///     An autocomplete provider for existing bio fields.
+    /// </summary>
     public class ExistingBioFieldsAutocompleteProvider : IAutocompleteProvider
     {
         public Task<IEnumerable<DiscordAutoCompleteChoice>> Provider(AutocompleteContext ctx)
         {
-            using var data = new Data("data.json").Initialize();
+            using var data = new Database("data.json").Initialize();
 
-            var account = data.UserAccounts.Find(x => x.UserId == ctx.User.Id);
+            var account = data.Users.Find(x => x.UserId == ctx.User.Id);
             var list = new List<DiscordAutoCompleteChoice>();
 
             if (account is not null)
             {
-                // Add an autocomplete suggestion for every field.
                 foreach (var field in account.BioFields)
                     list.Add(new DiscordAutoCompleteChoice(field.Name, field.Name));
             }
 
-            return Task.FromResult(list.OrderBy(x => Utilities.CompareStrings((string)ctx.OptionValue, x.Name)) as IEnumerable<DiscordAutoCompleteChoice>);
+            return Task.FromResult(list.OrderBy(x => AutocompleteHelper.CompareStrings((string)ctx.OptionValue, x.Name)) as IEnumerable<DiscordAutoCompleteChoice>);
         }
     }
 }

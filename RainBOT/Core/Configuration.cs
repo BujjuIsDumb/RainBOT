@@ -22,23 +22,31 @@
 
 using Newtonsoft.Json;
 
-namespace RainBOT.Core.Entities.Models
+namespace RainBOT.Core
 {
-    public class ReportData
+    /// <summary>
+    ///     The configuration object for the bot.
+    /// </summary>
+    public class Configuration
     {
-        [JsonProperty("user_id")]
-        public ulong UserId { get; set; } = 0;
+        /// <summary>
+        ///     Gets the bot token.
+        /// </summary>
+        [JsonProperty("token")]
+        public string Token { get; private set; }
 
-        [JsonProperty("creator_user_id")]
-        public ulong CreatorUserId { get; set; } = 0;
+        /// <summary>
+        ///     Gets the guild ID for the bot. Null for release versions.
+        /// </summary>
+        [JsonProperty("guild_id")]
+        public ulong? GuildId { get; private set; }
 
-        [JsonProperty("subject")]
-        public string Subject { get; set; } = string.Empty;
-
-        [JsonProperty("body")]
-        public string Body { get; set; } = string.Empty;
-
-        [JsonProperty("creation_timestamp")]
-        public DateTimeOffset CreationTimestamp { get; set; } = DateTimeOffset.UnixEpoch;
+        /// <summary>
+        ///     Loads a <see cref="Configuration"/> object from the file at <paramref name="fileName"/>.
+        /// </summary>
+        /// <param name="fileName">The path to the config file.</param>
+        /// <returns>A <see cref="Configuration"/> object loaded from the specified file.</returns>
+        public static Configuration Load(string fileName)
+            => JsonConvert.DeserializeObject<Configuration>(File.ReadAllText(fileName));
     }
 }

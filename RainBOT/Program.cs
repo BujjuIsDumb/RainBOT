@@ -21,27 +21,30 @@
 // SOFTWARE.
 
 using Newtonsoft.Json;
-using RainBOT.Core.Entities.Services;
+using RainBOT.Core;
+using RainBOT.Core.Services;
 
 namespace RainBOT
 {
+    /// <summary>
+    ///     The startup object for the application.
+    /// </summary>
     public class Program
     {
+        /// <summary>
+        ///     The entry point for the application.
+        /// </summary>
         public static void Main()
         {
-            // Create config and database files if they don't already exist.
+            // Create the configuration file if it doesn't exist.
             if (!File.Exists("config.json"))
-            {
-                File.Create("config.json").Close();
-                File.WriteAllText("config.json", JsonConvert.SerializeObject(new Config(null), Formatting.Indented));
-            }
-            if (!File.Exists("data.json"))
-            {
-                File.Create("data.json").Close();
-                File.WriteAllText("data.json", JsonConvert.SerializeObject(new Data(null), Formatting.Indented));
-            }
+                File.WriteAllText("config.json", JsonConvert.SerializeObject(new Configuration(), Formatting.Indented));
 
-            new RbClient().Initialize();
+            // Create the database file if it doesn't exist.
+            if (!File.Exists("data.json"))
+                File.WriteAllText("data.json", JsonConvert.SerializeObject(new Database(null), Formatting.Indented));
+
+            new RbClient().InitializeAsync().GetAwaiter().GetResult();
         }
     }
 }

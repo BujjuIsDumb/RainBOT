@@ -26,59 +26,73 @@ using DSharpPlus.Entities;
 using DSharpPlus.SlashCommands;
 using RainBOT.Core;
 using RainBOT.Core.AutocompleteProviders;
-using RainBOT.Core.Entities.Services;
+using RainBOT.Core.Services;
 
 namespace RainBOT.Modules
 {
+    /// <summary>
+    ///     The tonetags module.
+    /// </summary>
     [SlashCommandGroup("tonetags", "Tonetags convey tone to people who struggle to identify on their own.")]
     public class Tonetags : ApplicationCommandModule
     {
-        public Config Config { private get; set; }
+        /// <summary>
+        ///     Sets the database service.
+        /// </summary>
+        public Database Data { private get; set; }
 
-        public Data Data { private get; set; }
-
+        /// <summary>
+        ///    The /tonetags info command.
+        /// </summary>
+        /// <param name="ctx">Context for the interaction.</param>
+        /// <returns>A task that represents the asynchronous operation.</returns>
         [SlashCommand("info", "Learn more about tonetags.")]
         public async Task TonetagsInfoAsync(InteractionContext ctx)
         {
-            var embed = new DiscordEmbedBuilder()
+            await ctx.CreateResponseAsync(new DiscordEmbedBuilder()
                 .WithTitle("Tonetags")
-                .WithDescription($"Tonetags are indicators of a message's tone, which is " +
-                $"important for people who struggle to identify tone by themselves (For example" +
-                $", some neuro-divergent people). You can use a tonetag if you think the tone " +
-                $"of your message may be unclear. If you don't know what a tonetag means, you " +
-                $"can look it up with " +
-                $"{Core.Utilities.GetCommandMention(ctx.Client, "tonetags define")} or define " +
-                $"all the tonetags with \"Find Tonetags\".")
-                .WithColor(new DiscordColor(3092790));
-
-            await ctx.CreateResponseAsync(embed, true);
+                .WithDescription($"Tonetags are indicators of a message's tone, which is important for people who struggle to identify tone by themselves (For example, some neuro-divergent people). You can use a tonetag if you think the tone of your message may be unclear. If you don't know what a tonetag means, you can look it up with {Core.Utilities.GetCommandMention(ctx.Client, "tonetags define")} or define all the tonetags with \"Find Tonetags\".")
+                .WithColor(new DiscordColor(3092790)), true);
         }
 
+        /// <summary>
+        ///     The /tonetags define command.
+        /// </summary>
+        /// <param name="ctx">Context for the interaction.</param>
+        /// <param name="tonetag">The tonetag option.</param>
+        /// <returns>A task that represents the asynchronous operation.</returns>
         [SlashCommand("define", "Define a tonetag.")]
         public async Task TonetagsDefineAsync(InteractionContext ctx,
             [Autocomplete(typeof(TonetagsDefineAutocompleteProvider))]
             [Option("tonetag", "The tonetag to define.", true)] string tonetag)
         {
-            if (Definitions.Tonetags.TryGetValue($"{(tonetag.StartsWith("/") ? "" : "/")}{tonetag.ToLower()}", out string definition)) await ctx.CreateResponseAsync($"`{tonetag}` {definition}", true);
-            else await ctx.CreateResponseAsync("⚠️ That tonetag isn't defined.", true);
+            if (Definitions.Tonetags.TryGetValue($"{(tonetag.StartsWith("/") ? "" : "/")}{tonetag.ToLower()}", out string definition))
+                await ctx.CreateResponseAsync($"`{tonetag}` {definition}", true);
+            else
+                await ctx.CreateResponseAsync("⚠️ That tonetag isn't defined.", true);
         }
 
+        /// <summary>
+        ///     The /tonetags list command.
+        /// </summary>
+        /// <param name="ctx">Context for the interaction.</param>
+        /// <returns>A task that represents the asynchronous operation.</returns>
         [SlashCommand("list", "Get a list of tonetags.")]
         public async Task TonetagsListAsync(InteractionContext ctx)
         {
-            // Build list.
-            var builder = new StringBuilder();
-            foreach (string tonetag in Definitions.Tonetags.Keys)
-                builder.AppendLine($"`{tonetag}` {Definitions.Tonetags[tonetag]}");
-
             var embed = new DiscordEmbedBuilder()
                 .WithTitle("Tonetag List")
-                .WithDescription(builder.ToString())
+                .WithDescription(string.Join("\n", Definitions.Tonetags.Keys.Select(x => $"`{x}` {Definitions.Tonetags[x]}")))
                 .WithColor(new DiscordColor(3092790));
 
             await ctx.CreateResponseAsync(embed, true);
         }
 
+        /// <summary>
+        ///     The Find Tonetags context menu.
+        /// </summary>
+        /// <param name="ctx">Context for the interaction.</param>
+        /// <returns>A task that represents the asynchronous operation.</returns>
         [ContextMenu(ApplicationCommandType.MessageContextMenu, "Find Tonetags")]
         public async Task FindTonetagsAsync(ContextMenuContext ctx)
         {
@@ -95,8 +109,10 @@ namespace RainBOT.Modules
                 }
             }
 
-            if (!string.IsNullOrEmpty(builder.ToString())) await ctx.CreateResponseAsync(builder.ToString(), true);
-            else await ctx.CreateResponseAsync("⚠️ No tonetag was found.", true);
+            if (!string.IsNullOrEmpty(builder.ToString()))
+                await ctx.CreateResponseAsync(builder.ToString(), true);
+            else
+                await ctx.CreateResponseAsync("⚠️ No tonetag was found.", true);
         }
     }
 }

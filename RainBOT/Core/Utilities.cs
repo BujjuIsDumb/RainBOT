@@ -25,45 +25,32 @@ using DSharpPlus.SlashCommands;
 
 namespace RainBOT.Core
 {
+    // This file can be deleted once my PR (#1420) is merged into DSharpPlus.
+
+    /// <summary>
+    ///     Utilities used for the bot.
+    /// </summary>
     public class Utilities
     {
+        /// <summary>
+        ///     Gets the command mention string.
+        /// </summary>
+        /// <param name="client">The client to fetch the mention from.</param>
+        /// <param name="name">The command name.</param>
+        /// <returns>The mention string for the specified command.</returns>
         public static string GetCommandMention(DiscordClient client, string name)
         {
             foreach (var registeredCommand in client.GetSlashCommands().RegisteredCommands)
             {
-                // Find the command/command group.
+                // Find the command with the specified name.
                 var command = registeredCommand.Value.ToList().Find(x => x.Name == name.Split(' ')[0]);
 
                 if (command is not null)
                     return $"</{name}:{command.Id}>";
             }
 
-            // Return without ID if the command/command group isn't found
+            // Return without ID if the command with the specified name is not found.
             return $"</{name}:0>";
-        }
-
-        public static int CompareStrings(string string1, string string2)
-        {
-            int similarity = 0;
-
-            foreach (char c in string1)
-            {
-                // Increase by 1 if the second string contains the character.
-                // Increase by 2 if the second string contains the character in the same place.
-
-                if (string2.Contains(c)) similarity++;
-                if (string2.IndexOf(c) == string1.IndexOf(c)) similarity++;
-            }
-
-            return similarity * -1;
-        }
-
-        public static string CreateCustomId(string componentName)
-        {
-            // Create a custom ID.
-            // Uses snowflakes to differentiate between uses.
-            // Uses component name to differentiate between different components created at the same time.
-            return $"{componentName}-{DateTimeOffset.Now.ToUnixTimeSeconds()}";
         }
     }
 }

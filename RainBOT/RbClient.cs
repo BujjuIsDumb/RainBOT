@@ -23,72 +23,128 @@
 using System.Reflection;
 using DSharpPlus;
 using DSharpPlus.Entities;
-using DSharpPlus.Interactivity;
-using DSharpPlus.Interactivity.Enums;
-using DSharpPlus.Interactivity.EventHandling;
-using DSharpPlus.Interactivity.Extensions;
+using DSharpPlus.EventArgs;
 using DSharpPlus.SlashCommands;
+using DSharpPlus.SlashCommands.Attributes;
+using DSharpPlus.SlashCommands.EventArgs;
 using Microsoft.Extensions.DependencyInjection;
 using RainBOT.Core;
-using RainBOT.Core.Entities.Services;
+using RainBOT.Core.Services;
+using RainBOT.Core.Services.Models;
 
 namespace RainBOT
 {
+    /// <summary>
+    ///     The client used to connect to the bot..
+    /// </summary>
     public class RbClient
     {
-        private Config _config;
+        /// <summary>
+        ///     The configuration.
+        /// </summary>
+        private Configuration _config;
 
-        private DiscordShardedClient _client;
+        /// <summary>
+        ///     The Discord client.
+        /// </summary>
+        private DiscordClient _client;
 
-        private async Task InitializeAsync()
+        /// <summary>
+        ///     Starts the bot.
+        /// </summary>
+        /// <returns>A task that represents the asynchronous operation.</returns>
+        public async Task InitializeAsync()
         {
-            _config = new Config("config.json").Initialize();
+            // Load the configuration.
+            _config = Configuration.Load("config.json");
 
-            // Setup client.
-            _client = new DiscordShardedClient(new DiscordConfiguration()
+            // Create the Discord client.
+            _client = new DiscordClient(new DiscordConfiguration()
             {
                 Token = _config.Token,
-                TokenType = TokenType.Bot
+                TokenType = TokenType.Bot,
+                Intents = DiscordIntents.AllUnprivileged
             });
-            _client.MessageCreated += Events.MessageCreated;
+            _client.MessageCreated += MessageCreated;
+            _client.GuildCreated += GuildCreated;
 
-            // Setup slash commands.
-            var slash = await _client.UseSlashCommandsAsync(new SlashCommandsConfiguration()
+            // Create the slash command service.
+            var slash = _client.UseSlashCommands(new SlashCommandsConfiguration()
             {
                 Services = new ServiceCollection()
-                    .AddTransient(x => new Config("config.json").Initialize())
-                    .AddTransient(x => new Data("data.json").Initialize())
+                    .AddTransient(x => new Database("data.json").Initialize())
                     .BuildServiceProvider()
             });
+            slash.RegisterCommands(Assembly.GetExecutingAssembly(), _config.GuildId);
+            slash.SlashCommandErrored += SlashCommandErrored;
 
-            // Use interactivity for pagination.
-            await _client.UseInteractivityAsync(new InteractivityConfiguration()
-            {
-                AckPaginationButtons = true,
-                ButtonBehavior = ButtonPaginationBehavior.Disable,
-                PaginationButtons = new PaginationButtons()
-                {
-                    SkipLeft = new DiscordButtonComponent(ButtonStyle.Primary, Core.Utilities.CreateCustomId("first"), "First"),
-                    Left = new DiscordButtonComponent(ButtonStyle.Secondary, Core.Utilities.CreateCustomId("back"), "Back"),
-                    Stop = new DiscordButtonComponent(ButtonStyle.Danger, Core.Utilities.CreateCustomId("lock"), string.Empty, false, new DiscordComponentEmoji(DiscordEmoji.FromUnicode("🔒"))),
-                    Right = new DiscordButtonComponent(ButtonStyle.Secondary, Core.Utilities.CreateCustomId("next"), "Next"),
-                    SkipRight = new DiscordButtonComponent(ButtonStyle.Primary, Core.Utilities.CreateCustomId("last"), "Last")
-                }
-            });
-
-            // Register commands.
-            foreach (var extension in slash.Values)
-            {
-                extension.RegisterCommands(Assembly.GetExecutingAssembly(), _config.GuildId);
-                extension.SlashCommandErrored += Events.SlashCommandErrored;
-            }
-
-            // Start bot.
-            await _client.StartAsync();
-            _client.Ready += async (sender, args) => await _client.UpdateStatusAsync(new DiscordActivity(_config.Status, _config.StatusType));
+            // Connect to the Discord gateway.
+            await _client.ConnectAsync(new DiscordActivity("for pings!", ActivityType.Watching));
             await Task.Delay(-1);
         }
 
-        public void Initialize() => InitializeAsync().GetAwaiter().GetResult();
+        /// <summary>
+        ///     Handles the <see cref="DiscordClient.MessageCreated"/> event.
+        /// </summary>
+        /// <param name="sender">The sender.</param>
+        /// <param name="args">The args.</param>
+        /// <returns>A task that represents the asynchronous operation.</returns>
+        public static async Task MessageCreated(DiscordClient sender, MessageCreateEventArgs args)
+        {
+            if (args.MentionedUsers.Contains(sender.CurrentUser))
+            {
+                var embed = new DiscordEmbedBuilder()
+                    .WithTitle("👋 Get started")
+                    .WithDescription($"Welcome to RainBOT! I use slash commands, so you can view all of my commands by typing a `/` symbol.")
+                    .WithImageUrl("https://i.imgur.com/sWoBYi6.png")
+                    .WithFooter("Hint: Try /info!")
+                    .WithColor(new DiscordColor(3092790));
+
+                await args.Message.RespondAsync(embed);
+            }
+        }
+
+        /// <summary>
+        ///     Handles the <see cref="DiscordClient.GuildCreated"/> event.
+        /// </summary>
+        /// <param name="sender">The sender.</param>
+        /// <param name="args">The args.</param>
+        /// <returns>A task that represents the asynchronous operation.</returns>
+        private static Task GuildCreated(DiscordClient sender, GuildCreateEventArgs args)
+        {
+            return Task.Run(() =>
+            {
+                using var data = new Database("data.json").Initialize();
+                if (!data.Guilds.Exists(x => x.GuildId == args.Guild.Id))
+                {
+                    data.Guilds.Add(new GuildData() { GuildId = args.Guild.Id });
+                    data.Update();
+                }
+            });
+        }
+
+        /// <summary>
+        ///     Handles the <see cref="SlashCommandsExtension.SlashCommandErrored"/> event.
+        /// </summary>
+        /// <param name="sender">The sender.</param>
+        /// <param name="args">The args.</param>
+        /// <returns>A task that represents the asynchronous operation.</returns>
+        public static async Task SlashCommandErrored(SlashCommandsExtension sender, SlashCommandErrorEventArgs args)
+        {
+            if (args.Exception is SlashExecutionChecksFailedException slashExecutionChecksFailedException)
+            {
+                if (slashExecutionChecksFailedException.FailedChecks[0] is SlashCooldownAttribute slashCooldownAttribute)
+                    await args.Context.CreateResponseAsync($"⚠️ This command is on cooldown. (Finished <t:{((DateTimeOffset)DateTime.Now.Add(slashCooldownAttribute.GetRemainingCooldown(args.Context))).ToUnixTimeSeconds()}:R>)", true);
+                else if (slashExecutionChecksFailedException.FailedChecks[0] is SlashRequireBotPermissionsAttribute slashRequireBotPermissionsAttribute)
+                    await args.Context.CreateResponseAsync($"⚠️ I need `{slashRequireBotPermissionsAttribute.Permissions}` permissions for this command to work.", true);
+            }
+            else
+            {
+                await args.Context.CreateResponseAsync(new DiscordInteractionResponseBuilder()
+                    .WithContent($"❌ An unexpected error has occurred. If you think this is a bug, please report it.\n\n```{args.Exception.Message}```")
+                    .AddComponents(new DiscordLinkButtonComponent("https://github.com/BujjuIsDumb/RainBOT/issues", "Report"))
+                    .AsEphemeral());
+            }
+        }
     }
 }

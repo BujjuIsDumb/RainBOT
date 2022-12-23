@@ -22,13 +22,22 @@
 
 using Newtonsoft.Json;
 
-namespace RainBOT.Core.Entities.Models
+namespace RainBOT.Core.Services.Models
 {
-    public class UserBanData
+    /// <summary>
+    ///     Represents a ban.
+    /// </summary>
+    public class BanData
     {
+        /// <summary>
+        ///     Gets or sets the ID of the user who was banned.
+        /// </summary>
         [JsonProperty("user_id")]
         public ulong UserId { get; set; } = 0;
 
+        /// <summary>
+        ///     Gets or sets the reason for the ban.
+        /// </summary>
         [JsonProperty("reason")]
         public string Reason { get; set; } = string.Empty;
     }

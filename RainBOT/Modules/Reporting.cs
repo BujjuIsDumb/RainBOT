@@ -22,24 +22,31 @@
 
 using DSharpPlus;
 using DSharpPlus.Entities;
-using DSharpPlus.Interactivity;
-using DSharpPlus.Interactivity.Extensions;
 using DSharpPlus.SlashCommands;
-using RainBOT.Core.Attributes;
-using RainBOT.Core.Entities.Models;
-using RainBOT.Core.Entities.Services;
+using RainBOT.Core.Pagination;
+using RainBOT.Core.Services;
+using RainBOT.Core.Services.Models;
 
 namespace RainBOT.Modules
 {
+    /// <summary>
+    ///     The report module.
+    /// </summary>
     [SlashCommandGroup("report", "Report a user to warn the moderators when they join a server.")]
-    public class Report : ApplicationCommandModule
+    public class Reporting : ApplicationCommandModule
     {
-        public Config Config { private get; set; }
+        /// <summary>
+        ///     Sets the database service.
+        /// </summary>
+        public Database Data { private get; set; }
 
-        public Data Data { private get; set; }
-
+        /// <summary>
+        ///     The /report create command.
+        /// </summary>
+        /// <param name="ctx">Context for the interaction.</param>
+        /// <param name="user">The user option.</param>
+        /// <returns>A task that represents the asynchronous operation.</returns>
         [SlashCommand("create", "Create a report.")]
-        [SlashRequireUserAccount]
         public async Task ReportCreateAsync(InteractionContext ctx,
             [Option("user", "The user to report.")] DiscordUser user)
         {
@@ -49,16 +56,15 @@ namespace RainBOT.Modules
                 return;
             }
 
-            // Build modal.
+            #region Components
             var reportModal = new DiscordInteractionResponseBuilder()
                 .WithTitle("Detail the report")
-                .WithCustomId(Core.Utilities.CreateCustomId("reportModal"))
+                .WithCustomId($"reportModal-{DateTimeOffset.Now.ToUnixTimeSeconds()}")
                 .AddComponents(new TextInputComponent(label: "Subject", customId: "subject", placeholder: $"Summarize the report. (i.e., Raider)", style: TextInputStyle.Short, min_length: 5, max_length: 30))
                 .AddComponents(new TextInputComponent(label: "Body", customId: "body", placeholder: $"Explain what {user.Username} did.", style: TextInputStyle.Paragraph, min_length: 25, max_length: 1200));
+            #endregion
 
-            await ctx.CreateResponseAsync(InteractionResponseType.Modal, reportModal);
-
-            // Respond to modal submission.
+            #region Event Handlers
             ctx.Client.ModalSubmitted += async (sender, args) =>
             {
                 if (args.Interaction.Data.CustomId == reportModal.CustomId)
@@ -78,10 +84,18 @@ namespace RainBOT.Modules
                         .AsEphemeral());
                 }
             };
+            #endregion
+
+            await ctx.CreateResponseAsync(InteractionResponseType.Modal, reportModal);
         }
 
+        /// <summary>
+        ///     The /report revoke command.
+        /// </summary>
+        /// <param name="ctx">Context for the interaction.</param>
+        /// <param name="user">The user option.</param>
+        /// <returns>A task that represents the asynchronous operation.</returns>
         [SlashCommand("revoke", "Remove a report.")]
-        [SlashRequireUserAccount]
         public async Task ReportRevokeAsync(InteractionContext ctx,
             [Option("user", "The user to remove the report from.")] DiscordUser user)
         {
@@ -100,6 +114,12 @@ namespace RainBOT.Modules
             }
         }
 
+        /// <summary>
+        ///     The /report list command.
+        /// </summary>
+        /// <param name="ctx">Context for the interaction.</param>
+        /// <param name="user">The user option.</param>
+        /// <returns>A task that represents the asynchronous operation.</returns>
         [SlashCommand("list", "Get a list of reports for a user.")]
         public async Task ReportListAsync(InteractionContext ctx,
             [Option("user", "The user to view the reports of.")] DiscordUser user)
@@ -114,7 +134,7 @@ namespace RainBOT.Modules
             var pages = new List<Page>();
             foreach (var report in Data.Reports.FindAll(x => x.UserId == user.Id))
             {
-                pages.Add(new Page(embed: new DiscordEmbedBuilder()
+                pages.Add(new Page().WithEmbed(new DiscordEmbedBuilder()
                     .WithAuthor(name: (await ctx.Client.GetUserAsync(report.CreatorUserId)).Username, iconUrl: (await ctx.Client.GetUserAsync(report.CreatorUserId)).AvatarUrl)
                     .WithTitle(report.Subject)
                     .WithDescription(report.Body)
@@ -122,9 +142,14 @@ namespace RainBOT.Modules
                     .WithColor(new DiscordColor(3092790))));
             }
 
-            await ctx.Client.GetInteractivity().SendPaginatedResponseAsync(ctx.Interaction, true, ctx.User, pages);
+            await ctx.Interaction.CreatePaginatedResponseAsync(ctx.Client, pages, true);
         }
 
+        /// <summary>
+        ///     The View Reports context menu.
+        /// </summary>
+        /// <param name="ctx">Context for the interaction.</param>
+        /// <returns>A task that represents the asynchronous operation.</returns>
         [ContextMenu(ApplicationCommandType.UserContextMenu, "View Reports")]
         public async Task ViewReportsAsync(ContextMenuContext ctx)
         {
@@ -138,7 +163,7 @@ namespace RainBOT.Modules
             var pages = new List<Page>();
             foreach (var report in Data.Reports.FindAll(x => x.UserId == ctx.TargetUser.Id))
             {
-                pages.Add(new Page(embed: new DiscordEmbedBuilder()
+                pages.Add(new Page().WithEmbed(new DiscordEmbedBuilder()
                     .WithAuthor(name: (await ctx.Client.GetUserAsync(report.CreatorUserId)).Username, iconUrl: (await ctx.Client.GetUserAsync(report.CreatorUserId)).AvatarUrl)
                     .WithTitle(report.Subject)
                     .WithDescription(report.Body)
@@ -146,7 +171,7 @@ namespace RainBOT.Modules
                     .WithColor(new DiscordColor(3092790))));
             }
 
-            await ctx.Client.GetInteractivity().SendPaginatedResponseAsync(ctx.Interaction, true, ctx.User, pages);
+            await ctx.Interaction.CreatePaginatedResponseAsync(ctx.Client, pages, true);
         }
     }
 }

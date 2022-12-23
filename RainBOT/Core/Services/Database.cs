@@ -21,59 +21,52 @@
 // SOFTWARE.
 
 using Newtonsoft.Json;
-using RainBOT.Core.Entities.Models;
+using RainBOT.Core.Services.Models;
 
-namespace RainBOT.Core.Entities.Services
+namespace RainBOT.Core.Services
 {
-    public class Data : IDisposable
+    public class Database : IDisposable
     {
-        [JsonProperty("user_accounts")]
-        public List<UserAccountData> UserAccounts { get; set; } = new();
+        [JsonProperty("users")]
+        public List<UserData> Users { get; set; } = new();
 
-        [JsonProperty("guild_accounts")]
-        public List<GuildAccountData> GuildAccounts { get; set; } = new();
+        [JsonProperty("guilds")]
+        public List<GuildData> Guilds { get; set; } = new();
 
         [JsonProperty("reports")]
         public List<ReportData> Reports { get; set; } = new();
 
-        [JsonProperty("user_bans")]
-        public List<UserBanData> UserBans { get; set; } = new();
+        [JsonProperty("bans")]
+        public List<BanData> Bans { get; set; } = new();
 
-        [JsonProperty("guild_bans")]
-        public List<GuildBanData> GuildBans { get; set; } = new();
-
-        public Data(string fileName) => FileName = fileName;
+        public Database(string fileName) => FileName = fileName;
 
         [JsonIgnore]
         public string FileName { get; set; }
 
-        public Data Initialize()
+        public Database Initialize()
         {
             // Load the database.
-            var loaded = JsonConvert.DeserializeObject<Data>(File.ReadAllText(FileName));
+            var loaded = JsonConvert.DeserializeObject<Database>(File.ReadAllText(FileName));
 
-            UserAccounts = loaded.UserAccounts;
-            GuildAccounts = loaded.GuildAccounts;
+            Users = loaded.Users;
+            Guilds = loaded.Guilds;
             Reports = loaded.Reports;
-            UserBans = loaded.UserBans;
-            GuildBans = loaded.GuildBans;
+            Bans = loaded.Bans;
 
             return this;
         }
 
         public void Update()
-        {
-            File.WriteAllText(FileName, JsonConvert.SerializeObject(this, Formatting.Indented));
-        }
+            => File.WriteAllText(FileName, JsonConvert.SerializeObject(this, Formatting.Indented));
 
         void IDisposable.Dispose()
         {
             GC.SuppressFinalize(this);
-            UserAccounts.Clear();
-            GuildAccounts.Clear();
+            Users.Clear();
+            Guilds.Clear();
             Reports.Clear();
-            UserBans.Clear();
-            GuildBans.Clear();
+            Bans.Clear();
         }
     }
 }

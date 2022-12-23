@@ -21,51 +21,60 @@
 // SOFTWARE.
 
 using DSharpPlus.SlashCommands;
-using RainBOT.Core.Entities.Services;
+using RainBOT.Core.Services;
 
 namespace RainBOT.Modules
 {
+    /// <summary>
+    ///     The pronouns module.
+    /// </summary>
     [SlashCommandGroup("pronouns", "Try new pronouns to see if they fit.")]
     public class Pronouns : ApplicationCommandModule
     {
-        public Config Config { private get; set; }
+        /// <summary>
+        ///     Sets the database service.
+        /// </summary>
+        public Database Data { private get; set; }
 
-        public Data Data { private get; set; }
-
+        /// <summary>
+        ///     The /pronouns try command.
+        /// </summary>
+        /// <param name="ctx">Context for the interaction.</param>
+        /// <param name="subjective">The subjective option.</param>
+        /// <param name="objective">The objective option.</param>
+        /// <param name="possessiveAdjective">The possessive_adjective option.</param>
+        /// <param name="possessivePronoun">The possessive_pronouns option.</param>
+        /// <param name="reflexive">The reflexive option.</param>
+        /// <param name="plural">The plural option.</param>
+        /// <returns>A task that represents the asynchronous operation.</returns>
         [SlashCommand("try", "Try new pronouns.")]
         public async Task PronounsTryAsync(InteractionContext ctx,
             [Option("subjective", "He, she, and they are subjective pronouns.")] string subjective,
             [Option("objective", "Him, her, and them are objective pronouns.")] string objective,
-            [Option("possessive-adjective", "His, her, and their are possessive adjectives.")] string possessiveAdjective,
-            [Option("possessive-pronoun", "His, hers, and theirs are possessive pronouns.")] string possessivePronoun,
+            [Option("possessive_adjective", "His, her, and their are possessive adjectives.")] string possessiveAdjective,
+            [Option("possessive_pronoun", "His, hers, and theirs are possessive pronouns.")] string possessivePronoun,
             [Option("reflexive", "Himself, herself, and themself are reflexive pronouns.")] string reflexive,
             [Option("plural", "Whether or not to use plural grammar rules for the pronouns.")] bool plural)
         {
             string[] prompts = new string[]
             {
-                $"My friend {ctx.User.Username} and I went to the café the other day. Usually, " +
-                $"I order for {objective}, but {subjective} ordered for {reflexive} today! I am " +
-                $"really proud of {objective}.",
+                $"My friend {ctx.User.Username} and I went to the café the other day. Usually, I order for {objective}, but {subjective} ordered for {reflexive} today! I am really proud of {objective}.",
 
-                $"Do you know where {ctx.User.Username} is? I think {subjective} lost " +
-                $"{possessiveAdjective} phone. I found a phone, and it looks like " +
-                $"{possessivePronoun}. The last time I saw {objective}, {subjective} " +
-                $"{(plural ? "were" : "was")} over there. Oh, there {subjective} " +
-                $"{(plural ? "are" : "is")}.",
+                $"Do you know where {ctx.User.Username} is? I think {subjective} lost {possessiveAdjective} phone. I found a phone, and it looks like {possessivePronoun}. The last time I saw {objective}, {subjective} {(plural ? "were" : "was")} over there. Oh, there {subjective} {(plural ? "are" : "is")}.",
 
-                $"Did {ctx.User.Username} tell you that {subjective}'{(plural ? "re" : "s")} " +
-                $"trying out {subjective}/{objective} pronouns. I think these pronouns fit " +
-                $"{objective} really well. Do you think {subjective} made a good choice? I hope " +
-                $"{subjective} can find pronouns that fit {objective}.",
+                $"Did {ctx.User.Username} tell you that {subjective}'{(plural ? "re" : "s")} trying out {subjective}/{objective} pronouns. I think these pronouns fit {objective} really well. Do you think {subjective} made a good choice? I hope {subjective} can find pronouns that fit {objective}.",
 
-                $"Have you met {ctx.User.Username}? You haven't? I think you'd like " +
-                $"{objective}. {subjective}'{(plural ? "re" : "s")} really kind and funny. You " +
-                $"should meet {objective} sometime."
+                $"Have you met {ctx.User.Username}? You haven't? I think you'd like {objective}. {subjective}'{(plural ? "re" : "s")} really kind and funny. You should meet {objective} sometime."
             };
 
             await ctx.CreateResponseAsync(prompts[new Random().Next(prompts.Length)], true);
         }
 
+        /// <summary>
+        ///     The /pronouns random command.
+        /// </summary>
+        /// <param name="ctx">Context for the interaction.</param>
+        /// <returns>A task that represents the asynchronous operation.</returns>
         [SlashCommand("random", "Get a random set of pronouns to try.")]
         public async Task PronounsRandom(InteractionContext ctx)
         {

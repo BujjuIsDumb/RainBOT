@@ -21,15 +21,40 @@
 // SOFTWARE.
 
 using DSharpPlus.Entities;
-using RainBOT.Core.Entities.Models;
-using RainBOT.Core.Entities.Services;
+using RainBOT.Core.Services;
+using RainBOT.Core.Services.Models;
 
 namespace RainBOT.Core
 {
+    /// <summary>
+    ///     An extension for DSharpPlus objects.
+    /// </summary>
     public static class Extensions
     {
-        public static UserAccountData GetUserAccount(this DiscordUser user, Data data) => data.UserAccounts.Find(x => x.UserId == user.Id);
+        /// <summary>
+        ///     Gets the user configuration.
+        /// </summary>
+        /// <param name="user">The user.</param>
+        /// <param name="data">The database object to use.</param>
+        /// <returns>The user configuration for the specified user.</returns>
+        public static UserData GetUserData(this DiscordUser user, Database data)
+        {
+            if (!data.Users.Exists(x => x.UserId == user.Id) && !data.Bans.Exists(x => x.UserId == user.Id))
+            {
+                data.Users.Add(new UserData() { UserId = user.Id });
+                data.Update();
+            }
 
-        public static GuildAccountData GetGuildAccount(this DiscordGuild guild, Data data) => data.GuildAccounts.Find(x => x.GuildId == guild.Id);
+            return data.Users.Find(x => x.UserId == user.Id);
+        }
+
+        /// <summary>
+        ///     Gets the guild configuration.
+        /// </summary>
+        /// <param name="guild">The guild.</param>
+        /// <param name="data">The database object to use.</param>
+        /// <returns>The guild configuration for the specified guild.</returns>
+        public static GuildData GetGuildData(this DiscordGuild guild, Database data)
+            => data.Guilds.Find(x => x.GuildId == guild.Id);
     }
 }
