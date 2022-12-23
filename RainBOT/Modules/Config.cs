@@ -25,6 +25,7 @@ using DSharpPlus;
 using DSharpPlus.Entities;
 using DSharpPlus.SlashCommands;
 using RainBOT.Core;
+using RainBOT.Core.Attributes;
 using RainBOT.Core.Services;
 
 namespace RainBOT.Modules
@@ -33,6 +34,7 @@ namespace RainBOT.Modules
     ///     The user configuration module.
     /// </summary>
     [SlashCommandGroup("user", "Configure user-side settings.")]
+    [SlashBannable]
     public class User : ApplicationCommandModule
     {
         /// <summary>

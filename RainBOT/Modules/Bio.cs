@@ -24,6 +24,7 @@ using DSharpPlus;
 using DSharpPlus.Entities;
 using DSharpPlus.SlashCommands;
 using RainBOT.Core;
+using RainBOT.Core.Attributes;
 using RainBOT.Core.AutocompleteProviders;
 using RainBOT.Core.Services;
 
@@ -48,6 +49,7 @@ namespace RainBOT.Modules
         /// <param name="value">The value option.</param>
         /// <returns>A task that represents the asynchronous operation.</returns>
         [SlashCommand("create", "Create a bio field.")]
+        [SlashBannable]
         public async Task BioCreateAsync(InteractionContext ctx,
             [Autocomplete(typeof(TemplateBioFieldsAutocompleteProvider))]
             [MaximumLength(256)]
@@ -88,6 +90,7 @@ namespace RainBOT.Modules
         /// <param name="value">The value option.</param>
         /// <returns>A task that represents the asynchronous operation.</returns>
         [SlashCommand("edit", "Edit a bio field.")]
+        [SlashBannable]
         public async Task BioEditAsync(InteractionContext ctx,
             [Autocomplete(typeof(ExistingBioFieldsAutocompleteProvider))]
             [Option("field", "The name of the field to edit.", true)] string field,
@@ -117,6 +120,7 @@ namespace RainBOT.Modules
         /// <param name="field">The field option.</param>
         /// <returns>A task that represents the asynchronous operation.</returns>
         [SlashCommand("delete", "Delete a bio field.")]
+        [SlashBannable]
         public async Task BioClearAsync(InteractionContext ctx,
             [Autocomplete(typeof(ExistingBioFieldsAutocompleteProvider))]
             [Option("field", "The name of the field to delete.", true)] string field)
