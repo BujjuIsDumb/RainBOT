@@ -35,7 +35,7 @@ using RainBOT.Core.Services.Models;
 namespace RainBOT
 {
     /// <summary>
-    ///     The client used to connect to the bot..
+    ///     The client used to connect to the bot.
     /// </summary>
     public class RbClient
     {

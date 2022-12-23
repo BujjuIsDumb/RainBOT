@@ -38,6 +38,7 @@ namespace RainBOT.Core.AutocompleteProviders
             var account = data.Users.Find(x => x.UserId == ctx.User.Id);
             var list = new List<DiscordAutoCompleteChoice>();
 
+            // Add all the fields to the list.
             if (account is not null)
             {
                 foreach (var field in account.BioFields)

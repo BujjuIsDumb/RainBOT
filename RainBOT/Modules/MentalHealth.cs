@@ -222,8 +222,8 @@ namespace RainBOT.Modules
         /// <summary>
         ///     A cached response to a vent.
         /// </summary>
-        /// <param name="creator">The creator of the vent.</param>
-        /// <param name="message">The message that was sent.</param>
+        /// <param name="creator">The creator of the response.</param>
+        /// <param name="message">The response message that was sent.</param>
         /// <param name="creationTimestamp">When the response was created.</param>
         private record VentResponse(DiscordUser creator, string message, DateTimeOffset creationTimestamp);
     }
