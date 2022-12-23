@@ -38,7 +38,7 @@ namespace RainBOT.Modules
     public class User : ApplicationCommandModule
     {
         /// <summary>
-        ///     The database service.
+        ///     Sets the database service.
         /// </summary>
         public Database Data { private get; set; }
 

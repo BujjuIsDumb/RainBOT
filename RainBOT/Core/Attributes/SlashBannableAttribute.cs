@@ -25,6 +25,9 @@ using RainBOT.Core.Services;
 
 namespace RainBOT.Core.Attributes
 {
+    /// <summary>
+    ///     A slash command check that checks if the user is banned.
+    /// </summary>
     public class SlashBannableAttribute : SlashCheckBaseAttribute
     {
         public override async Task<bool> ExecuteChecksAsync(InteractionContext ctx)

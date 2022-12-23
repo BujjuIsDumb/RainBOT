@@ -30,12 +30,12 @@ namespace RainBOT.Core.Pagination
     public class Page
     {
         /// <summary>
-        ///     Gets the content of the page message.
+        ///     Gets or sets the content of the page message.
         /// </summary>
         public string Content { get; set; }
 
         /// <summary>
-        ///     Gets the embed of the page message.
+        ///     Gets or sets the embed of the page message.
         /// </summary>
         public DiscordEmbed Embed { get; set; }
 

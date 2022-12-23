@@ -28,7 +28,7 @@ namespace RainBOT.Core
     public class Definitions
     {
         /// <summary>
-        ///     The tonetag definitions for the bot.
+        ///     Gets the tonetag definitions for the bot.
         /// </summary>
         public static Dictionary<string, string> Tonetags { get; }
             = new Dictionary<string, string>()
@@ -96,7 +96,7 @@ namespace RainBOT.Core
             };
 
         /// <summary>
-        ///     The identity definitions for the bot.
+        ///     Gets the identity definitions for the bot.
         /// </summary>
         public static Dictionary<string, string> Identities { get; }
             = new Dictionary<string, string>()

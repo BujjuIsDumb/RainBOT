@@ -48,13 +48,13 @@ namespace RainBOT.Core.Services.Models
         public string Subject { get; set; } = string.Empty;
 
         /// <summary>
-        /// Gets or sets the body of the report.
+        ///     Gets or sets the body of the report.
         /// </summary>
         [JsonProperty("body")]
         public string Body { get; set; } = string.Empty;
 
         /// <summary>
-        /// Gets or sets the creation timestamp of the report.
+        ///     Gets or sets the creation timestamp of the report.
         /// </summary>
         [JsonProperty("creation_timestamp")]
         public DateTimeOffset CreationTimestamp { get; set; } = DateTimeOffset.UnixEpoch;
