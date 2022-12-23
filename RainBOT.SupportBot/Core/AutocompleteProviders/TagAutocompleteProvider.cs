@@ -22,7 +22,7 @@
 
 using DSharpPlus.Entities;
 using DSharpPlus.SlashCommands;
-using RainBOT.SupportBot.Core.Entities.Services;
+using RainBOT.SupportBot.Core.Services;
 
 namespace RainBOT.SupportBot.Core.AutocompleteProviders
 {
@@ -30,21 +30,19 @@ namespace RainBOT.SupportBot.Core.AutocompleteProviders
     {
         public Task<IEnumerable<DiscordAutoCompleteChoice>> Provider(AutocompleteContext ctx)
         {
-            using (var data = new Data("data.json").Initialize())
+            using var data = new Database("data.json").Initialize();
+            var list = new List<DiscordAutoCompleteChoice>();
+
+            // Add an autocomplete suggestion for every tag.
+            foreach (var prompt in data.Prompts)
             {
-                var list = new List<DiscordAutoCompleteChoice>();
-
-                // Add an autocomplete suggestion for every tag.
-                foreach (var prompt in data.Prompts)
+                foreach (string tag in prompt.Tags)
                 {
-                    foreach (string tag in prompt.Tags)
-                    {
-                        list.Add(new DiscordAutoCompleteChoice(tag, tag));
-                    }
+                    list.Add(new DiscordAutoCompleteChoice(tag, tag));
                 }
-
-                return Task.FromResult(list.OrderBy(x => Utilities.CompareStrings((string)ctx.OptionValue, x.Name)).Take(10));
             }
+
+            return Task.FromResult(list.OrderBy(x => Utilities.CompareStrings((string)ctx.OptionValue, x.Name)).Take(10));
         }
     }
 }

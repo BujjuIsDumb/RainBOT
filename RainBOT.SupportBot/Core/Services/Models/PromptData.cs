@@ -20,49 +20,19 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-using DSharpPlus.Entities;
 using Newtonsoft.Json;
 
-namespace RainBOT.SupportBot.Core.Entities.Services
+namespace RainBOT.SupportBot.Core.Services.Models
 {
-    public class Config : IDisposable
+    public class PromptData
     {
-        [JsonProperty("token")]
-        public string Token { get; private set; }
+        [JsonProperty("tags")]
+        public string[] Tags { get; set; } = new string[0];
 
-        [JsonProperty("guild_id")]
-        public ulong? GuildId { get; private set; }
+        [JsonProperty("prompt")]
+        public string Prompt { get; set; } = string.Empty;
 
-        [JsonProperty("status")]
-        public string Status { get; private set; }
-
-        [JsonProperty("status_type")]
-        public ActivityType StatusType { get; private set; }
-
-        public Config(string fileName) => FileName = fileName;
-
-        [JsonIgnore]
-        public string FileName { get; set; }
-
-        public Config Initialize()
-        {
-            // Load the config.
-            var loaded = JsonConvert.DeserializeObject<Config>(File.ReadAllText(FileName));
-
-            Token = loaded.Token;
-            GuildId = loaded.GuildId;
-            Status = loaded.Status;
-            StatusType = loaded.StatusType;
-
-            return this;
-        }
-
-        public void Dispose()
-        {
-            Token = null;
-            GuildId = null;
-            Status = null;
-            StatusType = default;
-        }
+        [JsonProperty("creator_user_id")]
+        public ulong CreatorUserId { get; set; } = 0;
     }
 }

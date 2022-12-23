@@ -23,46 +23,66 @@
 using System.Reflection;
 using DSharpPlus;
 using DSharpPlus.Entities;
+using DSharpPlus.EventArgs;
 using DSharpPlus.SlashCommands;
+using DSharpPlus.SlashCommands.EventArgs;
 using Microsoft.Extensions.DependencyInjection;
 using RainBOT.SupportBot.Core;
-using RainBOT.SupportBot.Core.Entities.Services;
+using RainBOT.SupportBot.Core.Services;
 
 namespace RainBOT.SupportBot
 {
     public class RbSupportClient
     {
-        private async Task InitializeAsync()
+        private Configuration _config;
+
+        private DiscordClient _client;
+
+        public async Task InitializeAsync()
         {
-            using (var config = new Config("config.json").Initialize())
+            // Load the configuration.
+            _config = Configuration.Load("config.json");
+
+            // Create the Discord client.
+            _client = new DiscordClient(new DiscordConfiguration()
             {
-                // Setup client.
-                var discord = new DiscordClient(new DiscordConfiguration()
-                {
-                    Token = config.Token,
-                    TokenType = TokenType.Bot
-                });
-                discord.MessageCreated += Events.MessageCreated;
+                Token = _config.Token,
+                TokenType = TokenType.Bot,
+                Intents = DiscordIntents.AllUnprivileged
+            });
+            _client.MessageCreated += MessageCreated;
 
-                // Setup slash commands.
-                var slash = discord.UseSlashCommands(new SlashCommandsConfiguration()
-                {
-                    Services = new ServiceCollection()
-                        .AddTransient(x => new Config("config.json").Initialize())
-                        .AddTransient(x => new Data("data.json").Initialize())
-                        .BuildServiceProvider()
-                });
+            // Create the slash command service.
+            var slash = _client.UseSlashCommands(new SlashCommandsConfiguration()
+            {
+                Services = new ServiceCollection()
+                    .AddTransient(x => new Database("data.json").Initialize())
+                    .BuildServiceProvider()
+            });
+            slash.RegisterCommands(Assembly.GetExecutingAssembly(), _config.GuildId);
+            slash.SlashCommandErrored += SlashCommandErrored;
 
-                // Register commands.
-                slash.RegisterCommands(Assembly.GetExecutingAssembly(), config.GuildId);
-                slash.SlashCommandErrored += Events.SlashCommandErrored;
-
-                // Start bot.
-                await discord.ConnectAsync(new DiscordActivity(config.Status, config.StatusType));
-                await Task.Delay(-1);
-            }
+            // Connect to the Discord gateway.
+            await _client.ConnectAsync(new DiscordActivity("for pings!", ActivityType.Watching));
+            await Task.Delay(-1);
         }
 
-        public void Initialize() => InitializeAsync().GetAwaiter().GetResult();
+        private static async Task SlashCommandErrored(SlashCommandsExtension sender, SlashCommandErrorEventArgs args)
+        {
+            await args.Context.CreateResponseAsync($"❌ An unexpected error has occurred.\n\n```{args.Exception.Message}```", true);
+        }
+
+        private static async Task MessageCreated(DiscordClient sender, MessageCreateEventArgs args)
+        {
+            if (args.MentionedUsers.Contains(sender.CurrentUser))
+            {
+                var embed = new DiscordEmbedBuilder()
+                    .WithTitle("🌈 RainBOT Support")
+                    .WithDescription("This bot was designed for the RainBOT support server. It has commands that create responses with answers to common questions.")
+                    .WithColor(new DiscordColor(3092790));
+
+                await args.Message.RespondAsync(embed);
+            }
+        }
     }
 }

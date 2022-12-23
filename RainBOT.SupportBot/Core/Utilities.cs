@@ -39,13 +39,5 @@ namespace RainBOT.SupportBot.Core
 
             return similarity * -1;
         }
-
-        public static string CreateCustomId(string componentName)
-        {
-            // Create a custom ID.
-            // Uses snowflakes to differentiate between uses.
-            // Uses component name to differentiate between different components created at the same time.
-            return $"{componentName}-{DateTimeOffset.Now.ToUnixTimeSeconds()}";
-        }
     }
 }

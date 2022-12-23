@@ -21,7 +21,8 @@
 // SOFTWARE.
 
 using Newtonsoft.Json;
-using RainBOT.SupportBot.Core.Entities.Services;
+using RainBOT.SupportBot.Core;
+using RainBOT.SupportBot.Core.Services;
 
 namespace RainBOT.SupportBot
 {
@@ -33,15 +34,15 @@ namespace RainBOT.SupportBot
             if (!File.Exists("config.json"))
             {
                 File.Create("config.json").Close();
-                File.WriteAllText("config.json", JsonConvert.SerializeObject(new Config(null), Formatting.Indented));
+                File.WriteAllText("config.json", JsonConvert.SerializeObject(new Configuration(), Formatting.Indented));
             }
             if (!File.Exists("data.json"))
             {
                 File.Create("data.json").Close();
-                File.WriteAllText("data.json", JsonConvert.SerializeObject(new Data(null), Formatting.Indented));
+                File.WriteAllText("data.json", JsonConvert.SerializeObject(new Database(null), Formatting.Indented));
             }
 
-            new RbSupportClient().Initialize();
+            new RbSupportClient().InitializeAsync().GetAwaiter().GetResult();
         }
     }
 }

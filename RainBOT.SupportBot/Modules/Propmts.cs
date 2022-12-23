@@ -25,17 +25,15 @@ using DSharpPlus;
 using DSharpPlus.Entities;
 using DSharpPlus.SlashCommands;
 using RainBOT.SupportBot.Core.AutocompleteProviders;
-using RainBOT.SupportBot.Core.Entities.Models;
-using RainBOT.SupportBot.Core.Entities.Services;
+using RainBOT.SupportBot.Core.Services;
+using RainBOT.SupportBot.Core.Services.Models;
 
 namespace RainBOT.SupportBot.Modules
 {
     [SlashCommandGroup("prompt", "A prompt is a reusable text snippet for common questions.")]
     public class Propmts : ApplicationCommandModule
     {
-        public Config Config { private get; set; }
-
-        public Data Data { private get; set; }
+        public Database Data { private get; set; }
 
         [SlashCommand("create", "Create a new prompt.")]
         public async Task PromptCreateAsync(InteractionContext ctx)
@@ -43,7 +41,7 @@ namespace RainBOT.SupportBot.Modules
             // Build modal.
             var promptCreateModal = new DiscordInteractionResponseBuilder()
                 .WithTitle("Create the prompt")
-                .WithCustomId(Core.Utilities.CreateCustomId("promptCreateModal"))
+                .WithCustomId($"promptCreateModal-{DateTimeOffset.Now.ToUnixTimeSeconds()}")
                 .AddComponents(new TextInputComponent(label: "Tags (Comma-separated)", customId: "tags", placeholder: "example, tag-example, tags-example", style: TextInputStyle.Short, min_length: 5, max_length: 50))
                 .AddComponents(new TextInputComponent(label: "Prompt", customId: "prompt", style: TextInputStyle.Paragraph, min_length: 5, max_length: 1500));
 
@@ -97,7 +95,7 @@ namespace RainBOT.SupportBot.Modules
                     // Build modal.
                     var promptEditModal = new DiscordInteractionResponseBuilder()
                         .WithTitle("Edit the prompt")
-                        .WithCustomId(Core.Utilities.CreateCustomId("promptEditModal"))
+                        .WithCustomId($"promptEditModal-{DateTimeOffset.Now.ToUnixTimeSeconds()}")
                         .AddComponents(new TextInputComponent(label: "Prompt", customId: "prompt", value: Data.Prompts.Find(x => x.Tags.Contains(query)).Prompt, style: TextInputStyle.Paragraph, min_length: 5, max_length: 1500));
 
                     await ctx.CreateResponseAsync(InteractionResponseType.Modal, promptEditModal);

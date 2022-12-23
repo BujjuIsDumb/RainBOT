@@ -20,32 +20,38 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-using DSharpPlus;
-using DSharpPlus.Entities;
-using DSharpPlus.EventArgs;
-using DSharpPlus.SlashCommands;
-using DSharpPlus.SlashCommands.EventArgs;
+using Newtonsoft.Json;
+using RainBOT.SupportBot.Core.Services.Models;
 
-namespace RainBOT.SupportBot.Core
+namespace RainBOT.SupportBot.Core.Services
 {
-    public class Events
+    public class Database : IDisposable
     {
-        public static async Task SlashCommandErrored(SlashCommandsExtension sender, SlashCommandErrorEventArgs args)
+        public List<PromptData> Prompts = new();
+
+        public Database(string fileName) => FileName = fileName;
+
+        [JsonIgnore]
+        public string FileName { get; set; }
+
+        public Database Initialize()
         {
-            await args.Context.CreateResponseAsync($"❌ An unexpected error has occurred.\n\n```{args.Exception.Message}```", true);
+            // Load the database.
+            var loaded = JsonConvert.DeserializeObject<Database>(File.ReadAllText(FileName));
+
+            Prompts = loaded.Prompts;
+
+            return this;
         }
 
-        public static async Task MessageCreated(DiscordClient sender, MessageCreateEventArgs args)
+        public void Update()
         {
-            if (args.MentionedUsers.Contains(sender.CurrentUser))
-            {
-                var embed = new DiscordEmbedBuilder()
-                    .WithTitle("🌈 RainBOT Support")
-                    .WithDescription("This bot was designed for the RainBOT support server. It has commands that create responses with answers to common questions.")
-                    .WithColor(new DiscordColor(3092790));
+            File.WriteAllText(FileName, JsonConvert.SerializeObject(this, Formatting.Indented));
+        }
 
-                await args.Message.RespondAsync(embed);
-            }
+        public void Dispose()
+        {
+            Prompts.Clear();
         }
     }
 }
