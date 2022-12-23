@@ -46,12 +46,13 @@ namespace RainBOT.Core.Pagination
             if (pages.Count == 0)
                 throw new ArgumentException("You must provide at least one page to paginate.", nameof(pages));
 
+            #region Components
             DiscordButtonComponent previous = new DiscordButtonComponent(ButtonStyle.Danger, $"previous-{DateTimeOffset.Now.ToUnixTimeSeconds()}", "Previous");
+
             DiscordButtonComponent next = new DiscordButtonComponent(ButtonStyle.Success, $"next-{DateTimeOffset.Now.ToUnixTimeSeconds()}", "Next");
+            #endregion
 
-            await interaction.CreateResponseAsync(InteractionResponseType.ChannelMessageWithSource, pages.First().ToDiscordInteractionResponseBuilder(ephemeral).AddComponents(previous, next));
-
-            // Respond to button input.
+            #region Event Handlers
             client.ComponentInteractionCreated += async (sender, args) =>
             {
                 if (args.Id == previous.CustomId)
@@ -77,6 +78,9 @@ namespace RainBOT.Core.Pagination
                     await interaction.EditOriginalResponseAsync(pages[index].ToDiscordWebhookBuilder().AddComponents(previous, next));
                 }
             };
+            #endregion
+
+            await interaction.CreateResponseAsync(InteractionResponseType.ChannelMessageWithSource, pages.First().ToDiscordInteractionResponseBuilder(ephemeral).AddComponents(previous, next));
         }
     }
 }
