@@ -20,6 +20,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using DSharpPlus;
 using DSharpPlus.Entities;
@@ -63,7 +64,7 @@ namespace RainBOT.SupportBot.Modules
             {
                 if (args.Interaction.Data.CustomId == promptCreateModal.CustomId)
                 {
-                    string[] tags = args.Values["tags"].ToLower().Split(", ");
+                    string[] tags = args.Values["tags"].Replace(' ', '_').ToLower().Split(", ");
 
                     // Check for duplicate tags.
                     foreach (string tag in tags)
@@ -104,7 +105,6 @@ namespace RainBOT.SupportBot.Modules
             [Autocomplete(typeof(TagAutocompleteProvider))]
             [Option("query", "The tag to search for.", true)] string query)
         {
-
             if (Data.Prompts.Exists(x => x.Tags.Contains(query)))
             {
                 if (Data.Prompts.Find(x => x.Tags.Contains(query)).CreatorUserId == ctx.User.Id)
@@ -225,6 +225,62 @@ namespace RainBOT.SupportBot.Modules
             [Autocomplete(typeof(TagAutocompleteProvider))]
             [Option("query", "The tag to search for.", true)] string query)
         {
+            #region Components
+            var helpfulButton = new DiscordButtonComponent(ButtonStyle.Success, $"helpfulButton-{DateTimeOffset.Now.ToUnixTimeSeconds()}", "Helpful", false, new DiscordComponentEmoji(DiscordEmoji.FromUnicode("👍")));
+
+            var unhelpfulButton = new DiscordButtonComponent(ButtonStyle.Danger, $"unhelpfulButton-{DateTimeOffset.Now.ToUnixTimeSeconds()}", "Not helpful", false, new DiscordComponentEmoji(DiscordEmoji.FromUnicode("👎")));
+            #endregion
+
+            #region Event Handlers
+            ctx.Client.ComponentInteractionCreated += async (sender, args) =>
+            {
+                if (args.Id == helpfulButton.CustomId)
+                {
+                    if (!Data.Prompts.Find(x => x.Tags.Contains(query)).Voters.Contains(args.User.Id))
+                    {
+                        Data.Prompts.Find(x => x.Tags.Contains(query)).Votes++;
+
+                        var voters = Data.Prompts.Find(x => x.Tags.Contains(query)).Voters.Append(ctx.User.Id).ToArray();
+                        Data.Prompts.Find(x => x.Tags.Contains(query)).Voters = voters;
+
+                        Data.Update();
+
+                        await args.Interaction.CreateResponseAsync(InteractionResponseType.ChannelMessageWithSource, new DiscordInteractionResponseBuilder()
+                            .WithContent("✅ Thank you for your feedback!")
+                            .AsEphemeral());
+                    }
+                    else
+                    {
+                        await args.Interaction.CreateResponseAsync(InteractionResponseType.ChannelMessageWithSource, new DiscordInteractionResponseBuilder()
+                            .WithContent("⚠ You have already voted on this prompt.")
+                            .AsEphemeral());
+                    }
+                }
+                else if (args.Id == unhelpfulButton.CustomId)
+                {
+                    if (!Data.Prompts.Find(x => x.Tags.Contains(query)).Voters.Contains(args.User.Id))
+                    {
+                        Data.Prompts.Find(x => x.Tags.Contains(query)).Votes--;
+
+                        var voters = Data.Prompts.Find(x => x.Tags.Contains(query)).Voters.Append(ctx.User.Id).ToArray();
+                        Data.Prompts.Find(x => x.Tags.Contains(query)).Voters = voters;
+
+                        Data.Update();
+
+                        await args.Interaction.CreateResponseAsync(InteractionResponseType.ChannelMessageWithSource, new DiscordInteractionResponseBuilder()
+                            .WithContent("✅ Thank you for your feedback!")
+                            .AsEphemeral());
+                    }
+                    else
+                    {
+                        await args.Interaction.CreateResponseAsync(InteractionResponseType.ChannelMessageWithSource, new DiscordInteractionResponseBuilder()
+                            .WithContent("⚠ You have already voted on this prompt.")
+                            .AsEphemeral());
+                    }
+                }
+            };
+            #endregion
+
             foreach (var prompt in Data.Prompts)
             {
                 if (prompt.Tags.Contains(query))
@@ -237,7 +293,11 @@ namespace RainBOT.SupportBot.Modules
                         .WithDescription(prompt.Prompt)
                         .WithColor(new DiscordColor(3092790));
 
-                    await ctx.CreateResponseAsync(embed, true);
+                    await ctx.CreateResponseAsync(new DiscordInteractionResponseBuilder()
+                        .AddEmbed(embed)
+                        .AddComponents(helpfulButton, unhelpfulButton)
+                        .AsEphemeral());
+                    
                     return;
                 }
             }
@@ -276,6 +336,62 @@ namespace RainBOT.SupportBot.Modules
             [Autocomplete(typeof(TagAutocompleteProvider))]
             [Option("query", "The tag to search for.", true)] string query)
         {
+            #region Components
+            var helpfulButton = new DiscordButtonComponent(ButtonStyle.Success, $"helpfulButton-{DateTimeOffset.Now.ToUnixTimeSeconds()}", "Helpful", false, new DiscordComponentEmoji(DiscordEmoji.FromUnicode("👍")));
+
+            var unhelpfulButton = new DiscordButtonComponent(ButtonStyle.Danger, $"unhelpfulButton-{DateTimeOffset.Now.ToUnixTimeSeconds()}", "Not helpful", false, new DiscordComponentEmoji(DiscordEmoji.FromUnicode("👎")));
+            #endregion
+
+            #region Event Handlers
+            ctx.Client.ComponentInteractionCreated += async (sender, args) =>
+            {
+                if (args.Id == helpfulButton.CustomId)
+                {
+                    if (!Data.Prompts.Find(x => x.Tags.Contains(query)).Voters.Contains(args.User.Id))
+                    {
+                        Data.Prompts.Find(x => x.Tags.Contains(query)).Votes++;
+
+                        var voters = Data.Prompts.Find(x => x.Tags.Contains(query)).Voters.Append(ctx.User.Id).ToArray();
+                        Data.Prompts.Find(x => x.Tags.Contains(query)).Voters = voters;
+
+                        Data.Update();
+
+                        await args.Interaction.CreateResponseAsync(InteractionResponseType.ChannelMessageWithSource, new DiscordInteractionResponseBuilder()
+                            .WithContent("✅ Thank you for your feedback!")
+                            .AsEphemeral());
+                    }
+                    else
+                    {
+                        await args.Interaction.CreateResponseAsync(InteractionResponseType.ChannelMessageWithSource, new DiscordInteractionResponseBuilder()
+                            .WithContent("⚠ You have already voted on this prompt.")
+                            .AsEphemeral());
+                    }
+                }
+                else if (args.Id == unhelpfulButton.CustomId)
+                {
+                    if (!Data.Prompts.Find(x => x.Tags.Contains(query)).Voters.Contains(args.User.Id))
+                    {
+                        Data.Prompts.Find(x => x.Tags.Contains(query)).Votes--;
+
+                        var voters = Data.Prompts.Find(x => x.Tags.Contains(query)).Voters.Append(ctx.User.Id).ToArray();
+                        Data.Prompts.Find(x => x.Tags.Contains(query)).Voters = voters;
+
+                        Data.Update();
+
+                        await args.Interaction.CreateResponseAsync(InteractionResponseType.ChannelMessageWithSource, new DiscordInteractionResponseBuilder()
+                            .WithContent("✅ Thank you for your feedback!")
+                            .AsEphemeral());
+                    }
+                    else
+                    {
+                        await args.Interaction.CreateResponseAsync(InteractionResponseType.ChannelMessageWithSource, new DiscordInteractionResponseBuilder()
+                            .WithContent("⚠ You have already voted on this prompt.")
+                            .AsEphemeral());
+                    }
+                }
+            };
+            #endregion
+
             foreach (var prompt in Data.Prompts)
             {
                 if (prompt.Tags.Contains(query))
@@ -288,7 +404,10 @@ namespace RainBOT.SupportBot.Modules
                         .WithDescription(prompt.Prompt)
                         .WithColor(new DiscordColor(3092790));
 
-                    await ctx.CreateResponseAsync(embed);
+                    await ctx.CreateResponseAsync(new DiscordInteractionResponseBuilder()
+                        .AddEmbed(embed)
+                        .AddComponents(helpfulButton, unhelpfulButton));
+                    
                     return;
                 }
             }

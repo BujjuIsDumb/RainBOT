@@ -46,5 +46,17 @@ namespace RainBOT.SupportBot.Core.Services.Models
         /// </summary>
         [JsonProperty("creator_user_id")]
         public ulong CreatorUserId { get; set; } = 0;
+
+        /// <summary>
+        ///     Gets or sets the votes on this prompt.
+        /// </summary>
+        [JsonProperty("votes")]
+        public int Votes { get; set; } = 0;
+
+        /// <summary>
+        ///     Gets or sets the IDs of the users who voted.
+        /// </summary>
+        [JsonProperty("voters")]
+        public ulong[] Voters { get; set; } = Array.Empty<ulong>();
     }
 }
