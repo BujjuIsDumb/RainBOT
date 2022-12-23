@@ -30,6 +30,7 @@ using DSharpPlus.SlashCommands.EventArgs;
 using Microsoft.Extensions.DependencyInjection;
 using RainBOT.Core;
 using RainBOT.Core.Services;
+using RainBOT.Core.Services.Models;
 
 namespace RainBOT
 {
@@ -61,9 +62,11 @@ namespace RainBOT
             _client = new DiscordClient(new DiscordConfiguration()
             {
                 Token = _config.Token,
-                TokenType = TokenType.Bot
+                TokenType = TokenType.Bot,
+                Intents = DiscordIntents.AllUnprivileged
             });
             _client.MessageCreated += MessageCreated;
+            _client.GuildCreated += GuildCreated;
 
             // Create the slash command service.
             var slash = _client.UseSlashCommands(new SlashCommandsConfiguration()
@@ -98,6 +101,22 @@ namespace RainBOT
                     .WithColor(new DiscordColor(3092790));
 
                 await args.Message.RespondAsync(embed);
+            }
+        }
+
+        /// <summary>
+        ///     Handles the <see cref="DiscordClient.GuildCreated"/> event.
+        /// </summary>
+        /// <param name="sender">The sender.</param>
+        /// <param name="args">The args.</param>
+        /// <returns>A task that represents the asynchronous operation.</returns>
+        private void GuildCreated(DiscordClient sender, GuildCreateEventArgs args)
+        {
+            using var data = new Database("data.json").Initialize();
+            if (!data.Guilds.Exists(x => x.GuildId == args.Guild.Id))
+            {
+                data.Guilds.Add(new GuildData() { GuildId = args.Guild.Id });
+                data.Update();
             }
         }
 
