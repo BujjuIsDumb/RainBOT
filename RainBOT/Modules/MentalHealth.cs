@@ -185,7 +185,7 @@ namespace RainBOT.Modules
                             .WithColor(new DiscordColor(3092790));
 
                         foreach (var response in responseCache)
-                            embed.AddField($"Response from {response.creator.Username}", $"> {response.message}" + $"\n\nSent <t:{response.timestamp.ToUnixTimeSeconds()}:R>");
+                            embed.AddField($"Response from {response.creator.Username}", $"> {response.message}" + $"\n\nSent <t:{response.creationTimestamp.ToUnixTimeSeconds()}:R>");
 
                         await args.Interaction.CreateResponseAsync(InteractionResponseType.ChannelMessageWithSource, new DiscordInteractionResponseBuilder()
                             .AddEmbed(embed)
@@ -222,7 +222,7 @@ namespace RainBOT.Modules
         /// </summary>
         /// <param name="creator">The creator of the vent.</param>
         /// <param name="message">The message that was sent.</param>
-        /// <param name="timestamp">When the message was sent.</param>
-        private record VentResponse(DiscordUser creator, string message, DateTimeOffset timestamp);
+        /// <param name="creationTimestamp">When the response was created.</param>
+        private record VentResponse(DiscordUser creator, string message, DateTimeOffset creationTimestamp);
     }
 }

@@ -110,14 +110,17 @@ namespace RainBOT
         /// <param name="sender">The sender.</param>
         /// <param name="args">The args.</param>
         /// <returns>A task that represents the asynchronous operation.</returns>
-        private void GuildCreated(DiscordClient sender, GuildCreateEventArgs args)
+        private static Task GuildCreated(DiscordClient sender, GuildCreateEventArgs args)
         {
-            using var data = new Database("data.json").Initialize();
-            if (!data.Guilds.Exists(x => x.GuildId == args.Guild.Id))
+            return Task.Run(() =>
             {
-                data.Guilds.Add(new GuildData() { GuildId = args.Guild.Id });
-                data.Update();
-            }
+                using var data = new Database("data.json").Initialize();
+                if (!data.Guilds.Exists(x => x.GuildId == args.Guild.Id))
+                {
+                    data.Guilds.Add(new GuildData() { GuildId = args.Guild.Id });
+                    data.Update();
+                }
+            });
         }
 
         /// <summary>

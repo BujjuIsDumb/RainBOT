@@ -24,23 +24,44 @@ using Newtonsoft.Json;
 
 namespace RainBOT.Core.Services.Models
 {
+    /// <summary>
+    ///     Represents a guild.
+    /// </summary>
     public class GuildData
     {
+        /// <summary>
+        ///     Gets or sets the ID of the guild.
+        /// </summary>
         [JsonProperty("guild_id")]
         public ulong GuildId { get; set; } = 0;
 
+        /// <summary>
+        ///     Gets or sets the vent moderators of the guild.
+        /// </summary>
         [JsonProperty("vent_moderators")]
         public ulong[] VentModerators { get; set; } = Array.Empty<ulong>();
 
+        /// <summary>
+        ///     Gets or sets whether users can vent anonymously.
+        /// </summary>
         [JsonProperty("anonymous_venting")]
         public bool AnonymousVenting { get; set; } = true;
 
+        /// <summary>
+        ///     Gets or sets whether to delete verification requests.
+        /// </summary>
         [JsonProperty("delete_verification_requests")]
         public bool DeleteVerificationRequests { get; set; } = false;
 
+        /// <summary>
+        ///     Gets or sets whether to create a vetting thread.
+        /// </summary>
         [JsonProperty("create_vetting_thread")]
         public bool CreateVettingThread { get; set; } = true;
 
+        /// <summary>
+        ///     Gets or sets the verification form questions.
+        /// </summary>
         [JsonProperty("verification_form_questions")]
         public string[] VerificationFormQuestions { get; set; } = Array.Empty<string>();
     }

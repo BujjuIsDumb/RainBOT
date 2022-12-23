@@ -24,25 +24,49 @@ using Newtonsoft.Json;
 
 namespace RainBOT.Core.Services.Models
 {
+    /// <summary>
+    ///     Represents a user.
+    /// </summary>
     public class UserData
     {
+        /// <summary>
+        ///     Gets or sets the ID of the user.
+        /// </summary>
         [JsonProperty("user_id")]
         public ulong UserId { get; set; } = 0;
 
+        /// <summary>
+        ///     Gets or sets the fields in the user bio.
+        /// </summary>
         [JsonProperty("bio_fields")]
         public BioField[] BioFields { get; set; } = Array.Empty<BioField>();
 
+        /// <summary>
+        ///     Gets or sets the color of the user's bio.
+        /// </summary>
         [JsonProperty("bio_style")]
         public string BioStyle { get; set; } = "2F3136";
 
+        /// <summary>
+        ///     Gets or sets whether the user has opted out of vent responses.
+        /// </summary>
         [JsonProperty("allow_vent_responses")]
         public bool AllowVentResponses { get; set; } = true;
 
+        /// <summary>
+        ///     Represents a field in a user's bio.
+        /// </summary>
         public class BioField
         {
+            /// <summary>
+            ///     Gets or sets the name of the field.
+            /// </summary>
             [JsonProperty("name")]
             public string Name { get; set; } = string.Empty;
 
+            /// <summary>
+            ///     Gets or sets the value of the field.
+            /// </summary>
             [JsonProperty("value")]
             public string Value { get; set; } = string.Empty;
         }

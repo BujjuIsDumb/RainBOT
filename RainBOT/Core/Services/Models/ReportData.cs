@@ -24,20 +24,38 @@ using Newtonsoft.Json;
 
 namespace RainBOT.Core.Services.Models
 {
+    /// <summary>
+    ///     Represents a report.
+    /// </summary>
     public class ReportData
     {
+        /// <summary>
+        ///     Gets or sets the ID of the user who was reported.
+        /// </summary>
         [JsonProperty("user_id")]
         public ulong UserId { get; set; } = 0;
 
+        /// <summary>
+        ///     Gets or sets the ID of the user who reported the user.
+        /// </summary>
         [JsonProperty("creator_user_id")]
         public ulong CreatorUserId { get; set; } = 0;
 
+        /// <summary>
+        ///     Gets or sets the subject of the report.
+        /// </summary>
         [JsonProperty("subject")]
         public string Subject { get; set; } = string.Empty;
 
+        /// <summary>
+        /// Gets or sets the body of the report.
+        /// </summary>
         [JsonProperty("body")]
         public string Body { get; set; } = string.Empty;
 
+        /// <summary>
+        /// Gets or sets the creation timestamp of the report.
+        /// </summary>
         [JsonProperty("creation_timestamp")]
         public DateTimeOffset CreationTimestamp { get; set; } = DateTimeOffset.UnixEpoch;
     }
