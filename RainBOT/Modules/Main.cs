@@ -20,6 +20,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
+using DSharpPlus.Entities;
 using DSharpPlus.SlashCommands;
 using RainBOT.Core.Services;
 
@@ -43,7 +44,11 @@ namespace RainBOT.Modules
         [SlashCommand("info", "Get information about me.")]
         public async Task InfoAsync(InteractionContext ctx)
         {
-
+            await ctx.CreateResponseAsync(new DiscordEmbedBuilder()
+                .WithTitle("RainBOT")
+                .WithDescription("A bot designed to help start, manage, and moderate 2SLGBTQIA+ safespace servers.")
+                .WithColor(new DiscordColor(3092790))
+                .WithThumbnail("https://i.imgur.com/IHdrwiJ.png"), true);
         }
 
         /// <summary>
@@ -54,7 +59,10 @@ namespace RainBOT.Modules
         [SlashCommand("source", "View my source code.")]
         public async Task SourceAsync(InteractionContext ctx)
         {
-
+            await ctx.CreateResponseAsync(new DiscordInteractionResponseBuilder()
+                .WithContent("Click the button to view my source code.")
+                .AddComponents(new DiscordLinkButtonComponent("https://github.com/BujjuIsDumb/RainBOT", "Click me"))
+                .AsEphemeral());
         }
 
         /// <summary>
@@ -65,7 +73,10 @@ namespace RainBOT.Modules
         [SlashCommand("support", "Join the support server.")]
         public async Task SupportAsync(InteractionContext ctx)
         {
-
+            await ctx.CreateResponseAsync(new DiscordInteractionResponseBuilder()
+                .WithContent("Click the button to join the support server.")
+                .AddComponents(new DiscordLinkButtonComponent("https://discord.gg/tKsqy5ZWFZ", "Click me"))
+                .AsEphemeral());
         }
 
         /// <summary>
@@ -76,7 +87,10 @@ namespace RainBOT.Modules
         [SlashCommand("invite", "Invite me to your server.")]
         public async Task InviteAsync(InteractionContext ctx)
         {
-
+            await ctx.CreateResponseAsync(new DiscordInteractionResponseBuilder()
+                .WithContent("Click the button to invite me to your server.")
+                .AddComponents(new DiscordLinkButtonComponent("https://discord.com/api/oauth2/authorize?client_id=1004158946740809839&permissions=86167809030&scope=bot%20applications.commands", "Click me"))
+                .AsEphemeral());
         }
 
         /// <summary>
@@ -87,7 +101,10 @@ namespace RainBOT.Modules
         [SlashCommand("wiki", "Go to my wiki.")]
         public async Task WikiAsync(InteractionContext ctx)
         {
-
+            await ctx.CreateResponseAsync(new DiscordInteractionResponseBuilder()
+                .WithContent("Click the button to go to my wiki.")
+                .AddComponents(new DiscordLinkButtonComponent("https://github.com/BujjuIsDumb/RainBOT/wiki", "Click me"))
+                .AsEphemeral());
         }
     }
 }
