@@ -24,14 +24,26 @@ using Newtonsoft.Json;
 
 namespace RainBOT.SupportBot.Core.Services.Models
 {
+    /// <summary>
+    ///     Represents a prompt.
+    /// </summary>
     public class PromptData
     {
+        /// <summary>
+        ///     Gets or sets the prompt tags.
+        /// </summary>
         [JsonProperty("tags")]
-        public string[] Tags { get; set; } = new string[0];
+        public string[] Tags { get; set; } = Array.Empty<string>();
 
+        /// <summary>
+        ///     Gets or sets the prompt text.
+        /// </summary>
         [JsonProperty("prompt")]
         public string Prompt { get; set; } = string.Empty;
 
+        /// <summary>
+        ///     Gets or sets the prompt author.
+        /// </summary>
         [JsonProperty("creator_user_id")]
         public ulong CreatorUserId { get; set; } = 0;
     }

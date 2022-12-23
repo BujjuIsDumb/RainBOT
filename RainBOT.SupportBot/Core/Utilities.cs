@@ -22,8 +22,17 @@
 
 namespace RainBOT.SupportBot.Core
 {
+    /// <summary>
+    ///     Utilities for the bot.
+    /// </summary>
     public class Utilities
     {
+        /// <summary>
+        ///     Compares two strings and returns a value indicating how similar they are.
+        /// </summary>
+        /// <param name="string1">The first string.</param>
+        /// <param name="string2">The second string.</param>
+        /// <returns>A value indicating how similar the specified strings are</returns>
         public static int CompareStrings(string string1, string string2)
         {
             int similarity = 0;

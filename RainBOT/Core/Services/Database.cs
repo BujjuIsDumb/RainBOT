@@ -27,23 +27,46 @@ namespace RainBOT.Core.Services
 {
     public class Database : IDisposable
     {
+        /// <summary>
+        ///     Initializes a new instance of the <see cref="Database"/> class.
+        /// </summary>
+        /// <param name="fileName">The database file.</param>
+        public Database(string fileName) => FileName = fileName;
+
+        /// <summary>
+        ///     Gets or sets the list of users.
+        /// </summary>
         [JsonProperty("users")]
         public List<UserData> Users { get; set; } = new();
 
+        /// <summary>
+        ///     Gets or sets the list of guilds.
+        /// </summary>
         [JsonProperty("guilds")]
         public List<GuildData> Guilds { get; set; } = new();
 
+        /// <summary>
+        ///     Gets or sets the list of reports.
+        /// </summary>
         [JsonProperty("reports")]
         public List<ReportData> Reports { get; set; } = new();
 
+        /// <summary>
+        ///     Gets or sets the list of bans.
+        /// </summary>
         [JsonProperty("bans")]
         public List<BanData> Bans { get; set; } = new();
 
-        public Database(string fileName) => FileName = fileName;
-
+        /// <summary>
+        ///     Gets or sets the database file.
+        /// </summary>
         [JsonIgnore]
         public string FileName { get; set; }
 
+        /// <summary>
+        ///     Initializes the database.
+        /// </summary>
+        /// <returns>The initialized database.</returns>
         public Database Initialize()
         {
             // Load the database.
@@ -57,10 +80,16 @@ namespace RainBOT.Core.Services
             return this;
         }
 
+        /// <summary>
+        ///     Updates the database.
+        /// </summary>
         public void Update()
             => File.WriteAllText(FileName, JsonConvert.SerializeObject(this, Formatting.Indented));
 
-        void IDisposable.Dispose()
+        /// <summary>
+        ///     Disposes of the database.
+        /// </summary>
+        public void Dispose()
         {
             GC.SuppressFinalize(this);
             Users.Clear();

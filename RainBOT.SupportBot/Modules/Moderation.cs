@@ -28,11 +28,23 @@ using RainBOT.SupportBot.Core.Services;
 
 namespace RainBOT.SupportBot.Modules
 {
+    /// <summary>
+    ///     The moderation module.
+    /// </summary>
     [GuildOnly]
     public class Moderation : ApplicationCommandModule
     {
+        /// <summary>
+        ///     Sets the database service.
+        /// </summary>
         public Database Data { private get; set; }
 
+        /// <summary>
+        ///     The /purge command.
+        /// </summary>
+        /// <param name="ctx">Context for the interaction.</param>
+        /// <param name="amount">The amount of messages to delete.</param>
+        /// <returns>A task that represents the asynchronous operation.</returns>
         [SlashCommand("purge", "Delete multiple messages at once.")]
         [SlashCooldown(1, 30, SlashCooldownBucketType.Guild)]
         [SlashCommandPermissions(Permissions.ManageMessages)]

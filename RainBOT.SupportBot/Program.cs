@@ -26,21 +26,23 @@ using RainBOT.SupportBot.Core.Services;
 
 namespace RainBOT.SupportBot
 {
+    /// <summary>
+    ///     The startup object for the application.
+    /// </summary>
     public class Program
     {
+        /// <summary>
+        ///     The entry point for the application.
+        /// </summary>
         public static void Main()
         {
-            // Create config and database files if they don't already exist.
+            // Create the configuration file if it doesn't exist.
             if (!File.Exists("config.json"))
-            {
-                File.Create("config.json").Close();
                 File.WriteAllText("config.json", JsonConvert.SerializeObject(new Configuration(), Formatting.Indented));
-            }
+
+            // Create the database file if it doesn't exist.
             if (!File.Exists("data.json"))
-            {
-                File.Create("data.json").Close();
                 File.WriteAllText("data.json", JsonConvert.SerializeObject(new Database(null), Formatting.Indented));
-            }
 
             new RbSupportClient().InitializeAsync().GetAwaiter().GetResult();
         }

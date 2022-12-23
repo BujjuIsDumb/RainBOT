@@ -30,11 +30,22 @@ using RainBOT.SupportBot.Core.Services.Models;
 
 namespace RainBOT.SupportBot.Modules
 {
+    /// <summary>
+    ///     The prompts module.
+    /// </summary>
     [SlashCommandGroup("prompt", "A prompt is a reusable text snippet for common questions.")]
     public class Propmts : ApplicationCommandModule
     {
+        /// <summary>
+        ///     Sets the database service.
+        /// </summary>
         public Database Data { private get; set; }
 
+        /// <summary>
+        ///     The /prompt create command.
+        /// </summary>
+        /// <param name="ctx">Context for the interaction</param>
+        /// <returns>A task that represents the asynchronous operation.</returns>
         [SlashCommand("create", "Create a new prompt.")]
         public async Task PromptCreateAsync(InteractionContext ctx)
         {
@@ -82,6 +93,12 @@ namespace RainBOT.SupportBot.Modules
             };
         }
 
+        /// <summary>
+        ///     The /prompt edit command.
+        /// </summary>
+        /// <param name="ctx">Context for the interaction</param>
+        /// <param name="query">The query option.</param>
+        /// <returns>A task that represents the asynchronous operation.</returns>
         [SlashCommand("edit", "Edit a prompt.")]
         public async Task PromptEditAsync(InteractionContext ctx,
             [Autocomplete(typeof(TagAutocompleteProvider))]
@@ -145,6 +162,12 @@ namespace RainBOT.SupportBot.Modules
             }
         }
 
+        /// <summary>
+        ///     The /prompt delete command.
+        /// </summary>
+        /// <param name="ctx">Context for the interaction</param>
+        /// <param name="query">The query option.</param>
+        /// <returns>A task that represents the asynchronous operation.</returns>
         [SlashCommand("delete", "Delete a prompt.")]
         public async Task PromptDeleteAsync(InteractionContext ctx,
             [Autocomplete(typeof(TagAutocompleteProvider))]
@@ -191,6 +214,12 @@ namespace RainBOT.SupportBot.Modules
             }
         }
 
+        /// <summary>
+        ///     The /prompt get command.
+        /// </summary>
+        /// <param name="ctx">Context for the interaction</param>
+        /// <param name="query">The query option.</param>
+        /// <returns>A task that represents the asynchronous operation.</returns>
         [SlashCommand("get", "Search for a prompt.")]
         public async Task PromptGetAsync(InteractionContext ctx,
             [Autocomplete(typeof(TagAutocompleteProvider))]
@@ -236,6 +265,12 @@ namespace RainBOT.SupportBot.Modules
             await ctx.CreateResponseAsync($"⚠ `{query}` doesn't exist. {(string.IsNullOrEmpty(builder.ToString()) ? string.Empty : $"Did you mean:\n\n{builder}")}", true);
         }
 
+        /// <summary>
+        ///     The /prompt share command.
+        /// </summary>
+        /// <param name="ctx">Context for the interaction</param>
+        /// <param name="query">The query option.</param>
+        /// <returns>A task that represents the asynchronous operation.</returns>
         [SlashCommand("share", "Share a prompt.")]
         public async Task PromptShareAsync(InteractionContext ctx,
             [Autocomplete(typeof(TagAutocompleteProvider))]

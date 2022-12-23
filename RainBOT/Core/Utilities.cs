@@ -28,7 +28,7 @@ namespace RainBOT.Core
     // This file can be deleted once my PR (#1420) is merged into DSharpPlus.
 
     /// <summary>
-    ///     Utilities used for the bot.
+    ///     Utilities for the bot.
     /// </summary>
     public class Utilities
     {

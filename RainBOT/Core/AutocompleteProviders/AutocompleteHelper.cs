@@ -39,6 +39,9 @@ namespace RainBOT.Core.AutocompleteProviders
 
             foreach (char c in string1)
             {
+                // Increase by 1 if the second string contains the character.
+                // Increase by 2 if the second string contains the character in the same place.
+
                 if (string2.Contains(c)) similarity++;
                 if (string2.IndexOf(c) == string1.IndexOf(c)) similarity++;
             }

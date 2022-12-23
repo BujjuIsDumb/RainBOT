@@ -27,13 +27,27 @@ namespace RainBOT.SupportBot.Core.Services
 {
     public class Database : IDisposable
     {
-        public List<PromptData> Prompts = new();
-
+        /// <summary>
+        ///     Initializes a new instance of the <see cref="Database"/> class.
+        /// </summary>
+        /// <param name="fileName">The database file.</param>
         public Database(string fileName) => FileName = fileName;
 
+        /// <summary>
+        ///     Gets or sets the list of prompts.
+        /// </summary>
+        public List<PromptData> Prompts { get; set; } = new();
+
+        /// <summary>
+        ///     Gets or sets the database file.
+        /// </summary>
         [JsonIgnore]
         public string FileName { get; set; }
 
+        /// <summary>
+        ///     Initializes the database.
+        /// </summary>
+        /// <returns>The initialized database.</returns>
         public Database Initialize()
         {
             // Load the database.
@@ -44,13 +58,18 @@ namespace RainBOT.SupportBot.Core.Services
             return this;
         }
 
+        /// <summary>
+        ///     Updates the database.
+        /// </summary>
         public void Update()
-        {
-            File.WriteAllText(FileName, JsonConvert.SerializeObject(this, Formatting.Indented));
-        }
+            => File.WriteAllText(FileName, JsonConvert.SerializeObject(this, Formatting.Indented));
 
+        /// <summary>
+        ///     Disposes of the database.
+        /// </summary>
         public void Dispose()
         {
+            GC.SuppressFinalize(this);
             Prompts.Clear();
         }
     }

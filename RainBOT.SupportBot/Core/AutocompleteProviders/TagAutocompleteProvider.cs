@@ -26,6 +26,9 @@ using RainBOT.SupportBot.Core.Services;
 
 namespace RainBOT.SupportBot.Core.AutocompleteProviders
 {
+    /// <summary>
+    ///     An autocomplete provider for tags.
+    /// </summary>
     public class TagAutocompleteProvider : IAutocompleteProvider
     {
         public Task<IEnumerable<DiscordAutoCompleteChoice>> Provider(AutocompleteContext ctx)
@@ -37,9 +40,7 @@ namespace RainBOT.SupportBot.Core.AutocompleteProviders
             foreach (var prompt in data.Prompts)
             {
                 foreach (string tag in prompt.Tags)
-                {
                     list.Add(new DiscordAutoCompleteChoice(tag, tag));
-                }
             }
 
             return Task.FromResult(list.OrderBy(x => Utilities.CompareStrings((string)ctx.OptionValue, x.Name)).Take(10));
