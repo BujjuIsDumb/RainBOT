@@ -22,8 +22,14 @@
 
 namespace RainBOT.Core
 {
+    /// <summary>
+    ///     The definitions for tonetags and identities.
+    /// </summary>
     public class Definitions
     {
+        /// <summary>
+        ///     The tonetag definitions for the bot.
+        /// </summary>
         public static Dictionary<string, string> Tonetags { get; }
             = new Dictionary<string, string>()
             {
@@ -89,6 +95,9 @@ namespace RainBOT.Core
                 ["/neu"] = "Neutral connotation",
             };
 
+        /// <summary>
+        ///     The identity definitions for the bot.
+        /// </summary>
         public static Dictionary<string, string> Identities { get; }
             = new Dictionary<string, string>()
             {

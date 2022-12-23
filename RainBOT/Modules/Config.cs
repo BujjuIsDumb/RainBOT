@@ -26,13 +26,25 @@ using RainBOT.Core.Services;
 
 namespace RainBOT.Modules
 {
+    /// <summary>
+    ///     The user configuration module.
+    /// </summary>
     [SlashCommandGroup("user", "Configure user-side settings.")]
     public class User : ApplicationCommandModule
     {
+        /// <summary>
+        ///     The database service.
+        /// </summary>
         public Database Data { private get; set; }
 
+        /// <summary>
+        ///     The /user config command.
+        /// </summary>
+        /// <param name="ctx">Context for the interaction.</param>
+        /// <param name="setting">The setting option.</param>
+        /// <returns>A task that represents the asynchronous operation.</returns>
         [SlashCommand("configure", "Configure user-side settings.")]
-        public async Task UserSettingsAsync(InteractionContext ctx,
+        public async Task UserConfigureAsync(InteractionContext ctx,
             [Choice("Allow Vent Responses", 0)]
             [Choice("Bio Style", 1)]
             [Option("setting", "The setting to manage.")] long setting)
@@ -41,15 +53,27 @@ namespace RainBOT.Modules
         
     }
 
+    /// <summary>
+    ///     The server configuration module.
+    /// </summary>
     [SlashCommandGroup("server", "Configure server-side settings.")]
     [SlashCommandPermissions(Permissions.ManageGuild)]
     [GuildOnly]
     public class Server : ApplicationCommandModule
     {
+        /// <summary>
+        ///     The database service.
+        /// </summary>
         public Database Data { private get; set; }
 
+        /// <summary>
+        ///     The /server config command.
+        /// </summary>
+        /// <param name="ctx">Context for the interaction.</param>
+        /// <param name="setting">The setting option.</param>
+        /// <returns>A task that represents the asynchronous operation.</returns>
         [SlashCommand("config", "Configure server-side settings.")]
-        public async Task ServerSettingsAsync(InteractionContext ctx,
+        public async Task ServerConfigureAsync(InteractionContext ctx,
             [Choice("Vent Moderators", 0)]
             [Choice("Anonymous Venting", 1)]
             [Choice("Delete Verification Requests", 2)]

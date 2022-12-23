@@ -28,11 +28,24 @@ using RainBOT.Core.Services;
 
 namespace RainBOT.Modules
 {
+    /// <summary>
+    ///     The bio module.
+    /// </summary>
     [SlashCommandGroup("bio", "Create a bio with information about yourself.")]
     public class Bio : ApplicationCommandModule
     {
+        /// <summary>
+        ///     The database service.
+        /// </summary>
         public Database Data { private get; set; }
 
+        /// <summary>
+        ///     The /bio create command.
+        /// </summary>
+        /// <param name="ctx">Context for the interaction.</param>
+        /// <param name="field">The field option.</param>
+        /// <param name="value">The value option.</param>
+        /// <returns>A task that represents the asynchronous operation.</returns>
         [SlashCommand("create", "Create a bio field.")]
         public async Task BioCreateAsync(InteractionContext ctx,
             [Autocomplete(typeof(TemplateBioFieldsAutocompleteProvider))]
@@ -44,6 +57,13 @@ namespace RainBOT.Modules
 
         }
 
+        /// <summary>
+        ///     The /bio edit command.
+        /// </summary>
+        /// <param name="ctx">Context for the interaction.</param>
+        /// <param name="field">The field option.</param>
+        /// <param name="value">The value option.</param>
+        /// <returns>A task that represents the asynchronous operation.</returns>
         [SlashCommand("edit", "Edit a bio field.")]
         public async Task BioEditAsync(InteractionContext ctx,
             [Autocomplete(typeof(ExistingBioFieldsAutocompleteProvider))]
@@ -54,6 +74,12 @@ namespace RainBOT.Modules
 
         }
 
+        /// <summary>
+        ///     The /bio delete command.
+        /// </summary>
+        /// <param name="ctx">Context for the interaction.</param>
+        /// <param name="field">The field option.</param>
+        /// <returns>A task that represents the asynchronous operation.</returns>
         [SlashCommand("delete", "Delete a bio field.")]
         public async Task BioClearAsync(InteractionContext ctx,
             [Autocomplete(typeof(ExistingBioFieldsAutocompleteProvider))]
@@ -62,6 +88,12 @@ namespace RainBOT.Modules
 
         }
 
+        /// <summary>
+        ///     The /bio get command.
+        /// </summary>
+        /// <param name="ctx">Context for the interaction.</param>
+        /// <param name="user">The user option.</param>
+        /// <returns>A task that represents the asynchronous operation.</returns>
         [SlashCommand("get", "View a user's bio.")]
         public async Task BioGetAsync(InteractionContext ctx,
             [Option("user", "The user to get the bio of.")] DiscordUser user)
@@ -69,6 +101,11 @@ namespace RainBOT.Modules
 
         }
 
+        /// <summary>
+        ///     The View Bio context menu.
+        /// </summary>
+        /// <param name="ctx">Context for the interaction.</param>
+        /// <returns>A task that represents the asynchronous operation.</returns>
         [ContextMenu(ApplicationCommandType.UserContextMenu, "View Bio")]
         public async Task ViewBioAsync(ContextMenuContext ctx)
         {

@@ -25,18 +25,31 @@ using DSharpPlus.SlashCommands;
 
 namespace RainBOT.Core
 {
+    // This file can be deleted once my PR (#1420) is merged into DSharpPlus.
+
+    /// <summary>
+    ///     Utilities used for the bot.
+    /// </summary>
     public class Utilities
     {
+        /// <summary>
+        ///     Gets the command mention string.
+        /// </summary>
+        /// <param name="client">The client to fetch the mention from.</param>
+        /// <param name="name">The command name.</param>
+        /// <returns>The mention string for the specified command.</returns>
         public static string GetCommandMention(DiscordClient client, string name)
         {
             foreach (var registeredCommand in client.GetSlashCommands().RegisteredCommands)
             {
+                // Find the command with the specified name.
                 var command = registeredCommand.Value.ToList().Find(x => x.Name == name.Split(' ')[0]);
 
                 if (command is not null)
                     return $"</{name}:{command.Id}>";
             }
 
+            // Return without ID if the command with the specified name is not found.
             return $"</{name}:0>";
         }
     }

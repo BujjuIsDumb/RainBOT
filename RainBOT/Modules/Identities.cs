@@ -26,11 +26,23 @@ using RainBOT.Core.Services;
 
 namespace RainBOT.Modules
 {
+    /// <summary>
+    ///     The identities module.
+    /// </summary>
     [SlashCommandGroup("identities", "2SLGBTQIA+ identities/labels.")]
     public class Identities : ApplicationCommandModule
     {
+        /// <summary>
+        ///     Sets the database service.
+        /// </summary>
         public Database Data { private get; set; }
 
+        /// <summary>
+        ///     The /identities define command.
+        /// </summary>
+        /// <param name="ctx">Context for the interaction.</param>
+        /// <param name="identity">The identity option.</param>
+        /// <returns>A task that represents the asynchronous operation.</returns>
         [SlashCommand("define", "Define a 2SLGBTQIA+ identity.")]
         public async Task IdentitiesDefineAsync(InteractionContext ctx,
             [Option("identity", "The identity to define.", true)][Autocomplete(typeof(IdentitiesDefineAutocompleteProvider))] string identity)

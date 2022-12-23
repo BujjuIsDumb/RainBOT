@@ -25,17 +25,34 @@ using RainBOT.Core.Services;
 
 namespace RainBOT.Modules
 {
+    /// <summary>
+    ///     The content warnings module.
+    /// </summary>
     [SlashCommandGroup("cw", "Content warnings are warnings that messages contain potentially triggering content.")]
     public class ContentWarnings : ApplicationCommandModule
     {
+        /// <summary>
+        ///     Sets the database service.
+        /// </summary>
         public Database Data { private get; set; }
 
+        /// <summary>
+        ///     The /cw info command.
+        /// </summary>
+        /// <param name="ctx">Context for the interaction.</param>
+        /// <returns>A task that represents the asynchronous operation.</returns>
         [SlashCommand("info", "Learn more about content warnings.")]
         public async Task CwInfoAsync(InteractionContext ctx)
         {
 
         }
 
+        /// <summary>
+        ///     The /cw create command.
+        /// </summary>
+        /// <param name="ctx">Context for the interaction.</param>
+        /// <param name="warning">The warning option.</param>
+        /// <returns>A task that represents the asynchronous operation.</returns>
         [SlashCommand("create", "Create a censored content warning.")]
         public async Task CwCreateAsync(InteractionContext ctx,
             [Option("warning", "The topic(s) (comma separated for more than one) to make a content warning for.")] string warning)

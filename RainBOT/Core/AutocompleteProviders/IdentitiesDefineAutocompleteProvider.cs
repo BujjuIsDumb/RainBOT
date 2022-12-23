@@ -25,6 +25,9 @@ using DSharpPlus.SlashCommands;
 
 namespace RainBOT.Core.AutocompleteProviders
 {
+    /// <summary>
+    ///     An autocomplete provider for the /identities define command.
+    /// </summary>
     public class IdentitiesDefineAutocompleteProvider : IAutocompleteProvider
     {
         public Task<IEnumerable<DiscordAutoCompleteChoice>> Provider(AutocompleteContext ctx)

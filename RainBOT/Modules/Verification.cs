@@ -27,10 +27,21 @@ using RainBOT.Core.Services;
 
 namespace RainBOT.Modules
 {
+    /// <summary>
+    ///     The verification module.
+    /// </summary>
     public class Verification : ApplicationCommandModule
     {
+        /// <summary>
+        ///     Sets the database service.
+        /// </summary>
         public Database Data { private get; set; }
 
+        /// <summary>
+        ///     The /verify command.
+        /// </summary>
+        /// <param name="ctx">Context for the interaction.</param>
+        /// <returns>A task that represents the asynchronous operation.</returns>
         [SlashCommand("verify", "Request verification for the member role.")]
         [GuildOnly]
         [SlashCooldown(5, 300, SlashCooldownBucketType.User)]

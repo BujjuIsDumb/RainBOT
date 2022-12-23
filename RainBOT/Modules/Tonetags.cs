@@ -27,17 +27,34 @@ using RainBOT.Core.Services;
 
 namespace RainBOT.Modules
 {
+    /// <summary>
+    ///     The tonetags module.
+    /// </summary>
     [SlashCommandGroup("tonetags", "Tonetags convey tone to people who struggle to identify on their own.")]
     public class Tonetags : ApplicationCommandModule
     {
+        /// <summary>
+        ///     Sets the database service.
+        /// </summary>
         public Database Data { private get; set; }
 
+        /// <summary>
+        ///    The /tonetags info command.
+        /// </summary>
+        /// <param name="ctx">Context for the interaction.</param>
+        /// <returns>A task that represents the asynchronous operation.</returns>
         [SlashCommand("info", "Learn more about tonetags.")]
         public async Task TonetagsInfoAsync(InteractionContext ctx)
         {
 
         }
 
+        /// <summary>
+        ///     The /tonetags define command.
+        /// </summary>
+        /// <param name="ctx">Context for the interaction.</param>
+        /// <param name="tonetag">The tonetag option.</param>
+        /// <returns>A task that represents the asynchronous operation.</returns>
         [SlashCommand("define", "Define a tonetag.")]
         public async Task TonetagsDefineAsync(InteractionContext ctx,
             [Autocomplete(typeof(TonetagsDefineAutocompleteProvider))]
@@ -46,12 +63,22 @@ namespace RainBOT.Modules
 
         }
 
+        /// <summary>
+        ///     The /tonetags list command.
+        /// </summary>
+        /// <param name="ctx">Context for the interaction.</param>
+        /// <returns>A task that represents the asynchronous operation.</returns>
         [SlashCommand("list", "Get a list of tonetags.")]
         public async Task TonetagsListAsync(InteractionContext ctx)
         {
 
         }
 
+        /// <summary>
+        ///     The Find Tonetags context menu.
+        /// </summary>
+        /// <param name="ctx">Context for the interaction.</param>
+        /// <returns>A task that represents the asynchronous operation.</returns>
         [ContextMenu(ApplicationCommandType.MessageContextMenu, "Find Tonetags")]
         public async Task FindTonetagsAsync(ContextMenuContext ctx)
         {

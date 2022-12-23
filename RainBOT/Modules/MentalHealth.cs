@@ -27,10 +27,23 @@ using RainBOT.Core.Services;
 
 namespace RainBOT.Modules
 {
+    /// <summary>
+    ///     The mental health module.
+    /// </summary>
     public class MentalHealth : ApplicationCommandModule
     {
+        /// <summary>
+        ///     Sets the database service.
+        /// </summary>
         public Database Data { private get; set; }
 
+        /// <summary>
+        ///     The /vent command.
+        /// </summary>
+        /// <param name="ctx">Context for the interaction.</param>
+        /// <param name="anonymous">The anonymous option.</param>
+        /// <param name="tw">The tw option.</param>
+        /// <returns></returns>
         [SlashCommand("vent", "Create a vent.")]
         [GuildOnly]
         [SlashCooldown(5, 300, SlashCooldownBucketType.User)]
@@ -42,6 +55,11 @@ namespace RainBOT.Modules
 
         }
 
+        /// <summary>
+        ///     The /hotlines command.
+        /// </summary>
+        /// <param name="ctx">Context for the interaction.</param>
+        /// <returns>A task that represents the asynchronous operation.</returns>
         [SlashCommand("hotlines", "Get a list of hotlines.")]
         public async Task HotlinesAsync(InteractionContext ctx)
         {

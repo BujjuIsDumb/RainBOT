@@ -26,13 +26,21 @@ using RainBOT.Core.Services;
 
 namespace RainBOT
 {
+    /// <summary>
+    ///     The startup object for the application.
+    /// </summary>
     public class Program
     {
+        /// <summary>
+        ///     The entry point for the application.
+        /// </summary>
         public static void Main()
         {
-            // Create config and database files if they don't already exist.
+            // Create the configuration file if it doesn't exist.
             if (!File.Exists("config.json"))
-                File.WriteAllText("config.json", JsonConvert.SerializeObject(new Config(), Formatting.Indented));
+                File.WriteAllText("config.json", JsonConvert.SerializeObject(new Configuration(), Formatting.Indented));
+            
+            // Create the database file if it doesn't exist.
             if (!File.Exists("data.json"))
                 File.WriteAllText("data.json", JsonConvert.SerializeObject(new Database(null), Formatting.Indented));
 

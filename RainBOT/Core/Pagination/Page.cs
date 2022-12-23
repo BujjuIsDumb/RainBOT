@@ -24,24 +24,48 @@ using DSharpPlus.Entities;
 
 namespace RainBOT.Core.Pagination
 {
+    /// <summary>
+    ///     Represents a page in a paginated message.
+    /// </summary>
     public class Page
     {
+        /// <summary>
+        ///     Gets the content of the page message.
+        /// </summary>
         public string Content { get; set; }
 
+        /// <summary>
+        ///     Gets the embed of the page message.
+        /// </summary>
         public DiscordEmbed Embed { get; set; }
 
+        /// <summary>
+        ///     Sets the content of the message.
+        /// </summary>
+        /// <param name="content">The content.</param>
+        /// <returns>This <see cref="Page"/>.</returns>
         public Page WithContent(string content)
         {
             Content = content;
             return this;
         }
 
-        public Page AddEmbed(DiscordEmbed embed)
+        /// <summary>
+        ///     Sets the embed of the message.
+        /// </summary>
+        /// <param name="embed">The embed.</param>
+        /// <returns>This <see cref="Page"/>.</returns>
+        public Page WithEmbed(DiscordEmbed embed)
         {
             Embed = embed;
             return this;
         }
 
+        /// <summary>
+        ///     Converts this <see cref="Page"/> to a <see cref="DiscordInteractionResponseBuilder"/>.
+        /// </summary>
+        /// <param name="ephemeral">Whether the response should be ephemeral.</param>
+        /// <returns>A <see cref="DiscordInteractionResponseBuilder"/> from this <see cref="Page"/>.</returns>
         internal DiscordInteractionResponseBuilder ToDiscordInteractionResponseBuilder(bool ephemeral)
         {
             var builder = new DiscordInteractionResponseBuilder()
@@ -52,6 +76,10 @@ namespace RainBOT.Core.Pagination
             return builder;
         }
 
+        /// <summary>
+        ///     Converts this <see cref="Page"/> to a <see cref="DiscordWebhookBuilder"/>.
+        /// </summary>
+        /// <returns>A <see cref="DiscordWebhookBuilder"/> from this <see cref="Page"/>.</returns>
         internal DiscordWebhookBuilder ToDiscordWebhookBuilder()
         {
             var builder = new DiscordWebhookBuilder()

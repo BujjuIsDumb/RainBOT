@@ -25,34 +25,65 @@ using RainBOT.Core.Services;
 
 namespace RainBOT.Modules
 {
+    /// <summary>
+    ///     The main module.
+    /// </summary>
     public class Main : ApplicationCommandModule
     {
+        /// <summary>
+        ///     Sets the database service.
+        /// </summary>
         public Database Data { private get; set; }
 
+        /// <summary>
+        ///     The /info command.
+        /// </summary>
+        /// <param name="ctx">Context for the interaction.</param>
+        /// <returns>A task that represents the asynchronous operation.</returns>
         [SlashCommand("info", "Get information about me.")]
         public async Task InfoAsync(InteractionContext ctx)
         {
 
         }
 
+        /// <summary>
+        ///     The /source command.
+        /// </summary>
+        /// <param name="ctx">Context for the interaction.</param>
+        /// <returns>A task that represents the asynchronous operation.</returns>
         [SlashCommand("source", "View my source code.")]
         public async Task SourceAsync(InteractionContext ctx)
         {
 
         }
 
+        /// <summary>
+        ///     The /support command.
+        /// </summary>
+        /// <param name="ctx">Context for the interaction.</param>
+        /// <returns>A task that represents the asynchronous operation.</returns>
         [SlashCommand("support", "Join the support server.")]
         public async Task SupportAsync(InteractionContext ctx)
         {
 
         }
 
+        /// <summary>
+        ///     The /invite command.
+        /// </summary>
+        /// <param name="ctx">Context for the interaction.</param>
+        /// <returns>A task that represents the asynchronous operation.</returns>
         [SlashCommand("invite", "Invite me to your server.")]
         public async Task InviteAsync(InteractionContext ctx)
         {
 
         }
 
+        /// <summary>
+        ///     The /wiki command.
+        /// </summary>
+        /// <param name="ctx">Context for the interaction.</param>
+        /// <returns>A task that represents the asynchronous operation.</returns>
         [SlashCommand("wiki", "Go to my wiki.")]
         public async Task WikiAsync(InteractionContext ctx)
         {

@@ -25,23 +25,45 @@ using RainBOT.Core.Services;
 
 namespace RainBOT.Modules
 {
+    /// <summary>
+    ///     The pronouns module.
+    /// </summary>
     [SlashCommandGroup("pronouns", "Try new pronouns to see if they fit.")]
     public class Pronouns : ApplicationCommandModule
     {
+        /// <summary>
+        ///     Sets the database service.
+        /// </summary>
         public Database Data { private get; set; }
 
+        /// <summary>
+        ///     The /pronouns try command.
+        /// </summary>
+        /// <param name="ctx">Context for the interaction.</param>
+        /// <param name="subjective">The subjective option.</param>
+        /// <param name="objective">The objective option.</param>
+        /// <param name="possessiveAdjective">The possessive_adjective option.</param>
+        /// <param name="possessivePronoun">The possessive_pronouns option.</param>
+        /// <param name="reflexive">The reflexive option.</param>
+        /// <param name="plural">The plural option.</param>
+        /// <returns>A task that represents the asynchronous operation.</returns>
         [SlashCommand("try", "Try new pronouns.")]
         public async Task PronounsTryAsync(InteractionContext ctx,
             [Option("subjective", "He, she, and they are subjective pronouns.")] string subjective,
             [Option("objective", "Him, her, and them are objective pronouns.")] string objective,
-            [Option("possessive-adjective", "His, her, and their are possessive adjectives.")] string possessiveAdjective,
-            [Option("possessive-pronoun", "His, hers, and theirs are possessive pronouns.")] string possessivePronoun,
+            [Option("possessive_adjective", "His, her, and their are possessive adjectives.")] string possessiveAdjective,
+            [Option("possessive_pronoun", "His, hers, and theirs are possessive pronouns.")] string possessivePronoun,
             [Option("reflexive", "Himself, herself, and themself are reflexive pronouns.")] string reflexive,
             [Option("plural", "Whether or not to use plural grammar rules for the pronouns.")] bool plural)
         {
 
         }
 
+        /// <summary>
+        ///     The /pronouns random command.
+        /// </summary>
+        /// <param name="ctx">Context for the interaction.</param>
+        /// <returns>A task that represents the asynchronous operation.</returns>
         [SlashCommand("random", "Get a random set of pronouns to try.")]
         public async Task PronounsRandom(InteractionContext ctx)
         {

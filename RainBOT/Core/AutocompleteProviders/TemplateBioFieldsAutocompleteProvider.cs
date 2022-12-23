@@ -25,6 +25,9 @@ using DSharpPlus.SlashCommands;
 
 namespace RainBOT.Core.AutocompleteProviders
 {
+    /// <summary>
+    ///     An autocomplete provider for template bio fields.
+    /// </summary>
     public class TemplateBioFieldsAutocompleteProvider : IAutocompleteProvider
     {
         public Task<IEnumerable<DiscordAutoCompleteChoice>> Provider(AutocompleteContext ctx)

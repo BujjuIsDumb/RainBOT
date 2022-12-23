@@ -27,11 +27,23 @@ using RainBOT.Core.Services;
 
 namespace RainBOT.Modules
 {
+    /// <summary>
+    ///     The report module.
+    /// </summary>
     [SlashCommandGroup("report", "Report a user to warn the moderators when they join a server.")]
     public class Report : ApplicationCommandModule
     {
+        /// <summary>
+        ///     Sets the database service.
+        /// </summary>
         public Database Data { private get; set; }
 
+        /// <summary>
+        ///     The /report create command.
+        /// </summary>
+        /// <param name="ctx">Context for the interaction.</param>
+        /// <param name="user">The user option.</param>
+        /// <returns>A task that represents the asynchronous operation.</returns>
         [SlashCommand("create", "Create a report.")]
         public async Task ReportCreateAsync(InteractionContext ctx,
             [Option("user", "The user to report.")] DiscordUser user)
@@ -39,6 +51,12 @@ namespace RainBOT.Modules
 
         }
 
+        /// <summary>
+        ///     The /report revoke command.
+        /// </summary>
+        /// <param name="ctx">Context for the interaction.</param>
+        /// <param name="user">The user option.</param>
+        /// <returns>A task that represents the asynchronous operation.</returns>
         [SlashCommand("revoke", "Remove a report.")]
         public async Task ReportRevokeAsync(InteractionContext ctx,
             [Option("user", "The user to remove the report from.")] DiscordUser user)
@@ -46,6 +64,12 @@ namespace RainBOT.Modules
 
         }
 
+        /// <summary>
+        ///     The /report list command.
+        /// </summary>
+        /// <param name="ctx">Context for the interaction.</param>
+        /// <param name="user">The user option.</param>
+        /// <returns>A task that represents the asynchronous operation.</returns>
         [SlashCommand("list", "Get a list of reports for a user.")]
         public async Task ReportListAsync(InteractionContext ctx,
             [Option("user", "The user to view the reports of.")] DiscordUser user)
@@ -53,6 +77,11 @@ namespace RainBOT.Modules
 
         }
 
+        /// <summary>
+        ///     The View Reports context menu.
+        /// </summary>
+        /// <param name="ctx">Context for the interaction.</param>
+        /// <returns>A task that represents the asynchronous operation.</returns>
         [ContextMenu(ApplicationCommandType.UserContextMenu, "View Reports")]
         public async Task ViewReportsAsync(ContextMenuContext ctx)
         {

@@ -26,6 +26,9 @@ using RainBOT.Core.Services;
 
 namespace RainBOT.Core.AutocompleteProviders
 {
+    /// <summary>
+    ///     An autocomplete provider for existing bio fields.
+    /// </summary>
     public class ExistingBioFieldsAutocompleteProvider : IAutocompleteProvider
     {
         public Task<IEnumerable<DiscordAutoCompleteChoice>> Provider(AutocompleteContext ctx)

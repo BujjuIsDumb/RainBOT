@@ -33,16 +33,31 @@ using RainBOT.Core.Services;
 
 namespace RainBOT
 {
+    /// <summary>
+    ///     The client used to connect to the bot..
+    /// </summary>
     public class RbClient
     {
-        private Config _config;
+        /// <summary>
+        ///     The configuration.
+        /// </summary>
+        private Configuration _config;
 
+        /// <summary>
+        ///     The Discord client.
+        /// </summary>
         private DiscordClient _client;
 
+        /// <summary>
+        ///     Starts the bot.
+        /// </summary>
+        /// <returns>A task that represents the asynchronous operation.</returns>
         public async Task InitializeAsync()
         {
-            _config = Config.Load("config.json");
+            // Load the configuration.
+            _config = Configuration.Load("config.json");
 
+            // Create the Discord client.
             _client = new DiscordClient(new DiscordConfiguration()
             {
                 Token = _config.Token,
@@ -50,6 +65,7 @@ namespace RainBOT
             });
             _client.MessageCreated += MessageCreated;
 
+            // Create the slash command service.
             var slash = _client.UseSlashCommands(new SlashCommandsConfiguration()
             {
                 Services = new ServiceCollection()
@@ -59,10 +75,17 @@ namespace RainBOT
             slash.RegisterCommands(Assembly.GetExecutingAssembly(), _config.GuildId);
             slash.SlashCommandErrored += SlashCommandErrored;
 
+            // Connect to the Discord gateway.
             await _client.ConnectAsync(new DiscordActivity("for pings!", ActivityType.Watching));
             await Task.Delay(-1);
         }
 
+        /// <summary>
+        ///     Handles the <see cref="DiscordClient.MessageCreated"/> event.
+        /// </summary>
+        /// <param name="sender">The sender.</param>
+        /// <param name="args">The args.</param>
+        /// <returns>A task that represents the asynchronous operation.</returns>
         public static async Task MessageCreated(DiscordClient sender, MessageCreateEventArgs args)
         {
             if (args.MentionedUsers.Contains(sender.CurrentUser))
@@ -71,13 +94,19 @@ namespace RainBOT
                     .WithTitle("👋 Get started")
                     .WithDescription($"Welcome to RainBOT! I use slash commands, so you can view all of my commands by typing a `/` symbol.")
                     .WithImageUrl("https://i.imgur.com/sWoBYi6.png")
-                    .WithFooter("Hint: Try /help!")
+                    .WithFooter("Hint: Try /info!")
                     .WithColor(new DiscordColor(3092790));
 
                 await args.Message.RespondAsync(embed);
             }
         }
 
+        /// <summary>
+        ///     Handles the <see cref="SlashCommandsExtension.SlashCommandErrored"/> event.
+        /// </summary>
+        /// <param name="sender">The sender.</param>
+        /// <param name="args">The args.</param>
+        /// <returns>A task that represents the asynchronous operation.</returns>
         public static async Task SlashCommandErrored(SlashCommandsExtension sender, SlashCommandErrorEventArgs args)
         {
             if (args.Exception is SlashExecutionChecksFailedException slashExecutionChecksFailedException)

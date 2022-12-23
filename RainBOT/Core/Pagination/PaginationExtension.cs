@@ -25,18 +25,33 @@ using DSharpPlus.Entities;
 
 namespace RainBOT.Core.Pagination
 {
+    /// <summary>
+    ///    The extension for pagination.
+    /// </summary>
     public static class PaginationExtension
     {
-        public static async Task<DiscordMessage> CreatePaginatedResponseAsync(this DiscordInteraction interaction, DiscordClient client, List<Page> pages, bool ephemeral)
+        /// <summary>
+        ///      Creates a paginated response to this interaction.
+        /// </summary>
+        /// <param name="interaction">The interaction.</param>
+        /// <param name="client">The Discord client.</param>
+        /// <param name="pages">The pages.</param>
+        /// <param name="ephemeral">Whether the response should be ephemeral.</param>
+        /// <returns>A task that represents the asynchronous operation.</returns>
+        /// <exception cref="ArgumentException"></exception>
+        public static async Task CreatePaginatedResponseAsync(this DiscordInteraction interaction, DiscordClient client, List<Page> pages, bool ephemeral)
         {
+            int index = 0;
+
             if (pages.Count == 0)
                 throw new ArgumentException("You must provide at least one page to paginate.", nameof(pages));
-
-            int index = 0;
 
             DiscordButtonComponent previous = new DiscordButtonComponent(ButtonStyle.Danger, $"previous-{DateTimeOffset.Now.ToUnixTimeSeconds()}", "Previous");
             DiscordButtonComponent next = new DiscordButtonComponent(ButtonStyle.Success, $"next-{DateTimeOffset.Now.ToUnixTimeSeconds()}", "Next");
 
+            await interaction.CreateResponseAsync(InteractionResponseType.ChannelMessageWithSource, pages.First().ToDiscordInteractionResponseBuilder(ephemeral).AddComponents(previous, next));
+
+            // Respond to button input.
             client.ComponentInteractionCreated += async (sender, args) =>
             {
                 if (args.Id == previous.CustomId)
@@ -46,6 +61,7 @@ namespace RainBOT.Core.Pagination
                     else
                         index = pages.Count - 1;
 
+                    // Update the message.
                     await args.Interaction.CreateResponseAsync(InteractionResponseType.DeferredMessageUpdate);
                     await interaction.EditOriginalResponseAsync(pages[index].ToDiscordWebhookBuilder().AddComponents(previous, next));
                 }
@@ -56,13 +72,11 @@ namespace RainBOT.Core.Pagination
                     else
                         index = 0;
 
+                    // Update the message.
                     await args.Interaction.CreateResponseAsync(InteractionResponseType.DeferredMessageUpdate);
                     await interaction.EditOriginalResponseAsync(pages[index].ToDiscordWebhookBuilder().AddComponents(previous, next));
                 }
             };
-
-            await interaction.CreateResponseAsync(InteractionResponseType.ChannelMessageWithSource, pages.First().ToDiscordInteractionResponseBuilder(ephemeral).AddComponents(previous, next));
-            return await interaction.GetOriginalResponseAsync();
         }
     }
 }
