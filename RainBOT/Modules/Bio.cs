@@ -23,7 +23,6 @@
 using DSharpPlus;
 using DSharpPlus.Entities;
 using DSharpPlus.SlashCommands;
-using Newtonsoft.Json.Linq;
 using RainBOT.Core;
 using RainBOT.Core.AutocompleteProviders;
 using RainBOT.Core.Services;
@@ -74,7 +73,7 @@ namespace RainBOT.Modules
                 Name = field,
                 Value = value
             }).ToArray();
-            
+
             ctx.User.GetUserData(Data).BioFields = bioFields;
             Data.Update();
 
@@ -104,7 +103,7 @@ namespace RainBOT.Modules
             // Create a new array with the edited field.
             var bioFields = ctx.User.GetUserData(Data).BioFields.ToList();
             bioFields.Find(x => x.Name == field).Value = value;
-            
+
             ctx.User.GetUserData(Data).BioFields = bioFields.ToArray();
             Data.Update();
 

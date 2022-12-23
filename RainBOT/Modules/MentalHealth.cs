@@ -112,7 +112,7 @@ namespace RainBOT.Modules
                 .AddComponents(new TextInputComponent(label: "Response", customId: "response", style: TextInputStyle.Paragraph, min_length: 5, max_length: 1200));
 
             var respondButton = new DiscordButtonComponent(ButtonStyle.Primary, $"respondButton-{DateTimeOffset.Now.ToUnixTimeSeconds()}", "Respond", false, new DiscordComponentEmoji(DiscordEmoji.FromUnicode("💬")));
-            
+
             var hotlinesButton = new DiscordButtonComponent(ButtonStyle.Primary, $"hotlinesButton-{DateTimeOffset.Now.ToUnixTimeSeconds()}", "Send Hotlines", false, new DiscordComponentEmoji(DiscordEmoji.FromUnicode("🛡")));
 
             var moderateButton = new DiscordButtonComponent(ButtonStyle.Secondary, $"moderateButton-{DateTimeOffset.Now.ToUnixTimeSeconds()}", "Moderate", false, new DiscordComponentEmoji(DiscordEmoji.FromUnicode("⚙")));

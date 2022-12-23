@@ -70,7 +70,7 @@ namespace RainBOT.Modules
             verificationFormModal.AddComponents(new TextInputComponent(label: "Notes", customId: "notes", required: false, style: TextInputStyle.Paragraph, min_length: 5, max_length: 500));
 
             var acceptButton = new DiscordButtonComponent(ButtonStyle.Success, $"acceptButton-{DateTimeOffset.Now.ToUnixTimeSeconds()}", "Accept", false, new DiscordComponentEmoji(DiscordEmoji.FromUnicode("✅")));
-            
+
             var denyButton = new DiscordButtonComponent(ButtonStyle.Danger, $"denyButton-{DateTimeOffset.Now.ToUnixTimeSeconds()}", "Deny", false, new DiscordComponentEmoji(DiscordEmoji.FromUnicode("⛔")));
 
             var acceptSelect = new DiscordRoleSelectComponent($"acceptSelect-{DateTimeOffset.Now.ToUnixTimeSeconds()}", "Select a role.");
@@ -104,7 +104,7 @@ namespace RainBOT.Modules
                         await args.Interaction.CreateResponseAsync(InteractionResponseType.ChannelMessageWithSource, new DiscordInteractionResponseBuilder()
                             .AddEmbed(embed)
                             .AddComponents(acceptButton, denyButton));
-                        
+
                         originalInteraction = args.Interaction;
 
                         // Create vetting thread.
@@ -119,7 +119,6 @@ namespace RainBOT.Modules
 
             ctx.Client.ComponentInteractionCreated += async (sender, args) =>
             {
-                
 
                 if (args.Id == acceptButton.CustomId)
                 {

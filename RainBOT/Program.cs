@@ -39,7 +39,7 @@ namespace RainBOT
             // Create the configuration file if it doesn't exist.
             if (!File.Exists("config.json"))
                 File.WriteAllText("config.json", JsonConvert.SerializeObject(new Configuration(), Formatting.Indented));
-            
+
             // Create the database file if it doesn't exist.
             if (!File.Exists("data.json"))
                 File.WriteAllText("data.json", JsonConvert.SerializeObject(new Database(null), Formatting.Indented));
