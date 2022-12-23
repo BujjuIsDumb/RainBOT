@@ -64,7 +64,7 @@ namespace RainBOT.SupportBot.Modules
             {
                 if (args.Interaction.Data.CustomId == promptCreateModal.CustomId)
                 {
-                    string[] tags = args.Values["tags"].Replace(' ', '_').ToLower().Split(", ");
+                    string[] tags = args.Values["tags"].ToLower().Split(", ");
 
                     // Check for duplicate tags.
                     foreach (string tag in tags)
