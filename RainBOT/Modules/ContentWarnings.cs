@@ -68,8 +68,8 @@ namespace RainBOT.Modules
             [Option("warning", "The topic(s) (comma separated for more than one) to make a content warning for.")] string warning)
         {
             string censoredWarning = Regex.Replace(warning, "[aeiou]", "/");
-            string key = Regex.Replace(warning, "[^aeiou, ]", "");
-            await ctx.CreateResponseAsync($"Here is your censored content warning:\n\n```CW ||{censoredWarning}|| {(string.IsNullOrEmpty(key) ? "" : $"(||{key}||)")}```", true);
+            string key = Regex.Replace(warning, "[^aeiou, ]", string.Empty);
+            await ctx.CreateResponseAsync($"Here is your censored content warning:\n\n```CW ||{censoredWarning}|| {(string.IsNullOrEmpty(key) ? string.Empty : $"(||{key}||)")}```", true);
         }
     }
 }
