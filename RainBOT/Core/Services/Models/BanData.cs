@@ -24,21 +24,12 @@ using Newtonsoft.Json;
 
 namespace RainBOT.Core.Services.Models
 {
-    public class Report
+    public class BanData
     {
         [JsonProperty("user_id")]
         public ulong UserId { get; set; } = 0;
 
-        [JsonProperty("creator_user_id")]
-        public ulong CreatorUserId { get; set; } = 0;
-
-        [JsonProperty("subject")]
-        public string Subject { get; set; } = string.Empty;
-
-        [JsonProperty("body")]
-        public string Body { get; set; } = string.Empty;
-
-        [JsonProperty("creation_timestamp")]
-        public DateTimeOffset CreationTimestamp { get; set; } = DateTimeOffset.UnixEpoch;
+        [JsonProperty("reason")]
+        public string Reason { get; set; } = string.Empty;
     }
 }

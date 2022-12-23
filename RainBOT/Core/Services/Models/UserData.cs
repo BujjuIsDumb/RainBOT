@@ -24,7 +24,7 @@ using Newtonsoft.Json;
 
 namespace RainBOT.Core.Services.Models
 {
-    public class User
+    public class UserData
     {
         [JsonProperty("user_id")]
         public ulong UserId { get; set; } = 0;

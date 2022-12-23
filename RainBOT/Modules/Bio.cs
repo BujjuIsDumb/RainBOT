@@ -69,7 +69,7 @@ namespace RainBOT.Modules
             }
 
             // Create a new array with the new field.
-            var bioFields = ctx.User.GetUserData(Data).BioFields.Append(new Core.Services.Models.User.BioField()
+            var bioFields = ctx.User.GetUserData(Data).BioFields.Append(new Core.Services.Models.UserData.BioField()
             {
                 Name = field,
                 Value = value

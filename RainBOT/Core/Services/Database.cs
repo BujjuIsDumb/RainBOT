@@ -28,16 +28,16 @@ namespace RainBOT.Core.Services
     public class Database : IDisposable
     {
         [JsonProperty("users")]
-        public List<User> Users { get; set; } = new();
+        public List<UserData> Users { get; set; } = new();
 
         [JsonProperty("guilds")]
-        public List<Guild> Guilds { get; set; } = new();
+        public List<GuildData> Guilds { get; set; } = new();
 
         [JsonProperty("reports")]
-        public List<Report> Reports { get; set; } = new();
+        public List<ReportData> Reports { get; set; } = new();
 
         [JsonProperty("bans")]
-        public List<Ban> Bans { get; set; } = new();
+        public List<BanData> Bans { get; set; } = new();
 
         public Database(string fileName) => FileName = fileName;
 

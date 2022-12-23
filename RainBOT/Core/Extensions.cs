@@ -37,11 +37,11 @@ namespace RainBOT.Core
         /// <param name="user">The user.</param>
         /// <param name="data">The database object to use.</param>
         /// <returns>The user configuration for the specified user.</returns>
-        public static User GetUserData(this DiscordUser user, Database data)
+        public static UserData GetUserData(this DiscordUser user, Database data)
         {
             if (!data.Users.Exists(x => x.UserId == user.Id))
             {
-                data.Users.Add(new User() { UserId = user.Id });
+                data.Users.Add(new UserData() { UserId = user.Id });
                 data.Update();
             }
 
@@ -54,11 +54,11 @@ namespace RainBOT.Core
         /// <param name="guild">The guild.</param>
         /// <param name="data">The database object to use.</param>
         /// <returns>The guild configuration for the specified guild.</returns>
-        public static Guild GetGuildData(this DiscordGuild guild, Database data)
+        public static GuildData GetGuildData(this DiscordGuild guild, Database data)
         {
             if (!data.Guilds.Exists(x => x.GuildId == guild.Id))
             {
-                data.Guilds.Add(new Guild() { GuildId = guild.Id });
+                data.Guilds.Add(new GuildData() { GuildId = guild.Id });
                 data.Update();
             }
 

@@ -24,24 +24,21 @@ using Newtonsoft.Json;
 
 namespace RainBOT.Core.Services.Models
 {
-    public class Guild
+    public class ReportData
     {
-        [JsonProperty("guild_id")]
-        public ulong GuildId { get; set; } = 0;
+        [JsonProperty("user_id")]
+        public ulong UserId { get; set; } = 0;
 
-        [JsonProperty("vent_moderators")]
-        public ulong[] VentModerators { get; set; } = Array.Empty<ulong>();
+        [JsonProperty("creator_user_id")]
+        public ulong CreatorUserId { get; set; } = 0;
 
-        [JsonProperty("anonymous_venting")]
-        public bool AnonymousVenting { get; set; } = true;
+        [JsonProperty("subject")]
+        public string Subject { get; set; } = string.Empty;
 
-        [JsonProperty("delete_verification_requests")]
-        public bool DeleteVerificationRequests { get; set; } = false;
+        [JsonProperty("body")]
+        public string Body { get; set; } = string.Empty;
 
-        [JsonProperty("create_vetting_thread")]
-        public bool CreateVettingThread { get; set; } = true;
-
-        [JsonProperty("verification_form_questions")]
-        public string[] VerificationFormQuestions { get; set; } = Array.Empty<string>();
+        [JsonProperty("creation_timestamp")]
+        public DateTimeOffset CreationTimestamp { get; set; } = DateTimeOffset.UnixEpoch;
     }
 }
