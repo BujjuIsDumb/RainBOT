@@ -47,9 +47,9 @@ namespace RainBOT.Core.Pagination
                 throw new ArgumentException("You must provide at least one page to paginate.", nameof(pages));
 
             #region Components
-            var previous = new DiscordButtonComponent(ButtonStyle.Danger, $"previous-{DateTimeOffset.Now.ToUnixTimeSeconds()}", "Previous");
+            var previous = new DiscordButtonComponent(ButtonStyle.Danger, $"previous-{DateTimeOffset.Now.ToUnixTimeSeconds()}", "Previous", pages.Count == 1);
 
-            var next = new DiscordButtonComponent(ButtonStyle.Success, $"next-{DateTimeOffset.Now.ToUnixTimeSeconds()}", "Next");
+            var next = new DiscordButtonComponent(ButtonStyle.Success, $"next-{DateTimeOffset.Now.ToUnixTimeSeconds()}", "Next", pages.Count == 1);
             #endregion
 
             #region Event Handlers
