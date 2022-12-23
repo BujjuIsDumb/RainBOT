@@ -57,26 +57,15 @@ namespace RainBOT.Modules
             [Option("plural", "Whether or not to use plural grammar rules for the pronouns.")] bool plural)
         {
             string[] prompts = new string[]
-{
-                $"My friend {ctx.User.Username} and I went to the café the other day. Usually, " +
-                $"I order for {objective}, but {subjective} ordered for {reflexive} today! I am " +
-                $"really proud of {objective}.",
+            {
+                $"My friend {ctx.User.Username} and I went to the café the other day. Usually, I order for {objective}, but {subjective} ordered for {reflexive} today! I am really proud of {objective}.",
 
-                $"Do you know where {ctx.User.Username} is? I think {subjective} lost " +
-                $"{possessiveAdjective} phone. I found a phone, and it looks like " +
-                $"{possessivePronoun}. The last time I saw {objective}, {subjective} " +
-                $"{(plural ? "were" : "was")} over there. Oh, there {subjective} " +
-                $"{(plural ? "are" : "is")}.",
+                $"Do you know where {ctx.User.Username} is? I think {subjective} lost {possessiveAdjective} phone. I found a phone, and it looks like {possessivePronoun}. The last time I saw {objective}, {subjective} {(plural ? "were" : "was")} over there. Oh, there {subjective} {(plural ? "are" : "is")}.",
 
-                $"Did {ctx.User.Username} tell you that {subjective}'{(plural ? "re" : "s")} " +
-                $"trying out {subjective}/{objective} pronouns. I think these pronouns fit " +
-                $"{objective} really well. Do you think {subjective} made a good choice? I hope " +
-                $"{subjective} can find pronouns that fit {objective}.",
+                $"Did {ctx.User.Username} tell you that {subjective}'{(plural ? "re" : "s")} trying out {subjective}/{objective} pronouns. I think these pronouns fit {objective} really well. Do you think {subjective} made a good choice? I hope {subjective} can find pronouns that fit {objective}.",
 
-                $"Have you met {ctx.User.Username}? You haven't? I think you'd like " +
-                $"{objective}. {subjective}'{(plural ? "re" : "s")} really kind and funny. You " +
-                $"should meet {objective} sometime."
-};
+                $"Have you met {ctx.User.Username}? You haven't? I think you'd like {objective}. {subjective}'{(plural ? "re" : "s")} really kind and funny. You should meet {objective} sometime."
+            };
 
             await ctx.CreateResponseAsync(prompts[new Random().Next(prompts.Length)], true);
         }
