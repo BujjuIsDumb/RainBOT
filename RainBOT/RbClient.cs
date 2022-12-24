@@ -116,7 +116,7 @@ namespace RainBOT
                 if (slashExecutionChecksFailedException.FailedChecks[0] is SlashCooldownAttribute slashCooldownAttribute)
                 {
                     // Error message for cooldowns.
-                    await args.Context.CreateResponseAsync($"⚠️ This command is on cooldown. (Finished <t:{((DateTimeOffset)DateTime.Now.Add(slashCooldownAttribute.GetRemainingCooldown(args.Context))).ToUnixTimeSeconds()}:R>)", true);
+                    await args.Context.CreateResponseAsync($"⚠️ This command is on cooldown. (Finished {Formatter.Timestamp((DateTimeOffset)DateTime.Now.Add(slashCooldownAttribute.GetRemainingCooldown(args.Context)), TimestampFormat.RelativeTime)}", true);
                 }
                 else if (slashExecutionChecksFailedException.FailedChecks[0] is SlashRequireBotPermissionsAttribute slashRequireBotPermissionsAttribute)
                 {

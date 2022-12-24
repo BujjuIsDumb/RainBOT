@@ -188,7 +188,7 @@ namespace RainBOT.Modules
                             .WithColor(new DiscordColor(3092790));
 
                         foreach (var response in responseCache)
-                            embed.AddField($"Response from {response.creator.Username}", $"> {response.message}" + $"\n\nSent <t:{response.creationTimestamp.ToUnixTimeSeconds()}:R>");
+                            embed.AddField($"Response from {response.creator.Username}", $"> {response.message}" + $"\n\nSent {Formatter.Timestamp(response.creationTimestamp, TimestampFormat.RelativeTime)}");
 
                         await args.Interaction.CreateResponseAsync(InteractionResponseType.ChannelMessageWithSource, new DiscordInteractionResponseBuilder()
                             .AddEmbed(embed)
