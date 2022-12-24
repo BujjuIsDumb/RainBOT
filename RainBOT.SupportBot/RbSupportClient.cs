@@ -29,6 +29,7 @@ using DSharpPlus.SlashCommands.EventArgs;
 using Microsoft.Extensions.DependencyInjection;
 using RainBOT.SupportBot.Core;
 using RainBOT.SupportBot.Core.Services;
+using RainBOT.SupportBot.Modules;
 
 namespace RainBOT.SupportBot
 {
@@ -110,13 +111,16 @@ namespace RainBOT.SupportBot
         /// <returns>A task that represents the asynchronous operation.</returns>
         private async Task MessageDeleted(DiscordClient sender, MessageDeleteEventArgs args)
         {
-            var embed = new DiscordEmbedBuilder()
-                .WithAuthor(name: args.Message.Author.Username, iconUrl: args.Message.Author.AvatarUrl)
-                .WithTitle("Message deleted")
-                .WithDescription(args.Message.Content)
-                .WithColor(new DiscordColor(3092790));
-            
-            await (await sender.GetChannelAsync(_config.LogsChannelId)).SendMessageAsync(embed);
+            if (Logs.LogsEnabled)
+            {
+                var embed = new DiscordEmbedBuilder()
+                    .WithAuthor(name: args.Message.Author.Username, iconUrl: args.Message.Author.AvatarUrl)
+                    .WithTitle("Message deleted")
+                    .WithDescription(args.Message.Content)
+                    .WithColor(new DiscordColor(3092790));
+
+                await (await sender.GetChannelAsync(_config.LogsChannelId)).SendMessageAsync(embed);
+            }
         }
 
         /// <summary>
@@ -127,14 +131,17 @@ namespace RainBOT.SupportBot
         /// <returns>A task that represents the asynchronous operation.</returns>
         private async Task MessageUpdated(DiscordClient sender, MessageUpdateEventArgs args)
         {
-            var embed = new DiscordEmbedBuilder()
-                .WithAuthor(name: args.Message.Author.Username, iconUrl: args.Message.Author.AvatarUrl)
-                .WithTitle("Message edited")
-                .AddField("Before", args.MessageBefore.Content)
-                .AddField("After", args.Message.Content)
-                .WithColor(new DiscordColor(3092790));
+            if (Logs.LogsEnabled)
+            {
+                var embed = new DiscordEmbedBuilder()
+                    .WithAuthor(name: args.Message.Author.Username, iconUrl: args.Message.Author.AvatarUrl)
+                    .WithTitle("Message edited")
+                    .AddField("Before", args.MessageBefore.Content)
+                    .AddField("After", args.Message.Content)
+                    .WithColor(new DiscordColor(3092790));
 
-            await (await sender.GetChannelAsync(_config.LogsChannelId)).SendMessageAsync(embed);
+                await (await sender.GetChannelAsync(_config.LogsChannelId)).SendMessageAsync(embed);
+            }
         }
 
         /// <summary>
@@ -145,13 +152,16 @@ namespace RainBOT.SupportBot
         /// <returns>A task that represents the asynchronous operation.</returns>
         private async Task GuildMemberRemoved(DiscordClient sender, GuildMemberRemoveEventArgs args)
         {
-            var embed = new DiscordEmbedBuilder()
-                .WithAuthor(name: args.Member.Username, iconUrl: args.Member.AvatarUrl)
-                .WithTitle("Member left")
-                .WithDescription($"{args.Member.Username} has been here since {Formatter.Timestamp(args.Member.JoinedAt, TimestampFormat.RelativeTime)}")
-                .WithColor(new DiscordColor(3092790));
+            if (Logs.LogsEnabled)
+            {
+                var embed = new DiscordEmbedBuilder()
+                    .WithAuthor(name: args.Member.Username, iconUrl: args.Member.AvatarUrl)
+                    .WithTitle("Member left")
+                    .WithDescription($"{args.Member.Username} has been here since {Formatter.Timestamp(args.Member.JoinedAt, TimestampFormat.RelativeTime)}")
+                    .WithColor(new DiscordColor(3092790));
 
-            await (await sender.GetChannelAsync(_config.LogsChannelId)).SendMessageAsync(embed);
+                await (await sender.GetChannelAsync(_config.LogsChannelId)).SendMessageAsync(embed);
+            }
         }
 
         /// <summary>
