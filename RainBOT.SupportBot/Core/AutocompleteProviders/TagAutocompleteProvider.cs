@@ -41,7 +41,7 @@ namespace RainBOT.SupportBot.Core.AutocompleteProviders
                 foreach (var tag in prompt.Tags)
                     list.Add(new DiscordAutoCompleteChoice(tag, tag));
                 
-            return Task.FromResult(list.OrderBy(x => AutocompleteHelper.CompareStrings((string)ctx.OptionValue, x.Name)).Take(10));
+            return Task.FromResult(list.OrderBy(x => Utilities.CompareStrings((string)ctx.OptionValue, x.Name)).Take(10));
         }
     }
 }

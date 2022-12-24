@@ -36,6 +36,12 @@ namespace RainBOT.SupportBot.Core
         public string Token { get; private set; }
 
         /// <summary>
+        ///     Gets the channel ID for the modmail channel.
+        /// </summary>
+        [JsonProperty("modmail_channel_id")]
+        public ulong ModmailChannelId { get; private set; }
+
+        /// <summary>
         ///     Gets the guild ID for the bot. Null for release versions.
         /// </summary>
         [JsonProperty("guild_id")]

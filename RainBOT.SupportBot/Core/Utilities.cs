@@ -20,12 +20,12 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-namespace RainBOT.SupportBot.Core.AutocompleteProviders
+namespace RainBOT.SupportBot.Core
 {
     /// <summary>
-    ///     A helper for autocomplete providers.
+    ///     Utilities for the bot.
     /// </summary>
-    public static class AutocompleteHelper
+    public class Utilities
     {
         /// <summary>
         ///     Compares two strings and returns a value indicating how similar they are.
