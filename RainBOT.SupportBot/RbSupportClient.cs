@@ -117,7 +117,9 @@ namespace RainBOT.SupportBot
                     .WithAuthor(name: args.Message.Author.Username, iconUrl: args.Message.Author.AvatarUrl)
                     .WithTitle("Message deleted")
                     .WithDescription(args.Message.Content)
-                    .WithColor(new DiscordColor(3092790));
+                    .WithFooter("Message ID: " + args.Message.Id)
+                    .WithTimestamp(args.Message.CreationTimestamp)
+                    .WithColor(DiscordColor.Red);
 
                 await (await sender.GetChannelAsync(_config.LogsChannelId)).SendMessageAsync(embed);
             }
@@ -138,7 +140,9 @@ namespace RainBOT.SupportBot
                     .WithTitle("Message edited")
                     .AddField("Before", args.MessageBefore.Content)
                     .AddField("After", args.Message.Content)
-                    .WithColor(new DiscordColor(3092790));
+                    .WithFooter("Message ID: " + args.Message.Id)
+                    .WithTimestamp(args.Message.CreationTimestamp)
+                    .WithColor(DiscordColor.Yellow);
 
                 await (await sender.GetChannelAsync(_config.LogsChannelId)).SendMessageAsync(embed);
             }
@@ -158,7 +162,9 @@ namespace RainBOT.SupportBot
                     .WithAuthor(name: args.Member.Username, iconUrl: args.Member.AvatarUrl)
                     .WithTitle("Member left")
                     .WithDescription($"{args.Member.Username} has been here since {Formatter.Timestamp(args.Member.JoinedAt, TimestampFormat.RelativeTime)}")
-                    .WithColor(new DiscordColor(3092790));
+                    .WithFooter("User ID: " + args.Member.Id)
+                    .WithTimestamp(args.Member.JoinedAt)
+                    .WithColor(DiscordColor.Red);
 
                 await (await sender.GetChannelAsync(_config.LogsChannelId)).SendMessageAsync(embed);
             }
