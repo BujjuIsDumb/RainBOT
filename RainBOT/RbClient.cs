@@ -125,7 +125,7 @@ namespace RainBOT
                 }
                 else if (slashExecutionChecksFailedException.FailedChecks[0] is SlashUserBannable slashUserBannable)
                 {
-                    using var data = new Data("data.json").Initialize();
+                    using var data = new Database("data.json").Initialize();
 
                     await args.Context.CreateResponseAsync(new DiscordInteractionResponseBuilder()
                         .WithContent($"⚠️ You are banned from RainBOT for \"{data.UserBans.Find(x => x.UserId == args.Context.User.Id).Reason}\".")
@@ -134,7 +134,7 @@ namespace RainBOT
                 }
                 else if (slashExecutionChecksFailedException.FailedChecks[0] is SlashGuildBannable slashGuildBannable)
                 {
-                    using var data = new Data("data.json").Initialize();
+                    using var data = new Database("data.json").Initialize();
 
                     await args.Context.CreateResponseAsync(new DiscordInteractionResponseBuilder()
                         .WithContent($"⚠️ This server is banned from RainBOT for \"{data.GuildBans.Find(x => x.GuildId == args.Context.Guild.Id).Reason}\".")
