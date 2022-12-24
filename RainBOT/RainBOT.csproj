@@ -8,6 +8,11 @@
     <ApplicationIcon>icon.ico</ApplicationIcon>
   </PropertyGroup>
 
+  <PropertyGroup>
+    <AssemblyVersion>3.5.1.4</AssemblyVersion>
+    <Version>3.5.1.4</Version>
+  </PropertyGroup>
+
   <ItemGroup>
     <Content Include="icon.ico" />
   </ItemGroup>
