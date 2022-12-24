@@ -113,18 +113,21 @@ namespace RainBOT
         {
             if (args.Exception is SlashExecutionChecksFailedException slashExecutionChecksFailedException)
             {
-                if (slashExecutionChecksFailedException.FailedChecks[0] is SlashCooldownAttribute slashCooldownAttribute)
+                var failedCheck = slashExecutionChecksFailedException.FailedChecks[0];
+               
+                if (failedCheck is SlashCooldownAttribute slashCooldownAttribute)
                 {
                     // Error message for cooldowns.
-                    await args.Context.CreateResponseAsync($"⚠️ This command is on cooldown. (Finished {Formatter.Timestamp((DateTimeOffset)DateTime.Now.Add(slashCooldownAttribute.GetRemainingCooldown(args.Context)), TimestampFormat.RelativeTime)}", true);
+                    string timestamp = Formatter.Timestamp((DateTimeOffset)DateTime.Now.Add(slashCooldownAttribute.GetRemainingCooldown(args.Context)), TimestampFormat.RelativeTime);
+                    await args.Context.CreateResponseAsync($"⚠️ This command is on cooldown. (Finished {timestamp}", true);
                 }
-                else if (slashExecutionChecksFailedException.FailedChecks[0] is SlashRequireBotPermissionsAttribute slashRequireBotPermissionsAttribute)
+                else if (failedCheck is SlashRequireBotPermissionsAttribute slashRequireBotPermissionsAttribute)
                 {
                     // Error message for missing bot permissions.
-                    string permissionString = slashRequireBotPermissionsAttribute.Permissions.ToPermissionString().ToLower();
-                    await args.Context.CreateResponseAsync($"⚠️ I need permissions to {permissionString.Insert(permissionString.LastIndexOf(", ") + 2, "and ")} for this command to work.", true);
+                    string permissionString = slashRequireBotPermissionsAttribute.Permissions.ToPermissionString();
+                    await args.Context.CreateResponseAsync($"⚠️ I need permissions to {permissionString.Insert(permissionString.LastIndexOf(", ") + 2, "and ").ToLower()} for this command to work.", true);
                 }
-                else if (slashExecutionChecksFailedException.FailedChecks[0] is SlashUserBannable slashUserBannable)
+                else if (failedCheck is SlashUserBannable slashUserBannable)
                 {
                     // Error message for banned users.
                     using var data = new Database("data.json").Initialize();
@@ -134,7 +137,7 @@ namespace RainBOT
                         .AddComponents(new DiscordLinkButtonComponent("https://forms.gle/mBBhmmT9qC57xjkG7", "Appeal"))
                         .AsEphemeral());
                 }
-                else if (slashExecutionChecksFailedException.FailedChecks[0] is SlashGuildBannable slashGuildBannable)
+                else if (failedCheck is SlashGuildBannable slashGuildBannable)
                 {
                     // Error message for banned guilds.
                     using var data = new Database("data.json").Initialize();

@@ -23,7 +23,6 @@
 using DSharpPlus.Entities;
 using RainBOT.Core.Services;
 using RainBOT.Core.Services.Models;
-using RainBOT.Modules;
 
 namespace RainBOT.Core
 {

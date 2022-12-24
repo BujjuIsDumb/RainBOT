@@ -43,7 +43,7 @@ namespace RainBOT.Core.AutocompleteProviders
                 foreach (var field in account.BioFields)
                     list.Add(new DiscordAutoCompleteChoice(field.Name, field.Name));
 
-            return Task.FromResult(list.OrderBy(x => AutocompleteHelper.CompareStrings((string)ctx.OptionValue, x.Name)) as IEnumerable<DiscordAutoCompleteChoice>);
+            return Task.FromResult(list.OrderBy(x => AutocompleteHelper.CompareStrings((string)ctx.OptionValue, x.Name)).AsEnumerable());
         }
     }
 }

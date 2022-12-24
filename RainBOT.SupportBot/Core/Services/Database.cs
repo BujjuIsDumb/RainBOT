@@ -64,10 +64,7 @@ namespace RainBOT.SupportBot.Core.Services
         /// </summary>
         public void Update()
             => File.WriteAllText(FileName, JsonConvert.SerializeObject(this, Formatting.Indented));
-
-        /// <summary>
-        ///     Disposes of the database.
-        /// </summary>
+        
         public void Dispose()
         {
             GC.SuppressFinalize(this);

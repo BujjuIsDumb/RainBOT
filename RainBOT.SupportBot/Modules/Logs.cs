@@ -31,6 +31,9 @@ namespace RainBOT.SupportBot.Modules
     [SlashCommandPermissions(Permissions.ManageGuild)]
     public class Logs : ApplicationCommandModule
     {
+        /// <summary>
+        ///     Accessed in <see cref="RbSupportClient"/> to check if the logs are enabled.
+        /// </summary>
         public static bool LogsEnabled = true;
         
         /// <summary>
