@@ -141,23 +141,32 @@ namespace RainBOT.Modules
                 }
                 else if (args.Interaction.Data.CustomId == respondModal.CustomId)
                 {
-                    try
+                    if (ctx.User.GetUserData(Data).AllowVentResponses)
                     {
-                        await ctx.Member.SendMessageAsync(new DiscordEmbedBuilder()
-                            .WithTitle("📨 A new vent response has arrived.")
-                            .WithDescription("> " + args.Values["response"])
-                            .WithColor(new DiscordColor(3092790)));
+                        try
+                        {
+                            await ctx.Member.SendMessageAsync(new DiscordEmbedBuilder()
+                                .WithTitle("📨 A new vent response has arrived.")
+                                .WithDescription("> " + args.Values["response"])
+                                .WithColor(new DiscordColor(3092790)));
 
-                        await args.Interaction.CreateResponseAsync(InteractionResponseType.ChannelMessageWithSource, new DiscordInteractionResponseBuilder()
-                            .WithContent("✅ Your response has been sent.")
-                            .AsEphemeral());
+                            await args.Interaction.CreateResponseAsync(InteractionResponseType.ChannelMessageWithSource, new DiscordInteractionResponseBuilder()
+                                .WithContent("✅ Your response has been sent.")
+                                .AsEphemeral());
 
-                        responseCache.Add(new(args.Interaction.User, args.Values["response"], DateTimeOffset.Now));
+                            responseCache.Add(new(args.Interaction.User, args.Values["response"], DateTimeOffset.Now));
+                        }
+                        catch (UnauthorizedException)
+                        {
+                            await args.Interaction.CreateResponseAsync(InteractionResponseType.ChannelMessageWithSource, new DiscordInteractionResponseBuilder()
+                                .WithContent("⚠️ The user doesn't have their DMs enabled for this server.")
+                                .AsEphemeral());
+                        }
                     }
-                    catch (UnauthorizedException)
+                    else
                     {
                         await args.Interaction.CreateResponseAsync(InteractionResponseType.ChannelMessageWithSource, new DiscordInteractionResponseBuilder()
-                            .WithContent("⚠️ The user doesn't have their DMs enabled for this server.")
+                            .WithContent("⚠️ This user doesn't allow people to respond to their vents.")
                             .AsEphemeral());
                     }
                 }
@@ -171,9 +180,27 @@ namespace RainBOT.Modules
                 }
                 else if (args.Id == hotlinesButton.CustomId)
                 {
-                    await args.Interaction.CreateResponseAsync(InteractionResponseType.ChannelMessageWithSource, new DiscordInteractionResponseBuilder()
-                        .AddEmbeds(Hotlines)
-                        .AsEphemeral());
+                    if (ctx.User.GetUserData(Data).AllowVentResponses)
+                    {
+                        try
+                        {
+                            await args.Interaction.CreateResponseAsync(InteractionResponseType.ChannelMessageWithSource, new DiscordInteractionResponseBuilder()
+                                .AddEmbeds(Hotlines)
+                                .AsEphemeral());
+                        }
+                        catch (UnauthorizedException)
+                        {
+                            await args.Interaction.CreateResponseAsync(InteractionResponseType.ChannelMessageWithSource, new DiscordInteractionResponseBuilder()
+                                .WithContent("⚠️ The user doesn't have their DMs enabled for this server.")
+                                .AsEphemeral());
+                        }
+                    }
+                    else
+                    {
+                        await args.Interaction.CreateResponseAsync(InteractionResponseType.ChannelMessageWithSource, new DiscordInteractionResponseBuilder()
+                            .WithContent("⚠️ This user doesn't allow people to respond to their vents.")
+                            .AsEphemeral());
+                    }
                 }
                 else if (args.Id == moderateButton.CustomId)
                 {
