@@ -61,9 +61,12 @@ namespace RainBOT.SupportBot
             {
                 Token = _config.Token,
                 TokenType = TokenType.Bot,
-                Intents = DiscordIntents.AllUnprivileged
+                Intents = DiscordIntents.AllUnprivileged | DiscordIntents.MessageContents
             });
             _client.MessageCreated += MessageCreated;
+            _client.MessageDeleted += MessageDeleted;
+            _client.MessageUpdated += MessageUpdated;
+            _client.GuildMemberRemoved += GuildMemberRemoved;
 
             // Create the slash command service.
             var slash = _client.UseSlashCommands(new SlashCommandsConfiguration()
@@ -97,6 +100,58 @@ namespace RainBOT.SupportBot
 
                 await args.Message.RespondAsync(embed);
             }
+        }
+
+        /// <summary>
+        ///     Handles the <see cref="DiscordClient.MessageDeleted"/> event.
+        /// </summary>
+        /// <param name="sender">The sender.</param>
+        /// <param name="args">The args.</param>
+        /// <returns>A task that represents the asynchronous operation.</returns>
+        private async Task MessageDeleted(DiscordClient sender, MessageDeleteEventArgs args)
+        {
+            var embed = new DiscordEmbedBuilder()
+                .WithAuthor(name: args.Message.Author.Username, iconUrl: args.Message.Author.AvatarUrl)
+                .WithTitle("Message deleted")
+                .WithDescription(args.Message.Content)
+                .WithColor(new DiscordColor(3092790));
+            
+            await (await sender.GetChannelAsync(_config.LogsChannelId)).SendMessageAsync(embed);
+        }
+
+        /// <summary>
+        ///     Handles the <see cref="DiscordClient.MessageUpdated"/> event.
+        /// </summary>
+        /// <param name="sender">The sender.</param>
+        /// <param name="args">The args.</param>
+        /// <returns>A task that represents the asynchronous operation.</returns>
+        private async Task MessageUpdated(DiscordClient sender, MessageUpdateEventArgs args)
+        {
+            var embed = new DiscordEmbedBuilder()
+                .WithAuthor(name: args.Message.Author.Username, iconUrl: args.Message.Author.AvatarUrl)
+                .WithTitle("Message edited")
+                .AddField("Before", args.MessageBefore.Content)
+                .AddField("After", args.Message.Content)
+                .WithColor(new DiscordColor(3092790));
+
+            await (await sender.GetChannelAsync(_config.LogsChannelId)).SendMessageAsync(embed);
+        }
+
+        /// <summary>
+        ///     Handles the <see cref="DiscordClient.GuildMemberRemoved"/> event.
+        /// </summary>
+        /// <param name="sender">The sender.</param>
+        /// <param name="args">The args.</param>
+        /// <returns>A task that represents the asynchronous operation.</returns>
+        private async Task GuildMemberRemoved(DiscordClient sender, GuildMemberRemoveEventArgs args)
+        {
+            var embed = new DiscordEmbedBuilder()
+                .WithAuthor(name: args.Member.Username, iconUrl: args.Member.AvatarUrl)
+                .WithTitle("Member left")
+                .WithDescription($"{args.Member.Username} has been here since {Formatter.Timestamp(args.Member.JoinedAt, TimestampFormat.RelativeTime)}")
+                .WithColor(new DiscordColor(3092790));
+
+            await (await sender.GetChannelAsync(_config.LogsChannelId)).SendMessageAsync(embed);
         }
 
         /// <summary>
