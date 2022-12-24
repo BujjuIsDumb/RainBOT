@@ -32,9 +32,9 @@ namespace RainBOT.SupportBot.Modules
     public class Logs : ApplicationCommandModule
     {
         /// <summary>
-        ///     Accessed in <see cref="RbSupportClient"/> to check if the logs are enabled.
+        ///     Gets or sets whether the logs are enabled.
         /// </summary>
-        public static bool LogsEnabled = true;
+        public static bool LogsEnabled { get; set; } = true;
         
         /// <summary>
         ///     Sets the database service.
