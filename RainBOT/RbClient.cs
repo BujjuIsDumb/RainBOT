@@ -121,7 +121,8 @@ namespace RainBOT
                 else if (slashExecutionChecksFailedException.FailedChecks[0] is SlashRequireBotPermissionsAttribute slashRequireBotPermissionsAttribute)
                 {
                     // Error message for missing bot permissions.
-                    await args.Context.CreateResponseAsync($"⚠️ I need `{slashRequireBotPermissionsAttribute.Permissions.ToPermissionString()}` permissions for this command to work.", true);
+                    string permissionString = slashRequireBotPermissionsAttribute.Permissions.ToPermissionString().ToLower();
+                    await args.Context.CreateResponseAsync($"⚠️ I need permissions to {permissionString.Insert(permissionString.LastIndexOf(", ") + 2, "and ")} for this command to work.", true);
                 }
                 else if (slashExecutionChecksFailedException.FailedChecks[0] is SlashUserBannable slashUserBannable)
                 {
