@@ -92,7 +92,7 @@ namespace RainBOT.SupportBot
             {
                 var embed = new DiscordEmbedBuilder()
                     .WithTitle("🌈 RainBOT Support")
-                    .WithDescription("This bot was designed for the RainBOT support server. It has commands that create responses with answers to common questions.")
+                    .WithDescription("I am the bot for the RainBOT support server. I have commands to help users get support with RainBOT, help the staff moderate this server, and more!")
                     .WithColor(new DiscordColor(3092790));
 
                 await args.Message.RespondAsync(embed);
