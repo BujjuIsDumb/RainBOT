@@ -52,10 +52,16 @@ namespace RainBOT.Core.Services
         public List<ReportData> Reports { get; set; } = new();
 
         /// <summary>
-        ///     Gets or sets the list of bans.
+        ///     Gets or sets the list of user bans.
         /// </summary>
-        [JsonProperty("bans")]
-        public List<BanData> Bans { get; set; } = new();
+        [JsonProperty("user_bans")]
+        public List<UserBanData> UserBans { get; set; } = new();
+
+        /// <summary>
+        ///     Gets or sets the list of guild bans.
+        /// </summary>
+        [JsonProperty("guild_bans")]
+        public List<GuildBanData> GuildBans { get; set; } = new();
 
         /// <summary>
         ///     Gets or sets the database file.
@@ -75,7 +81,8 @@ namespace RainBOT.Core.Services
             Users = loaded.Users;
             Guilds = loaded.Guilds;
             Reports = loaded.Reports;
-            Bans = loaded.Bans;
+            UserBans = loaded.UserBans;
+            GuildBans = loaded.GuildBans;
 
             return this;
         }
@@ -95,7 +102,8 @@ namespace RainBOT.Core.Services
             Users.Clear();
             Guilds.Clear();
             Reports.Clear();
-            Bans.Clear();
+            UserBans.Clear();
+            GuildBans.Clear();
         }
     }
 }

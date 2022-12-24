@@ -27,7 +27,7 @@ namespace RainBOT.Core.Services.Models
     /// <summary>
     ///     Represents a ban.
     /// </summary>
-    public class BanData
+    public class UserBanData
     {
         /// <summary>
         ///     Gets or sets the ID of the user who was banned.

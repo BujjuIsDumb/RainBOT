@@ -34,7 +34,7 @@ namespace RainBOT.Modules
     ///     The user configuration module.
     /// </summary>
     [SlashCommandGroup("user", "Configure user-side settings.")]
-    [SlashBannable]
+    [SlashUserBannable]
     public class User : ApplicationCommandModule
     {
         /// <summary>

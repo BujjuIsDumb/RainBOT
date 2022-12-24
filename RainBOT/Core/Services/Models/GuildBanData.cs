@@ -1,17 +1,17 @@
 ﻿// This file is from RainBOT.
-//
+// 
 // Copyright(c) 2022 Bujju
-//
+// 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
 // in the Software without restriction, including without limitation the rights
 // to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
 // copies of the Software, and to permit persons to whom the Software is
 // furnished to do so, subject to the following conditions:
-//
+// 
 // The above copyright notice and this permission notice shall be included in all
 // copies or substantial portions of the Software.
-//
+// 
 // THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 // IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
 // FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -20,22 +20,25 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-using DSharpPlus.SlashCommands;
-using RainBOT.Core.Services;
+using Newtonsoft.Json;
 
-namespace RainBOT.Core.Attributes
+namespace RainBOT.Core.Services.Models
 {
     /// <summary>
-    ///     A context menu check that checks if the user is banned.
+    ///     Represents a ban.
     /// </summary>
-    public class ContextMenuBannableAttribute : ContextMenuCheckBaseAttribute
+    public class GuildBanData
     {
-        public override async Task<bool> ExecuteChecksAsync(ContextMenuContext ctx)
-        {
-            using var data = new Database("data.json").Initialize();
+        /// <summary>
+        ///     Gets or sets the ID of the guild that was banned.
+        /// </summary>
+        [JsonProperty("guild_id")]
+        public ulong GuildId { get; set; } = 0;
 
-            // Return true if there is an account for the user; return false if there isn't.
-            return await Task.FromResult(!data.Bans.Exists(x => x.UserId == ctx.User.Id));
-        }
+        /// <summary>
+        ///     Gets or sets the reason for the ban.
+        /// </summary>
+        [JsonProperty("reason")]
+        public string Reason { get; set; } = string.Empty;
     }
 }

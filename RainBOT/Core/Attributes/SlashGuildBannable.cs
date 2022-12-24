@@ -26,16 +26,16 @@ using RainBOT.Core.Services;
 namespace RainBOT.Core.Attributes
 {
     /// <summary>
-    ///     A slash command check that checks if the user is banned.
+    ///     A slash command check that checks if the guild is banned.
     /// </summary>
-    public class SlashBannableAttribute : SlashCheckBaseAttribute
+    public class SlashGuildBannable : SlashCheckBaseAttribute
     {
         public override async Task<bool> ExecuteChecksAsync(InteractionContext ctx)
         {
             using var data = new Database("data.json").Initialize();
 
-            // Return true if there is an account for the user; return false if there isn't.
-            return await Task.FromResult(!data.Bans.Exists(x => x.UserId == ctx.User.Id));
+            // Return false if the guild is banned; return true if otherwise.
+            return await Task.FromResult(!data.GuildBans.Exists(x => x.GuildId == ctx.Guild.Id));
         }
     }
 }

@@ -89,7 +89,8 @@ namespace RainBOT.Modules
         [GuildOnly]
         [SlashCooldown(5, 300, SlashCooldownBucketType.User)]
         [SlashRequireBotPermissions(Permissions.AccessChannels | Permissions.SendMessages | Permissions.EmbedLinks)]
-        [SlashBannable]
+        [SlashGuildBannable]
+        [SlashUserBannable]
         public async Task VentAsync(InteractionContext ctx,
             [Option("anonymous", "Whether or not the vent will show you name to non-moderators.")] bool anonymous,
             [Option("tw", "Whether or not the vent contains potentially triggering content.")] bool tw)

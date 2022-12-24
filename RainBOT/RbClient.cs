@@ -29,8 +29,10 @@ using DSharpPlus.SlashCommands.Attributes;
 using DSharpPlus.SlashCommands.EventArgs;
 using Microsoft.Extensions.DependencyInjection;
 using RainBOT.Core;
+using RainBOT.Core.Attributes;
 using RainBOT.Core.Services;
 using RainBOT.Core.Services.Models;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace RainBOT
 {
@@ -66,7 +68,6 @@ namespace RainBOT
                 Intents = DiscordIntents.AllUnprivileged
             });
             _client.MessageCreated += MessageCreated;
-            _client.GuildCreated += GuildCreated;
 
             // Create the slash command service.
             var slash = _client.UseSlashCommands(new SlashCommandsConfiguration()
@@ -105,25 +106,6 @@ namespace RainBOT
         }
 
         /// <summary>
-        ///     Handles the <see cref="DiscordClient.GuildCreated"/> event.
-        /// </summary>
-        /// <param name="sender">The sender.</param>
-        /// <param name="args">The args.</param>
-        /// <returns>A task that represents the asynchronous operation.</returns>
-        private static Task GuildCreated(DiscordClient sender, GuildCreateEventArgs args)
-        {
-            return Task.Run(() =>
-            {
-                using var data = new Database("data.json").Initialize();
-                if (!data.Guilds.Exists(x => x.GuildId == args.Guild.Id))
-                {
-                    data.Guilds.Add(new GuildData() { GuildId = args.Guild.Id });
-                    data.Update();
-                }
-            });
-        }
-
-        /// <summary>
         ///     Handles the <see cref="SlashCommandsExtension.SlashCommandErrored"/> event.
         /// </summary>
         /// <param name="sender">The sender.</param>
@@ -134,9 +116,31 @@ namespace RainBOT
             if (args.Exception is SlashExecutionChecksFailedException slashExecutionChecksFailedException)
             {
                 if (slashExecutionChecksFailedException.FailedChecks[0] is SlashCooldownAttribute slashCooldownAttribute)
+                {
                     await args.Context.CreateResponseAsync($"⚠️ This command is on cooldown. (Finished <t:{((DateTimeOffset)DateTime.Now.Add(slashCooldownAttribute.GetRemainingCooldown(args.Context))).ToUnixTimeSeconds()}:R>)", true);
+                }
                 else if (slashExecutionChecksFailedException.FailedChecks[0] is SlashRequireBotPermissionsAttribute slashRequireBotPermissionsAttribute)
+                {
                     await args.Context.CreateResponseAsync($"⚠️ I need `{slashRequireBotPermissionsAttribute.Permissions}` permissions for this command to work.", true);
+                }
+                else if (slashExecutionChecksFailedException.FailedChecks[0] is SlashUserBannable slashUserBannable)
+                {
+                    using var data = new Data("data.json").Initialize();
+
+                    await args.Context.CreateResponseAsync(new DiscordInteractionResponseBuilder()
+                        .WithContent($"⚠️ You are banned from RainBOT for \"{data.UserBans.Find(x => x.UserId == args.Context.User.Id).Reason}\".")
+                        .AddComponents(new DiscordLinkButtonComponent("https://forms.gle/mBBhmmT9qC57xjkG7", "Appeal"))
+                        .AsEphemeral());
+                }
+                else if (slashExecutionChecksFailedException.FailedChecks[0] is SlashGuildBannable slashGuildBannable)
+                {
+                    using var data = new Data("data.json").Initialize();
+
+                    await args.Context.CreateResponseAsync(new DiscordInteractionResponseBuilder()
+                        .WithContent($"⚠️ This server is banned from RainBOT for \"{data.GuildBans.Find(x => x.GuildId == args.Context.Guild.Id).Reason}\".")
+                        .AddComponents(new DiscordLinkButtonComponent("https://forms.gle/mBBhmmT9qC57xjkG7", "Appeal"))
+                        .AsEphemeral());
+                }
             }
             else
             {

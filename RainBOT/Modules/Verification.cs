@@ -26,6 +26,7 @@ using DSharpPlus.Exceptions;
 using DSharpPlus.SlashCommands;
 using DSharpPlus.SlashCommands.Attributes;
 using RainBOT.Core;
+using RainBOT.Core.Attributes;
 using RainBOT.Core.Services;
 
 namespace RainBOT.Modules
@@ -49,6 +50,7 @@ namespace RainBOT.Modules
         [GuildOnly]
         [SlashCooldown(5, 300, SlashCooldownBucketType.User)]
         [SlashRequireBotPermissions(Permissions.CreatePrivateThreads | Permissions.ManageRoles | Permissions.KickMembers | Permissions.BanMembers | Permissions.ManageThreads)]
+        [SlashGuildBannable]
         public async Task VerifyAsync(InteractionContext ctx)
         {
             DiscordInteraction originalInteraction = null;

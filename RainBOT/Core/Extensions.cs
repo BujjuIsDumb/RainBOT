@@ -23,6 +23,7 @@
 using DSharpPlus.Entities;
 using RainBOT.Core.Services;
 using RainBOT.Core.Services.Models;
+using RainBOT.Modules;
 
 namespace RainBOT.Core
 {
@@ -39,9 +40,9 @@ namespace RainBOT.Core
         /// <returns>The user configuration for the specified user.</returns>
         public static UserData GetUserData(this DiscordUser user, Database data)
         {
-            if (!data.Users.Exists(x => x.UserId == user.Id) && !data.Bans.Exists(x => x.UserId == user.Id))
+            if (!data.Users.Exists(x => x.UserId == user.Id))
             {
-                data.Users.Add(new UserData() { UserId = user.Id });
+                data.Users.Add(new UserData() { UserId = user.Id});
                 data.Update();
             }
 
@@ -55,6 +56,14 @@ namespace RainBOT.Core
         /// <param name="data">The database object to use.</param>
         /// <returns>The guild configuration for the specified guild.</returns>
         public static GuildData GetGuildData(this DiscordGuild guild, Database data)
-            => data.Guilds.Find(x => x.GuildId == guild.Id);
+        {
+            if (!data.Guilds.Exists(x => x.GuildId == guild.Id))
+            {
+                data.Guilds.Add(new GuildData() { GuildId = guild.Id });
+                data.Update();
+            }
+
+            return data.Guilds.Find(x => x.GuildId == guild.Id);
+        }
     }
 }
