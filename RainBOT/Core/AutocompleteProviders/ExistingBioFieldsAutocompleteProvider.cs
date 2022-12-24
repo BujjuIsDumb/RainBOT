@@ -40,10 +40,8 @@ namespace RainBOT.Core.AutocompleteProviders
 
             // Add all the fields to the list.
             if (account is not null)
-            {
                 foreach (var field in account.BioFields)
                     list.Add(new DiscordAutoCompleteChoice(field.Name, field.Name));
-            }
 
             return Task.FromResult(list.OrderBy(x => AutocompleteHelper.CompareStrings((string)ctx.OptionValue, x.Name)) as IEnumerable<DiscordAutoCompleteChoice>);
         }
