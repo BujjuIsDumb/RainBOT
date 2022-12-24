@@ -36,6 +36,7 @@ namespace RainBOT.SupportBot.Core.Services
         /// <summary>
         ///     Gets or sets the list of prompts.
         /// </summary>
+        [JsonProperty("prompts")]
         public List<PromptData> Prompts { get; set; } = new();
 
         /// <summary>
