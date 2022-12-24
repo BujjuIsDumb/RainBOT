@@ -38,9 +38,10 @@ namespace RainBOT.SupportBot.Core.AutocompleteProviders
 
             // Add an autocomplete suggestion for every tag.
             foreach (var prompt in data.Prompts.OrderBy(x => x.Votes * -1))
-                prompt.Tags.ToList().ForEach(x => list.Add(new DiscordAutoCompleteChoice(x, x)));
+                foreach (var tag in prompt.Tags)
+                    list.Add(new DiscordAutoCompleteChoice(tag, tag));
                 
-            return Task.FromResult(list.OrderBy(x => Utilities.CompareStrings((string)ctx.OptionValue, x.Name)).Take(10));
+            return Task.FromResult(list.OrderBy(x => AutocompleteHelper.CompareStrings((string)ctx.OptionValue, x.Name)).Take(10));
         }
     }
 }
