@@ -40,6 +40,12 @@ namespace RainBOT.SupportBot.Core.Services
         public List<PromptData> Prompts { get; set; } = new();
 
         /// <summary>
+        ///     Gets or sets the list of mod notes.
+        /// </summary>
+        [JsonProperty("mod_notes")]
+        public List<ModNoteData> ModNotes { get; set; } = new();
+
+        /// <summary>
         ///     Gets or sets the database file.
         /// </summary>
         [JsonIgnore]
@@ -55,6 +61,7 @@ namespace RainBOT.SupportBot.Core.Services
             var loaded = JsonConvert.DeserializeObject<Database>(File.ReadAllText(FileName));
 
             Prompts = loaded.Prompts;
+            ModNotes = loaded.ModNotes;
 
             return this;
         }
@@ -69,6 +76,7 @@ namespace RainBOT.SupportBot.Core.Services
         {
             GC.SuppressFinalize(this);
             Prompts.Clear();
+            ModNotes.Clear();
         }
     }
 }

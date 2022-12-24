@@ -25,6 +25,7 @@ using DSharpPlus.Entities;
 using DSharpPlus.SlashCommands;
 using DSharpPlus.SlashCommands.Attributes;
 using RainBOT.SupportBot.Core.Services;
+using RainBOT.SupportBot.Core.Services.Models;
 
 namespace RainBOT.SupportBot.Modules
 {
@@ -96,6 +97,96 @@ namespace RainBOT.SupportBot.Modules
             await ctx.CreateResponseAsync(new DiscordInteractionResponseBuilder()
                 .WithContent($"Are you sure you want to delete {amount} messages?")
                 .AddComponents(confimButton, nevermindButton)
+                .AsEphemeral());
+        }
+
+        /// <summary>
+        ///     The Add Notes context menu.
+        /// </summary>
+        /// <param name="ctx">Context for the interaction</param>
+        /// <returns>A task that represents the asynchronous operation.</returns>
+        [ContextMenu(ApplicationCommandType.UserContextMenu, "Add Note")]
+        [SlashCommandPermissions(Permissions.ModerateMembers)]
+        public async Task AddNoteAsync(ContextMenuContext ctx)
+        {
+            #region Components
+            var noteModal = new DiscordInteractionResponseBuilder()
+                .WithTitle("Add a mod note")
+                .WithCustomId($"noteModal-{DateTimeOffset.Now.ToUnixTimeSeconds()}")
+                .AddComponents(new TextInputComponent(label: "Subject", customId: "subject", placeholder: "Describe the note.", style: TextInputStyle.Short, min_length: 5, max_length: 50))
+                .AddComponents(new TextInputComponent(label: "Note", customId: "note", placeholder: "What should the note say?", style: TextInputStyle.Paragraph, min_length: 10, max_length: 1200));
+            #endregion
+
+            #region Event Handlers
+            ctx.Client.ModalSubmitted += async (sender, args) =>
+            {
+                if (args.Interaction.Data.CustomId == noteModal.CustomId)
+                {
+                    Data.ModNotes.Add(new ModNoteData()
+                    {
+                        UserId = ctx.TargetUser.Id,
+                        CreatorUserId = ctx.User.Id,
+                        Subject = args.Values["subject"],
+                        Note = args.Values["note"],
+                        CreationTimestamp = DateTimeOffset.Now
+                    });
+                    Data.Update();
+
+                    await args.Interaction.CreateResponseAsync(InteractionResponseType.ChannelMessageWithSource, new DiscordInteractionResponseBuilder()
+                        .WithContent("✅ Created the note.")
+                        .AsEphemeral());
+                }
+            };
+            #endregion
+
+            await ctx.CreateResponseAsync(InteractionResponseType.Modal, noteModal);
+        }
+
+        /// <summary>
+        ///     The View Notes context menu.
+        /// </summary>
+        /// <param name="ctx">Context for the interaction</param>
+        /// <returns>A task that represents the asynchronous operation.</returns>
+        [ContextMenu(ApplicationCommandType.UserContextMenu, "View Notes")]
+        [SlashCommandPermissions(Permissions.ModerateMembers)]
+        public async Task ViewNotesAsync(ContextMenuContext ctx)
+        {
+            if (!Data.ModNotes.Exists(x => x.UserId == ctx.TargetUser.Id))
+            {
+                await ctx.CreateResponseAsync($"⚠ There are no notes for **{ctx.TargetUser.Username}**.", true);
+                return;
+            }
+
+            #region Components
+            var noteSelectOptions = Data.ModNotes.FindAll(x => x.UserId == ctx.TargetUser.Id).Select(x => new DiscordSelectComponentOption(x.Subject, x.ModNoteId.ToString()));
+            var noteSelect = new DiscordSelectComponent($"noteSelect-{DateTimeOffset.Now.ToUnixTimeSeconds()}", "Select a note to view.", noteSelectOptions);
+            #endregion
+
+            #region Event Handlers
+            ctx.Client.ComponentInteractionCreated += async (sender, args) =>
+            {
+                if (args.Id == noteSelect.CustomId)
+                {
+                    var note = Data.ModNotes.Find(x => x.ModNoteId == ulong.Parse(args.Values[0]));
+                    var noteCreator = await ctx.Client.GetUserAsync(note.CreatorUserId);
+
+                    var embed = new DiscordEmbedBuilder()
+                        .WithAuthor(name: noteCreator.Username, iconUrl: noteCreator.AvatarUrl)
+                        .WithTitle(note.Subject)
+                        .WithDescription(note.Note)
+                        .WithTimestamp(note.CreationTimestamp)
+                        .WithColor(new DiscordColor(3092790));
+                    
+                    await args.Interaction.CreateResponseAsync(InteractionResponseType.ChannelMessageWithSource, new DiscordInteractionResponseBuilder()
+                        .AddEmbed(embed)
+                        .AsEphemeral());
+                }
+            };
+            #endregion
+
+            await ctx.CreateResponseAsync(new DiscordInteractionResponseBuilder()
+                .WithContent("Select a note to view.")
+                .AddComponents(noteSelect)
                 .AsEphemeral());
         }
     }
