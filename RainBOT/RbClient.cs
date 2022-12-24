@@ -117,14 +117,17 @@ namespace RainBOT
             {
                 if (slashExecutionChecksFailedException.FailedChecks[0] is SlashCooldownAttribute slashCooldownAttribute)
                 {
+                    // Error message for cooldowns.
                     await args.Context.CreateResponseAsync($"⚠️ This command is on cooldown. (Finished <t:{((DateTimeOffset)DateTime.Now.Add(slashCooldownAttribute.GetRemainingCooldown(args.Context))).ToUnixTimeSeconds()}:R>)", true);
                 }
                 else if (slashExecutionChecksFailedException.FailedChecks[0] is SlashRequireBotPermissionsAttribute slashRequireBotPermissionsAttribute)
                 {
-                    await args.Context.CreateResponseAsync($"⚠️ I need `{slashRequireBotPermissionsAttribute.Permissions}` permissions for this command to work.", true);
+                    // Error message for missing bot permissions.
+                    await args.Context.CreateResponseAsync($"⚠️ I need `{slashRequireBotPermissionsAttribute.Permissions.ToPermissionString()}` permissions for this command to work.", true);
                 }
                 else if (slashExecutionChecksFailedException.FailedChecks[0] is SlashUserBannable slashUserBannable)
                 {
+                    // Error message for banned users.
                     using var data = new Database("data.json").Initialize();
 
                     await args.Context.CreateResponseAsync(new DiscordInteractionResponseBuilder()
@@ -134,6 +137,7 @@ namespace RainBOT
                 }
                 else if (slashExecutionChecksFailedException.FailedChecks[0] is SlashGuildBannable slashGuildBannable)
                 {
+                    // Error message for banned guilds.
                     using var data = new Database("data.json").Initialize();
 
                     await args.Context.CreateResponseAsync(new DiscordInteractionResponseBuilder()
