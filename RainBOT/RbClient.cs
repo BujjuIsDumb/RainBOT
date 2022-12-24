@@ -31,8 +31,6 @@ using Microsoft.Extensions.DependencyInjection;
 using RainBOT.Core;
 using RainBOT.Core.Attributes;
 using RainBOT.Core.Services;
-using RainBOT.Core.Services.Models;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace RainBOT
 {
