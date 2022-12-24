@@ -47,7 +47,7 @@ namespace RainBOT.SupportBot.Modules
         public async Task LogsToggleAsync(InteractionContext ctx)
         {
             LogsEnabled = !LogsEnabled;
-            await ctx.CreateResponseAsync("✅ Toggled the logs.", true);
+            await ctx.CreateResponseAsync($"✅ Logs have been **{(LogsEnabled ? "enabled" : "disabled")}**.", true);
         }
     }
 }
