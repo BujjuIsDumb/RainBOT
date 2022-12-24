@@ -50,16 +50,15 @@ namespace RainBOT.SupportBot.Modules
         [SlashCommand("create", "Create a new prompt.")]
         public async Task PromptCreateAsync(InteractionContext ctx)
         {
-            // Build modal.
+            #region Components
             var promptCreateModal = new DiscordInteractionResponseBuilder()
                 .WithTitle("Create the prompt")
                 .WithCustomId($"promptCreateModal-{DateTimeOffset.Now.ToUnixTimeSeconds()}")
                 .AddComponents(new TextInputComponent(label: "Tags (Comma-separated)", customId: "tags", placeholder: "example, tag-example, tags-example", style: TextInputStyle.Short, min_length: 5, max_length: 50))
                 .AddComponents(new TextInputComponent(label: "Prompt", customId: "prompt", style: TextInputStyle.Paragraph, min_length: 5, max_length: 1500));
+            #endregion
 
-            await ctx.CreateResponseAsync(InteractionResponseType.Modal, promptCreateModal);
-
-            // Respond to modal submission.
+            #region Event Handlers
             ctx.Client.ModalSubmitted += async (sender, args) =>
             {
                 if (args.Interaction.Data.CustomId == promptCreateModal.CustomId)
@@ -92,6 +91,9 @@ namespace RainBOT.SupportBot.Modules
                         .AsEphemeral());
                 }
             };
+            #endregion
+
+            await ctx.CreateResponseAsync(InteractionResponseType.Modal, promptCreateModal);
         }
 
         /// <summary>
@@ -109,15 +111,14 @@ namespace RainBOT.SupportBot.Modules
             {
                 if (Data.Prompts.Find(x => x.Tags.Contains(query)).CreatorUserId == ctx.User.Id)
                 {
-                    // Build modal.
+                    #region Components
                     var promptEditModal = new DiscordInteractionResponseBuilder()
                         .WithTitle("Edit the prompt")
                         .WithCustomId($"promptEditModal-{DateTimeOffset.Now.ToUnixTimeSeconds()}")
                         .AddComponents(new TextInputComponent(label: "Prompt", customId: "prompt", value: Data.Prompts.Find(x => x.Tags.Contains(query)).Prompt, style: TextInputStyle.Paragraph, min_length: 5, max_length: 1500));
+                    #endregion
 
-                    await ctx.CreateResponseAsync(InteractionResponseType.Modal, promptEditModal);
-
-                    // Respond to modal submission.
+                    #region Event Handlers
                     ctx.Client.ModalSubmitted += async (sender, args) =>
                     {
                         if (args.Interaction.Data.CustomId == promptEditModal.CustomId)
@@ -130,6 +131,9 @@ namespace RainBOT.SupportBot.Modules
                                 .AsEphemeral());
                         }
                     };
+                    #endregion
+
+                    await ctx.CreateResponseAsync(InteractionResponseType.Modal, promptEditModal);
                 }
                 else
                 {
