@@ -336,6 +336,7 @@ namespace RainBOT.SupportBot.Modules
         /// <param name="query">The query option.</param>
         /// <returns>A task that represents the asynchronous operation.</returns>
         [SlashCommand("share", "Share a prompt.")]
+        [GuildOnly]
         public async Task PromptShareAsync(InteractionContext ctx,
             [Autocomplete(typeof(TagAutocompleteProvider))]
             [Option("query", "The tag to search for.", true)] string query)
