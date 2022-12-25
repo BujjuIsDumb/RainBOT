@@ -54,9 +54,9 @@ namespace RainBOT.SupportBot.Modules
             [Option("amount", "The amount of messages to delete.")] long amount)
         {
             #region Components
-            var confimButton = new DiscordButtonComponent(ButtonStyle.Primary, $"confimButton-{DateTimeOffset.Now.ToUnixTimeSeconds()}", "Yes", false, new DiscordComponentEmoji(DiscordEmoji.FromUnicode("✅")));
+            var confimButton = new DiscordButtonComponent(ButtonStyle.Success, $"confimButton-{DateTimeOffset.Now.ToUnixTimeSeconds()}", "Yes", false, new DiscordComponentEmoji(DiscordEmoji.FromUnicode("✅")));
             
-            var nevermindButton = new DiscordButtonComponent(ButtonStyle.Primary, $"nevermindButton-{DateTimeOffset.Now.ToUnixTimeSeconds()}", "Nevermind", false, new DiscordComponentEmoji(DiscordEmoji.FromUnicode("❌")));
+            var nevermindButton = new DiscordButtonComponent(ButtonStyle.Danger, $"nevermindButton-{DateTimeOffset.Now.ToUnixTimeSeconds()}", "Nevermind", false, new DiscordComponentEmoji(DiscordEmoji.FromUnicode("❌")));
             #endregion
 
             #region Event Handlers
