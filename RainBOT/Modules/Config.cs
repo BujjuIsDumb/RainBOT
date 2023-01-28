@@ -48,7 +48,7 @@ namespace RainBOT.Modules
         /// <param name="ctx">Context for the interaction.</param>
         /// <param name="setting">The setting option.</param>
         /// <returns>A task that represents the asynchronous operation.</returns>
-        [SlashCommand("configure", "Configure user-side settings.")]
+        [SlashCommand("config", "Configure user-side settings.")]
         public async Task UserConfigureAsync(InteractionContext ctx,
             [Choice("Allow Vent Responses", 0)]
             [Choice("Bio Style", 1)]
