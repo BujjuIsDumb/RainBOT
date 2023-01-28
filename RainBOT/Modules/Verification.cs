@@ -92,10 +92,11 @@ namespace RainBOT.Modules
                     if (args.Interaction.Data.CustomId == verificationFormModal.CustomId)
                     {
                         int reports = Data.Reports.FindAll(x => x.UserId == ctx.User.Id).Count;
+                        string cmd = (await ctx.Client.GetGlobalApplicationCommandAsync("report")).GetSubcommandMention("list");
                         var embed = new DiscordEmbedBuilder()
                             .WithAuthor(name: ctx.User.Username, iconUrl: ctx.User.AvatarUrl)
                             .WithTitle("📨 A new verification request has arrived!")
-                            .WithDescription(reports > 0 ? $"This user has {reports} report{(reports == 1 ? string.Empty : "s")}. ({Core.Utilities.GetCommandMention(ctx.Client, "report list")})" : null)
+                            .WithDescription(reports > 0 ? $"This user has {reports} report{(reports == 1 ? string.Empty : "s")}. ({cmd})" : null)
                             .WithFooter((DateTime.Now - ctx.User.CreationTimestamp.DateTime).TotalDays <= 7 ? "This account is less than a week old." : null)
                             .WithColor(new DiscordColor(3092790));
 

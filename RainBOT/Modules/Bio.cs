@@ -59,7 +59,8 @@ namespace RainBOT.Modules
         {
             if (ctx.User.GetUserData(Data).BioFields.Any(x => x.Name == field))
             {
-                await ctx.CreateResponseAsync($"⚠️ You already have a field with that name.Use {Core.Utilities.GetCommandMention(ctx.Client, "bio edit")}.", true);
+                string cmd = (await ctx.Client.GetGlobalApplicationCommandAsync("bio")).GetSubcommandMention("edit");
+                await ctx.CreateResponseAsync($"⚠️ You already have a field with that name.Use {cmd}.", true);
                 return;
             }
 
@@ -99,7 +100,8 @@ namespace RainBOT.Modules
         {
             if (!ctx.User.GetUserData(Data).BioFields.Any(x => x.Name == field))
             {
-                await ctx.CreateResponseAsync($"⚠️ You don't have a field with that name. Use {Core.Utilities.GetCommandMention(ctx.Client, "bio create")}.", true);
+                string cmd = (await ctx.Client.GetGlobalApplicationCommandAsync("bio")).GetSubcommandMention("create");
+                await ctx.CreateResponseAsync($"⚠️ You don't have a field with that name. Use {cmd}.", true);
                 return;
             }
 
@@ -127,7 +129,8 @@ namespace RainBOT.Modules
         {
             if (!ctx.User.GetUserData(Data).BioFields.Any(x => x.Name == field))
             {
-                await ctx.CreateResponseAsync($"⚠️ You don't have a field with that name. Use {Core.Utilities.GetCommandMention(ctx.Client, "bio create")}.", true);
+                string cmd = (await ctx.Client.GetGlobalApplicationCommandAsync("bio")).GetSubcommandMention("create");
+                await ctx.CreateResponseAsync($"⚠️ You don't have a field with that name. Use {cmd}.", true);
                 return;
             }
 
