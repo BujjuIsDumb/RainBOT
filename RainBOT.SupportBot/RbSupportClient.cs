@@ -115,8 +115,7 @@ namespace RainBOT.SupportBot
             {
                 var embed = new DiscordEmbedBuilder()
                     .WithAuthor(name: args.Message.Author.Username, iconUrl: args.Message.Author.AvatarUrl)
-                    .WithTitle("Message deleted")
-                    .WithUrl(args.Message.JumpLink)
+                    .WithTitle($"Message deleted in {args.Channel.Mention}")
                     .WithDescription(args.Message.Content)
                     .WithFooter("Message ID: " + args.Message.Id)
                     .WithTimestamp(args.Message.CreationTimestamp)
@@ -138,7 +137,7 @@ namespace RainBOT.SupportBot
             {
                 var embed = new DiscordEmbedBuilder()
                     .WithAuthor(name: args.Message.Author.Username, iconUrl: args.Message.Author.AvatarUrl)
-                    .WithTitle("Message edited")
+                    .WithTitle($"Message edited in {args.Channel.Mention}")
                     .WithUrl(args.Message.JumpLink)
                     .AddField("Before", args.MessageBefore.Content)
                     .AddField("After", args.Message.Content)
