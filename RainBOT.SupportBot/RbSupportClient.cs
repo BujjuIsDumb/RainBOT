@@ -137,7 +137,7 @@ namespace RainBOT.SupportBot
             {
                 var embed = new DiscordEmbedBuilder()
                     .WithAuthor(name: args.Message.Author.Username, iconUrl: args.Message.Author.AvatarUrl)
-                    .WithTitle($"Message edited in {args.Channel.Mention}")
+                    .WithTitle("Message edited")
                     .WithUrl(args.Message.JumpLink)
                     .AddField("Before", args.MessageBefore.Content)
                     .AddField("After", args.Message.Content)
