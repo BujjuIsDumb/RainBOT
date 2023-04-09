@@ -47,7 +47,7 @@ namespace RainBOT
         /// <summary>
         ///     The Discord client.
         /// </summary>
-        private DiscordClient _client;
+        private DiscordShardedClient _client;
 
         /// <summary>
         ///     Starts the bot.
@@ -59,7 +59,7 @@ namespace RainBOT
             _config = Configuration.Load("config.json");
 
             // Create the Discord client.
-            _client = new DiscordClient(new DiscordConfiguration()
+            _client = new DiscordShardedClient(new DiscordConfiguration()
             {
                 Token = _config.Token,
                 TokenType = TokenType.Bot,
@@ -68,17 +68,22 @@ namespace RainBOT
             _client.MessageCreated += MessageCreated;
 
             // Create the slash command service.
-            var slash = _client.UseSlashCommands(new SlashCommandsConfiguration()
+            foreach (var shard in _client.ShardClients.Values)
             {
-                Services = new ServiceCollection()
+                var slash = shard.UseSlashCommands(new SlashCommandsConfiguration()
+                {
+                    Services = new ServiceCollection()
                     .AddTransient(x => new Database("data.json").Initialize())
                     .BuildServiceProvider()
-            });
-            slash.RegisterCommands(Assembly.GetExecutingAssembly(), _config.GuildId);
-            slash.SlashCommandErrored += SlashCommandErrored;
+                });
+                slash.RegisterCommands(Assembly.GetExecutingAssembly(), _config.GuildId);
+                slash.SlashCommandErrored += SlashCommandErrored;
+            }
+
+            _client.Ready += async (sender, args) => await _client.UpdateStatusAsync(new DiscordActivity("for pings!", ActivityType.Watching));
 
             // Connect to the Discord gateway.
-            await _client.ConnectAsync(new DiscordActivity("for pings!", ActivityType.Watching));
+            await _client.StartAsync();
             await Task.Delay(-1);
         }
 
