@@ -95,7 +95,7 @@ namespace RainBOT.Modules
                     new DiscordSelectComponentOption("Black", "black", "Make your bio black.", false, new DiscordComponentEmoji(DiscordEmoji.FromUnicode("⚫"))),
                     new DiscordSelectComponentOption("White", "white", "Make your bio white.", false, new DiscordComponentEmoji(DiscordEmoji.FromUnicode("⚪"))),
                     new DiscordSelectComponentOption("Invisible (Dark Mode)", "invisd", "Make your bio color blend in with the embed for dark mode.", false, new DiscordComponentEmoji(DiscordEmoji.FromUnicode("🌑"))),
-                    new DiscordSelectComponentOption("Invisible (Light Mode)", "invisl", "Make your bio color blend in with the embed for light mode.", false, new DiscordComponentEmoji(DiscordEmoji.FromUnicode("🌞")))
+                    new DiscordSelectComponentOption("Invisible (Light Mode)", "invisl", "Make your bio color blend in with the embed for light mode.", false, new DiscordComponentEmoji(DiscordEmoji.FromUnicode("🌞"))),
                     new DiscordSelectComponentOption("Custom", "custom", "Choose a custom color", false, new DiscordComponentEmoji(DiscordEmoji.FromUnicode("🔘")))
                 });
 
