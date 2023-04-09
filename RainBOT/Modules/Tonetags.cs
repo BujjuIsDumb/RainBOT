@@ -53,7 +53,7 @@ namespace RainBOT.Modules
             await ctx.CreateResponseAsync(new DiscordEmbedBuilder()
                 .WithTitle("Tonetags")
                 .WithDescription($"Tonetags are indicators of a message's tone, which is important for people who struggle to identify tone by themselves (For example, some neuro-divergent people). You can use a tonetag if you think the tone of your message may be unclear. If you don't know what a tonetag means, you can look it up with {cmd} or define all the tonetags with \"Find Tonetags\".")
-                .WithColor(new DiscordColor(3092790)), true);
+                .WithColor(new DiscordColor(6317300)), true);
         }
 
         /// <summary>
@@ -84,7 +84,7 @@ namespace RainBOT.Modules
             var embed = new DiscordEmbedBuilder()
                 .WithTitle("Tonetag List")
                 .WithDescription(string.Join("\n", Definitions.Tonetags.Keys.Select(x => $"`{x}` {Definitions.Tonetags[x]}")))
-                .WithColor(new DiscordColor(3092790));
+                .WithColor(new DiscordColor(6317300));
 
             await ctx.CreateResponseAsync(embed, true);
         }

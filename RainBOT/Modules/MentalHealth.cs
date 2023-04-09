@@ -51,7 +51,7 @@ namespace RainBOT.Modules
                 .WithTitle("Hotlines")
                 .WithDescription("**CW ||S//c/d/|| (||uiie||)**\n\n||This is a list of suicide prevention hotlines. Some are for LGBTQIA+ people, and some are for general suicide-prevention. If you need to, please call one of the hotlines that apply to your situation.||")
                 .WithFooter("Whether you realize it or not, there are people who care about you. ♥")
-                .WithColor(new DiscordColor(3092790)),
+                .WithColor(new DiscordColor(6317300)),
 
             new DiscordEmbedBuilder()
                 .WithTitle("LGBTQIA Support Lines")
@@ -132,7 +132,7 @@ namespace RainBOT.Modules
                         .WithTitle("📨 A new vent has arrived!")
                         .WithDescription((tw ? "||" : null) + args.Values["vent"] + (tw ? "||" : null))
                         .WithFooter(tw ? "This vent contains potentially triggering content!" : null)
-                        .WithColor(new DiscordColor(3092790)))
+                        .WithColor(new DiscordColor(6317300)))
                         .AddComponents(respondButton, moderateButton));
 
                     await args.Interaction.CreateResponseAsync(InteractionResponseType.ChannelMessageWithSource, new DiscordInteractionResponseBuilder()
@@ -148,7 +148,7 @@ namespace RainBOT.Modules
                             await ctx.Member.SendMessageAsync(new DiscordEmbedBuilder()
                                 .WithTitle("📨 A new vent response has arrived.")
                                 .WithDescription("> " + args.Values["response"])
-                                .WithColor(new DiscordColor(3092790)));
+                                .WithColor(new DiscordColor(6317300)));
 
                             await args.Interaction.CreateResponseAsync(InteractionResponseType.ChannelMessageWithSource, new DiscordInteractionResponseBuilder()
                                 .WithContent("✅ Your response has been sent.")
@@ -212,7 +212,7 @@ namespace RainBOT.Modules
                             .WithTitle($"Vent from {ctx.User.Username}")
                             .WithThumbnail(ctx.User.AvatarUrl)
                             .WithDescription($"**Anonymous:** {(anonymous ? "Enabled" : "Disabled")}\n**Trigger Warning:** {(tw ? "Enabled" : "Disabled")}\n**Responses:** {responseCache.Count}")
-                            .WithColor(new DiscordColor(3092790));
+                            .WithColor(new DiscordColor(6317300));
 
                         foreach (var response in responseCache)
                             embed.AddField($"Response from {response.creator.Username}", $"> {response.message}" + $"\n\nSent {Formatter.Timestamp(response.creationTimestamp, TimestampFormat.RelativeTime)}");

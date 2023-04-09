@@ -139,7 +139,7 @@ namespace RainBOT.Modules
                     .WithTitle(report.Subject)
                     .WithDescription(report.Body)
                     .WithTimestamp(report.CreationTimestamp)
-                    .WithColor(new DiscordColor(3092790))));
+                    .WithColor(new DiscordColor(6317300))));
             }
 
             await ctx.Interaction.CreatePaginatedResponseAsync(ctx.Client, pages, true);
@@ -168,7 +168,7 @@ namespace RainBOT.Modules
                     .WithTitle(report.Subject)
                     .WithDescription(report.Body)
                     .WithTimestamp(report.CreationTimestamp)
-                    .WithColor(new DiscordColor(3092790))));
+                    .WithColor(new DiscordColor(6317300))));
             }
 
             await ctx.Interaction.CreatePaginatedResponseAsync(ctx.Client, pages, true);

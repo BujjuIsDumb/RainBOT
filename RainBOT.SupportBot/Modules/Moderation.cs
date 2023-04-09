@@ -175,7 +175,7 @@ namespace RainBOT.SupportBot.Modules
                         .WithTitle(note.Subject)
                         .WithDescription(note.Note)
                         .WithTimestamp(note.CreationTimestamp)
-                        .WithColor(new DiscordColor(3092790));
+                        .WithColor(new DiscordColor(6317300));
                     
                     await args.Interaction.CreateResponseAsync(InteractionResponseType.ChannelMessageWithSource, new DiscordInteractionResponseBuilder()
                         .AddEmbed(embed)

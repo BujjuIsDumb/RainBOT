@@ -102,7 +102,7 @@ namespace RainBOT
                     .WithDescription($"Welcome to RainBOT! I use slash commands, so you can view all of my commands by typing a `/` symbol.")
                     .WithImageUrl("https://i.imgur.com/sWoBYi6.png")
                     .WithFooter("Hint: Try /info!")
-                    .WithColor(new DiscordColor(3092790));
+                    .WithColor(new DiscordColor(6317300));
 
                 await args.Message.RespondAsync(embed);
             }

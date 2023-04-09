@@ -98,7 +98,7 @@ namespace RainBOT.Modules
                             .WithTitle("📨 A new verification request has arrived!")
                             .WithDescription(reports > 0 ? $"This user has {reports} report{(reports == 1 ? string.Empty : "s")}. ({cmd})" : null)
                             .WithFooter((DateTime.Now - ctx.User.CreationTimestamp.DateTime).TotalDays <= 7 ? "This account is less than a week old." : null)
-                            .WithColor(new DiscordColor(3092790));
+                            .WithColor(new DiscordColor(6317300));
 
                         // Add form answers.
                         questions.ToList().ForEach(x => embed.AddField(x.Value, args.Values[x.Key]));
@@ -178,7 +178,7 @@ namespace RainBOT.Modules
                             var embed = new DiscordEmbedBuilder()
                                 .WithTitle("✅ This request has been accepted.")
                                 .WithDescription($"Accepted by **{user.Username}**.")
-                                .WithColor(new DiscordColor(3092790));
+                                .WithColor(new DiscordColor(6317300));
 
                             await buttonInteraction.EditOriginalResponseAsync(new DiscordWebhookBuilder().AddEmbed(embed));
 
@@ -244,7 +244,7 @@ namespace RainBOT.Modules
                             var embed = new DiscordEmbedBuilder()
                                 .WithTitle("⛔ This request has been denied.")
                                 .WithDescription($"Denied by **{user.Username}**.")
-                                .WithColor(new DiscordColor(3092790));
+                                .WithColor(new DiscordColor(6317300));
 
                             await originalInteraction.EditOriginalResponseAsync(new DiscordWebhookBuilder().AddEmbed(embed));
 

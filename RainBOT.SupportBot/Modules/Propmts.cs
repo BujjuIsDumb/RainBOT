@@ -294,7 +294,7 @@ namespace RainBOT.SupportBot.Modules
                         .WithAuthor(name: creator.Username, iconUrl: creator.AvatarUrl)
                         .WithTitle("`" + query + "`")
                         .WithDescription(prompt.Prompt)
-                        .WithColor(new DiscordColor(3092790));
+                        .WithColor(new DiscordColor(6317300));
 
                     await ctx.CreateResponseAsync(new DiscordInteractionResponseBuilder()
                         .AddEmbed(embed)
@@ -406,7 +406,7 @@ namespace RainBOT.SupportBot.Modules
                         .WithAuthor(name: creator.Username, iconUrl: creator.AvatarUrl)
                         .WithTitle("`" + query + "`")
                         .WithDescription(prompt.Prompt)
-                        .WithColor(new DiscordColor(3092790));
+                        .WithColor(new DiscordColor(6317300));
 
                     await ctx.CreateResponseAsync(new DiscordInteractionResponseBuilder()
                         .AddEmbed(embed)

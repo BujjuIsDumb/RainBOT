@@ -48,7 +48,7 @@ namespace RainBOT.Modules
                 .WithTitle("RainBOT")
                 .WithThumbnail("https://i.imgur.com/IHdrwiJ.png")
                 .WithDescription("I am a bot designed to help start, manage, and moderate 2SLGBTQIA+ safespace servers.\n\n*Need help? Join the [support server](https://discord.gg/tKsqy5ZWFZ)*")
-                .WithColor(new DiscordColor(3092790)), true);
+                .WithColor(new DiscordColor(6317300)), true);
         }
 
         /// <summary>

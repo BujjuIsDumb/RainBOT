@@ -64,7 +64,7 @@ namespace RainBOT.SupportBot.Modules
                         .WithAuthor(name: ctx.User.Username, iconUrl: ctx.User.AvatarUrl)
                         .WithTitle("📨 A new modmail message has arrived")
                         .WithDescription(args.Values["message"])
-                        .WithColor(new DiscordColor(3092790));
+                        .WithColor(new DiscordColor(6317300));
 
                     await (await ctx.Client.GetChannelAsync(config.ModmailChannelId)).SendMessageAsync(embed);
 
