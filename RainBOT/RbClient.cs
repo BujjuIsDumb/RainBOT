@@ -68,22 +68,23 @@ namespace RainBOT
             _client.MessageCreated += MessageCreated;
 
             // Create the slash command service.
-            foreach (var shard in _client.ShardClients.Values)
+            var slash = await _client.UseSlashCommandsAsync(new SlashCommandsConfiguration()
             {
-                var slash = shard.UseSlashCommands(new SlashCommandsConfiguration()
-                {
-                    Services = new ServiceCollection()
+                Services = new ServiceCollection()
                     .AddTransient(x => new Database("data.json").Initialize())
                     .BuildServiceProvider()
-                });
-                slash.RegisterCommands(Assembly.GetExecutingAssembly(), _config.GuildId);
-                slash.SlashCommandErrored += SlashCommandErrored;
-            }
+            });
 
-            _client.Ready += async (sender, args) => await _client.UpdateStatusAsync(new DiscordActivity("for pings!", ActivityType.Watching));
+            // Register the commands.
+            foreach (var extension in slash.Values)
+            {
+                extension.RegisterCommands(Assembly.GetExecutingAssembly(), _config.GuildId);
+                extension.SlashCommandErrored += SlashCommandErrored;
+            }
 
             // Connect to the Discord gateway.
             await _client.StartAsync();
+            _client.Ready += async (sender, args) => await _client.UpdateStatusAsync(new DiscordActivity("for pings!", ActivityType.Watching));
             await Task.Delay(-1);
         }
 
