@@ -142,19 +142,19 @@ namespace RainBOT.Modules
                         }
                         else
                         {
-                            switch (args.Values.First())
+                            ctx.User.GetUserData(Data).BioStyle = args.Values.First() switch
                             {
-                                case "none": ctx.User.GetUserData(Data).BioStyle = "2F3136"; break;
-                                case "red": ctx.User.GetUserData(Data).BioStyle = "E91E63"; break;
-                                case "orange": ctx.User.GetUserData(Data).BioStyle = "E67E22"; break;
-                                case "yellow": ctx.User.GetUserData(Data).BioStyle = "F1C40F"; break;
-                                case "green": ctx.User.GetUserData(Data).BioStyle = "2ECC71"; break;
-                                case "blue": ctx.User.GetUserData(Data).BioStyle = "3498DB"; break;
-                                case "purple": ctx.User.GetUserData(Data).BioStyle = "9B59B6"; break;
-                                case "black": ctx.User.GetUserData(Data).BioStyle = "202225"; break;
-                                case "white": ctx.User.GetUserData(Data).BioStyle = "FFFFFF"; break;
-                            }
-
+                                "none" => "2F3136",
+                                "red" => "E91E63",
+                                "orange" => "E67E22",
+                                "yellow" => "F1C40F",
+                                "green" => "2ECC71",
+                                "blue" => "3498DB",
+                                "purple" => "9B59B6",
+                                "black" => "202225",
+                                "white" => "FFFFFF",
+                                _ => "2F3136"
+                            };
                             Data.Update();
 
                             await args.Interaction.CreateResponseAsync(InteractionResponseType.ChannelMessageWithSource, new DiscordInteractionResponseBuilder()
