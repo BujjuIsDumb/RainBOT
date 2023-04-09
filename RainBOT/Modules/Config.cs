@@ -85,7 +85,7 @@ namespace RainBOT.Modules
             {
                 var bioStyleSelect = new DiscordSelectComponent($"bioStyleSelect-{DateTimeOffset.Now.ToUnixTimeSeconds()}", "Select an option", new List<DiscordSelectComponentOption>()
                 {
-                    new DiscordSelectComponentOption("Default", "default", "Use the default bio color, Discord's Blurple.", false, new DiscordComponentEmoji(DiscordEmoji.FromUnicode("🎨"))),
+                    new DiscordSelectComponentOption("Blurple (Default)", "blurple", "Make your bio color blurple.", false),
                     new DiscordSelectComponentOption("Red", "red", "Make your bio color red.", false, new DiscordComponentEmoji(DiscordEmoji.FromUnicode("🔴"))),
                     new DiscordSelectComponentOption("Orange", "orange", "Make your bio orange.", false, new DiscordComponentEmoji(DiscordEmoji.FromUnicode("🟠"))),
                     new DiscordSelectComponentOption("Yellow", "yellow", "Make your bio yellow.", false, new DiscordComponentEmoji(DiscordEmoji.FromUnicode("🟡"))),
@@ -94,6 +94,8 @@ namespace RainBOT.Modules
                     new DiscordSelectComponentOption("Purple", "purple", "Make your bio purple.", false, new DiscordComponentEmoji(DiscordEmoji.FromUnicode("🟣"))),
                     new DiscordSelectComponentOption("Black", "black", "Make your bio black.", false, new DiscordComponentEmoji(DiscordEmoji.FromUnicode("⚫"))),
                     new DiscordSelectComponentOption("White", "white", "Make your bio white.", false, new DiscordComponentEmoji(DiscordEmoji.FromUnicode("⚪"))),
+                    new DiscordSelectComponentOption("Invisible (Dark Mode)", "invisd", "Make your bio color blend in with the embed for dark mode.", false, new DiscordComponentEmoji(DiscordEmoji.FromUnicode("🌑"))),
+                    new DiscordSelectComponentOption("Invisible (Light Mode)", "invisl", "Make your bio color blend in with the embed for light mode.", false, new DiscordComponentEmoji(DiscordEmoji.FromUnicode("🌞")))
                     new DiscordSelectComponentOption("Custom", "custom", "Choose a custom color", false, new DiscordComponentEmoji(DiscordEmoji.FromUnicode("🔘")))
                 });
 
@@ -144,7 +146,7 @@ namespace RainBOT.Modules
                         {
                             ctx.User.GetUserData(Data).BioStyle = args.Values.First() switch
                             {
-                                "default" => "6064F4",
+                                "blurple" => "6064F4",
                                 "red" => "E91E63",
                                 "orange" => "E67E22",
                                 "yellow" => "F1C40F",
@@ -153,6 +155,8 @@ namespace RainBOT.Modules
                                 "purple" => "9B59B6",
                                 "black" => "202225",
                                 "white" => "FFFFFF",
+                                "invisd" => "2C2C34",
+                                "invisl" => "F4F4F4",
                                 _ => "6064F4"
                             };
                             Data.Update();
