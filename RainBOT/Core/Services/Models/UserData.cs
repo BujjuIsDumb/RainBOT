@@ -45,7 +45,7 @@ namespace RainBOT.Core.Services.Models
         ///     Gets or sets the color of the user's bio.
         /// </summary>
         [JsonProperty("bio_style")]
-        public string BioStyle { get; set; } = "2F3136";
+        public string BioStyle { get; set; } = "6064F4";
 
         /// <summary>
         ///     Gets or sets whether the user has opted out of vent responses.
