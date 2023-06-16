@@ -34,7 +34,7 @@ namespace RainBOT.Modules
     /// <summary>
     ///     The mental health module.
     /// </summary>
-    public class MentalHealth : ApplicationCommandModule
+    public class Venting : ApplicationCommandModule
     {
         /// <summary>
         ///     Sets the database service.
@@ -215,7 +215,7 @@ namespace RainBOT.Modules
                             .WithColor(new DiscordColor(6317300));
 
                         foreach (var response in responseCache)
-                            embed.AddField($"Response from {response.creator.Username}", $"> {response.message}" + $"\n\nSent {Formatter.Timestamp(response.creationTimestamp, TimestampFormat.RelativeTime)}");
+                            embed.AddField($"Response from {response.Creator.Username}", $"> {response.Message}" + $"\n\nSent {Formatter.Timestamp(response.CreationTimestamp, TimestampFormat.RelativeTime)}");
 
                         await args.Interaction.CreateResponseAsync(InteractionResponseType.ChannelMessageWithSource, new DiscordInteractionResponseBuilder()
                             .AddEmbed(embed)
@@ -250,9 +250,9 @@ namespace RainBOT.Modules
         /// <summary>
         ///     A cached response to a vent.
         /// </summary>
-        /// <param name="creator">The creator of the response.</param>
-        /// <param name="message">The response message that was sent.</param>
-        /// <param name="creationTimestamp">When the response was created.</param>
-        private record VentResponse(DiscordUser creator, string message, DateTimeOffset creationTimestamp);
+        /// <param name="Creator">The creator of the response.</param>
+        /// <param name="Message">The response message that was sent.</param>
+        /// <param name="CreationTimestamp">When the response was created.</param>
+        private record VentResponse(DiscordUser Creator, string Message, DateTimeOffset CreationTimestamp);
     }
 }

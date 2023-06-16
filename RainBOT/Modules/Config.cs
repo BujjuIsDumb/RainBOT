@@ -35,7 +35,7 @@ namespace RainBOT.Modules
     /// </summary>
     [SlashCommandGroup("user", "Configure user-side settings.")]
     [SlashUserBannable]
-    public class User : ApplicationCommandModule
+    public partial class User : ApplicationCommandModule
     {
         /// <summary>
         ///     Sets the database service.
@@ -124,7 +124,7 @@ namespace RainBOT.Modules
                             {
                                 if (args.Interaction.Data.CustomId == colorModal.CustomId)
                                 {
-                                    if (Regex.IsMatch(args.Values["color"], @"^#(?:[0-9a-fA-F]{3}){1,2}$"))
+                                    if (HexCodeRegex().IsMatch(args.Values["color"]))
                                     {
                                         ctx.User.GetUserData(Data).BioStyle = args.Values["color"].ToUpper()[1..];
                                         Data.Update();
@@ -169,6 +169,9 @@ namespace RainBOT.Modules
                 };
             }
         }
+
+        [GeneratedRegex("^#(?:[0-9a-fA-F]{3}){1,2}$")]
+        private static partial Regex HexCodeRegex();
     }
 
     /// <summary>

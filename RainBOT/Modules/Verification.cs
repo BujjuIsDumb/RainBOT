@@ -59,7 +59,7 @@ namespace RainBOT.Modules
 
             // Add form questions.
             Dictionary<string, string> questions = new();
-            for (int i = 0; i < ctx.Guild.GetGuildData(Data).VerificationFormQuestions.Count(); i++)
+            for (int i = 0; i < ctx.Guild.GetGuildData(Data).VerificationFormQuestions.Length; i++)
                 questions.Add($"question{i}", ctx.Guild.GetGuildData(Data).VerificationFormQuestions[i]);
 
             #region Components
