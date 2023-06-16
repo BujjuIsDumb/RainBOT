@@ -37,7 +37,7 @@ namespace RainBOT
     /// <summary>
     ///     The client used to connect to the bot.
     /// </summary>
-    public class RbClient
+    public class Bot
     {
         /// <summary>
         ///     The configuration.

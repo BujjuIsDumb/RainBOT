@@ -44,7 +44,7 @@ namespace RainBOT
             if (!File.Exists("data.json"))
                 File.WriteAllText("data.json", JsonConvert.SerializeObject(new Database(null), Formatting.Indented));
 
-            new RbClient().InitializeAsync().GetAwaiter().GetResult();
+            new Bot().InitializeAsync().GetAwaiter().GetResult();
         }
     }
 }
