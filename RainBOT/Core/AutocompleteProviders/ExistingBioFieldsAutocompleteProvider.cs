@@ -29,9 +29,9 @@ namespace RainBOT.Core.AutocompleteProviders
     /// <summary>
     ///     An autocomplete provider for existing bio fields.
     /// </summary>
-    public class ExistingBioFieldsAutocompleteProvider : IAutocompleteProvider
+    public class ExistingBioFieldsAutocompleteProvider : SortedAutocompleteProvider
     {
-        public Task<IEnumerable<DiscordAutoCompleteChoice>> Provider(AutocompleteContext ctx)
+        public override List<DiscordAutoCompleteChoice> GetChoices(AutocompleteContext ctx)
         {
             using var data = new Database("data.json").Initialize();
 
@@ -43,7 +43,7 @@ namespace RainBOT.Core.AutocompleteProviders
                 foreach (var field in account.BioFields)
                     list.Add(new DiscordAutoCompleteChoice(field.Name, field.Name));
 
-            return Task.FromResult(list.OrderBy(x => AutocompleteHelper.CompareStrings((string)ctx.OptionValue, x.Name)).AsEnumerable());
+            return list;
         }
     }
 }

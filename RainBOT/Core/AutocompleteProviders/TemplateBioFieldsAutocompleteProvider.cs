@@ -28,9 +28,9 @@ namespace RainBOT.Core.AutocompleteProviders
     /// <summary>
     ///     An autocomplete provider for template bio fields.
     /// </summary>
-    public class TemplateBioFieldsAutocompleteProvider : IAutocompleteProvider
+    public class TemplateBioFieldsAutocompleteProvider : SortedAutocompleteProvider
     {
-        public Task<IEnumerable<DiscordAutoCompleteChoice>> Provider(AutocompleteContext ctx)
+        public override List<DiscordAutoCompleteChoice> GetChoices(AutocompleteContext ctx)
         {
             var list = new List<DiscordAutoCompleteChoice>
             {
@@ -41,7 +41,7 @@ namespace RainBOT.Core.AutocompleteProviders
                 new DiscordAutoCompleteChoice("Sexuality/Romanticism", "Sexuality/Romanticism")
             };
 
-            return Task.FromResult(list.OrderBy(x => AutocompleteHelper.CompareStrings((string)ctx.OptionValue, x.Name)).AsEnumerable());
+            return list;
         }
     }
 }

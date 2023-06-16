@@ -28,14 +28,9 @@ namespace RainBOT.Core.AutocompleteProviders
     /// <summary>
     ///     An autocomplete provider for the /tonetags define command.
     /// </summary>
-    public class TonetagsDefineAutocompleteProvider : IAutocompleteProvider
+    public class TonetagsDefineAutocompleteProvider : SortedAutocompleteProvider
     {
-        /// <summary>
-        ///     Gets the autocomplete choices for the /tonetags define command.
-        /// </summary>
-        /// <param name="ctx">Context for the interaction.</param>
-        /// <returns>The autocomplete choices for the /tonetags define command.</returns>
-        public Task<IEnumerable<DiscordAutoCompleteChoice>> Provider(AutocompleteContext ctx)
+        public override List<DiscordAutoCompleteChoice> GetChoices(AutocompleteContext ctx)
         {
             var list = new List<DiscordAutoCompleteChoice>
             {
@@ -55,7 +50,7 @@ namespace RainBOT.Core.AutocompleteProviders
                 new DiscordAutoCompleteChoice("/neu", "/neu")
             };
 
-            return Task.FromResult(list.OrderBy(x => AutocompleteHelper.CompareStrings((string)ctx.OptionValue, x.Name)).AsEnumerable());
+            return list;
         }
     }
 }

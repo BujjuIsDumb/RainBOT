@@ -20,33 +20,30 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
+using DSharpPlus.Entities;
+using DSharpPlus.SlashCommands;
+
 namespace RainBOT.Core.AutocompleteProviders
 {
     /// <summary>
-    ///     A helper for autocomplete providers.
+    ///     An autocomplete provider that sorts the choices.
     /// </summary>
-    public static class AutocompleteHelper
+    public abstract class SortedAutocompleteProvider : IAutocompleteProvider
     {
-        /// <summary>
-        ///     Compares two strings and returns a value indicating how similar they are.
-        /// </summary>
-        /// <param name="string1">The first string.</param>
-        /// <param name="string2">The second string.</param>
-        /// <returns>A value indicating how similar the specified strings are</returns>
-        public static int CompareStrings(string string1, string string2)
+        public Task<IEnumerable<DiscordAutoCompleteChoice>> Provider(AutocompleteContext ctx)
         {
-            int similarity = 0;
+            string userInput = (string)ctx.OptionValue;
+            var choices = GetChoices(ctx);
+            IEnumerable<DiscordAutoCompleteChoice> filteredChoices = choices.Where(choice => choice.Name.ToLower().Contains(userInput)).OrderBy(choice => choice.Name);
 
-            foreach (char c in string1)
-            {
-                // Increase by 1 if the second string contains the character.
-                // Increase by 2 if the second string contains the character in the same place.
-
-                if (string2.Contains(c)) similarity++;
-                if (string2.IndexOf(c) == string1.IndexOf(c)) similarity++;
-            }
-
-            return similarity * -1;
+            return Task.FromResult(filteredChoices);
         }
+
+        /// <summary>
+        ///     Gets the choices for the autocomplete.
+        /// </summary>
+        /// <param name="ctx">The autocomplete context.</param>
+        /// <returns>The choices for the autocomplete.</returns>
+        public abstract List<DiscordAutoCompleteChoice> GetChoices(AutocompleteContext ctx);
     }
 }
