@@ -62,7 +62,8 @@ namespace RainBOT.SupportBot
             {
                 Token = _config.Token,
                 TokenType = TokenType.Bot,
-                Intents = DiscordIntents.AllUnprivileged | DiscordIntents.MessageContents
+                Intents = DiscordIntents.AllUnprivileged | DiscordIntents.MessageContents,
+                AutoReconnect = true
             });
             _client.MessageCreated += MessageCreated;
             _client.MessageDeleted += MessageDeleted;

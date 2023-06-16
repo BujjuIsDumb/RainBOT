@@ -63,7 +63,8 @@ namespace RainBOT
             {
                 Token = _config.Token,
                 TokenType = TokenType.Bot,
-                Intents = DiscordIntents.AllUnprivileged
+                Intents = DiscordIntents.AllUnprivileged,
+                AutoReconnect = true
             });
             _client.MessageCreated += MessageCreated;
 
